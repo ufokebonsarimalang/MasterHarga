@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Harga Firebase</title>
+    <!-- Tailwind CSS untuk styling cepat dan rapi -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto space-y-6">
+        
+        <!-- Header -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+            <h1 class="text-2xl font-bold text-gray-800">Aplikasi Master Harga Online</h1>
+            <p class="text-sm text-gray-500">Cari harga instan & Update massal dari Excel.</p>
+        </div>
+
+        <!-- Bagian 1: Pencarian Harga (Untuk Kasir/Staff) -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700 mb-3">🔍 Cari Harga Produk</h2>
+            <input type="text" id="searchInput" placeholder="Ketik Brand atau Tipe (Contoh: Samsung, Reno 10)..." 
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
+            
+            <!-- Hasil Pencarian -->
+            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-gray-400 italic">Ketik sesuatu untuk mulai mencari...</p>
+            </div>
+        </div>
+
+        <!-- Bagian 2: Update Massal (Copy-Paste dari Excel) -->
+        <div class="bg-white p-6 rounded-xl shadow-md">
+            <h2 class="text-lg font-semibold text-gray-700 mb-2">📋 Update Harga Massal (Copy-Paste Excel)</h2>
+            <p class="text-xs text-gray-500 mb-3">
+                Format kolom di Excel (urutan harus pas): <br>
+                <code class="bg-gray-100 px-1 py-0.5 rounded text-red-600">Brand [TAB] Tipe [TAB] Harga Modal [TAB] Harga Jual</code>
+            </p>
+            
+            <textarea id="pasteArea" rows="6" placeholder="Paste data dari Excel di sini..." 
+                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-3 font-mono text-sm"></textarea>
+            
+            <button onclick="prosesUploadExcel()" 
+                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition">
+                Simpan / Perbarui ke Firebase
+            </button>
+            <p id="statusUpload" class="text-sm mt-2 font-medium"></p>
+        </div>
+
+    </div>
+
+    <!-- Firebase SDK (Modular v10) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // ==========================================
+        // GANTI DENGAN CONFIG FIREBASE MILIKMU SENDIRI
+        // ==========================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-CONTOH_API_KEY_KAMU",
+            authDomain: "project-kamu.firebaseapp.com",
+            projectId: "project-kamu",
+            storageBucket: "project-kamu.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcde"
+        };
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Cache data lokal agar pencarian cepat tanpa bolak-balik fetch ke server
+        let localMasterData = [];
+
+        async function loadMasterData() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "master_harga"));
+                localMasterData = [];
+                querySnapshot.forEach((docSnap) => {
+                    localMasterData.push({
+                        id: docSnap.id, // ID dokumen berupa "Brand - Tipe"
+                        ...docSnap.data()
+                    });
+                });
+            } catch (error) {
+                console.error("Gagal memuat data:", error);
+            }
+        }
+
+        // Panggil saat halaman pertama kali dibuka
+        loadMasterData();
+
+        // Fungsi Pencarian Realtime
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase().trim();
+            const resultContainer = document.getElementById('searchResult');
+            
+            if (keyword === "") {
+                resultContainer.innerHTML = `<p class="text-gray-400 italic">Ketik sesuatu untuk mulai mencari...</p>`;
+                return;
+            }
+
+            // Filter data dari cache lokal
+            const filtered = localMasterData.filter(item => 
+                item.brand.toLowerCase().includes(keyword) || 
+                item.tipe.toLowerCase().includes(keyword)
+            );
+
+            if (filtered.length === 0) {
+                resultContainer.innerHTML = `<p class="text-red-500">Barang tidak ditemukan di database.</p>`;
+                return;
+            }
+
+            // Render hasil pencarian
+            let html = "";
+            filtered.forEach(item => {
+                html += `
+                    <div class="border p-4 rounded-lg bg-gray-50 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-semibold">${item.brand}</span>
+                            <h3 class="text-lg font-bold text-gray-800 mt-1">${item.tipe}</h3>
+                        </div>
+                        <div class="mt-3 pt-2 border-t flex justify-between text-sm">
+                            <div>
+                                <span class="text-gray-500 block">Modal:</span>
+                                <span class="font-bold text-red-600">Rp ${Number(item.modal).toLocaleString('id-ID')}</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-gray-500 block">Jual:</span>
+                                <span class="font-bold text-green-600">Rp ${Number(item.jual).toLocaleString('id-ID')}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            resultContainer.innerHTML = html;
+        });
+
+        // Fungsi Proses Copas dari Excel
+        window.prosesUploadExcel = async function() {
+            const text = document.getElementById('pasteArea').value.trim();
+            const statusEl = document.getElementById('statusUpload');
+            
+            if (!text) {
+                statusEl.className = "text-sm mt-2 font-medium text-red-500";
+                statusEl.innerText = "Kotak paste masih kosong!";
+                return;
+            }
+
+            statusEl.className = "text-sm mt-2 font-medium text-blue-600";
+            statusEl.innerText = "Sedang memproses dan mengirim ke Firebase...";
+
+            const rows = text.split('\n');
+            let successCount = 0;
+
+            try {
+                for (let row of rows) {
+                    // Pisahkan kolom berdasarkan Tab (hasil copy dari Excel)
+                    const cols = row.split('\t');
+                    if (cols.length >= 4) {
+                        const brand = cols[0].trim();
+                        const tipe = cols[1].trim();
+                        const modal = Number(cols[2].trim().replace(/[^0-9]/g, ''));
+                        const jual = Number(cols[3].trim().replace(/[^0-9]/g, ''));
+
+                        if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
+                            // Buat ID unik dokumen misal: "Samsung_Galaxy A54"
+                            const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
+                            
+                            // Simpan ke Firestore
+                            await setDoc(doc(db, "master_harga", docId), {
+                                brand: brand,
+                                tipe: tipe,
+                                modal: modal,
+                                jual: jual,
+                                updated_at: new Date().toISOString()
+                            });
+                            successCount++;
+                        }
+                    }
+                }
+
+                statusEl.className = "text-sm mt-2 font-medium text-green-600";
+                statusEl.innerText = `Sukses! Berhasil memperbarui ${successCount} produk.`;
+                document.getElementById('pasteArea').value = ""; // Bersihkan textarea
+                
+                // Refresh data lokal agar pencarian langsung mendeteksi harga baru
+                await loadMasterData();
+
+            } catch (error) {
+                console.error("Error saat upload:", error);
+                statusEl.className = "text-sm mt-2 font-medium text-red-600";
+                statusEl.innerText = "Terjadi kesalahan saat menyimpan ke Firebase.";
+            }
+        };
+    </script>
+</body>
+</html>
