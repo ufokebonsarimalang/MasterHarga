@@ -20,8 +20,8 @@
     <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg py-6 px-4 md:px-8 mb-8">
         <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">⚡ Master Harga Online</h1>
-                <p class="text-blue-100 text-sm mt-1">Sistem pencarian harga instan & sinkronisasi database cloud.</p>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">⚡ Master Harga & Margin Otomatis</h1>
+                <p class="text-blue-100 text-sm mt-1">Cari harga instan, hitung margin otomatis dari modal & jual, sinkronisasi cloud.</p>
             </div>
             <div class="bg-blue-500/30 border border-blue-400/30 px-4 py-2 rounded-xl text-xs backdrop-blur-sm flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -40,7 +40,7 @@
                 </div>
                 <div>
                     <h2 class="text-lg font-bold text-slate-900">Cari Harga Produk</h2>
-                    <p class="text-xs text-slate-500">Ketik nama brand atau tipe barang untuk melihat harga secara instan.</p>
+                    <p class="text-xs text-slate-500">Ketik nama brand atau tipe barang untuk melihat rincian harga & margin.</p>
                 </div>
             </div>
 
@@ -65,14 +65,15 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 </div>
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900">Upload Master Harga (Excel)</h2>
+                    <h2 class="text-lg font-bold text-slate-900">Upload Master Harga (Excel 4 Kolom)</h2>
                     <p class="text-xs text-slate-500">Perbarui database secara massal lewat file Excel (.xlsx / .csv).</p>
                 </div>
             </div>
             
             <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 text-xs text-slate-600 space-y-1">
-                <p class="font-semibold text-slate-700">Panduan Format Kolom Excel (Baris 1 adalah Header):</p>
+                <p class="font-semibold text-slate-700">Panduan Urutan Kolom Excel (Baris 1 adalah Header):</p>
                 <p>Kolom A: <span class="font-mono text-blue-600">Brand</span> | Kolom B: <span class="font-mono text-blue-600">Tipe</span> | Kolom C: <span class="font-mono text-blue-600">Harga Modal</span> | Kolom D: <span class="font-mono text-blue-600">Harga Jual</span></p>
+                <p class="text-slate-400 italic mt-1">*Margin keuntungan akan dihitung otomatis oleh sistem.</p>
             </div>
             
             <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
@@ -98,7 +99,7 @@
         // ==========================================
         // CONFIG FIREBASE KAMU
         // ==========================================
-         const firebaseConfig = {
+     const firebaseConfig = {
 
   apiKey: "AIzaSyAzDlIWFWrpHyf2xgLYMifLcGmBqc10EW0",
 
@@ -115,6 +116,7 @@
   measurementId: "G-N660XBC2L4"
 
 };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -165,20 +167,31 @@
 
             let html = "";
             filtered.forEach(item => {
+                // Hitung margin otomatis dari Modal & Jual
+                const modal = Number(item.modal) || 0;
+                const jual = Number(item.jual) || 0;
+                const selisihMargin = jual - modal;
+                const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
+
                 html += `
                     <div class="border border-slate-200 p-5 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                         <div>
                             <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
                             <h3 class="text-xl font-bold text-slate-900 mt-2">${item.tipe}</h3>
                         </div>
-                        <div class="grid grid-cols-2 gap-4 pt-3 border-t border-slate-100 text-sm">
-                            <div class="bg-slate-50 p-3 rounded-xl">
-                                <span class="text-slate-400 text-xs block mb-0.5 font-medium">Harga Modal</span>
-                                <span class="font-bold text-slate-700 text-base">Rp ${Number(item.modal).toLocaleString('id-ID')}</span>
+                        <div class="grid grid-cols-3 gap-2 pt-3 border-t border-slate-100 text-sm">
+                            <div class="bg-slate-50 p-2.5 rounded-xl">
+                                <span class="text-slate-400 text-[11px] block mb-0.5 font-medium">Modal</span>
+                                <span class="font-bold text-slate-700 text-xs md:text-sm">Rp ${modal.toLocaleString('id-ID')}</span>
                             </div>
-                            <div class="bg-emerald-50/60 p-3 rounded-xl text-right">
-                                <span class="text-emerald-600/80 text-xs block mb-0.5 font-medium">Harga Jual</span>
-                                <span class="font-bold text-emerald-700 text-base">Rp ${Number(item.jual).toLocaleString('id-ID')}</span>
+                            <div class="bg-emerald-50/60 p-2.5 rounded-xl">
+                                <span class="text-emerald-600/80 text-[11px] block mb-0.5 font-medium">Jual</span>
+                                <span class="font-bold text-emerald-700 text-xs md:text-sm">Rp ${jual.toLocaleString('id-ID')}</span>
+                            </div>
+                            <div class="bg-blue-50 p-2.5 rounded-xl text-right">
+                                <span class="text-blue-500 text-[11px] block mb-0.5 font-medium">Margin</span>
+                                <span class="font-bold text-blue-700 text-xs md:text-sm">+${persentaseMargin}%</span>
+                                <span class="text-[10px] text-blue-600 block">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                             </div>
                         </div>
                     </div>
@@ -187,7 +200,7 @@
             resultContainer.innerHTML = html;
         });
 
-        // Upload Excel
+        // Upload Excel (4 Kolom: Brand, Tipe, Modal, Jual)
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
@@ -222,6 +235,7 @@
 
                     for (let i = 1; i < jsonData.length; i++) {
                         const row = jsonData[i];
+                        // Minimal 4 kolom (Brand, Tipe, Modal, Jual)
                         if (row && row.length >= 4) {
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
@@ -251,7 +265,7 @@
                 } catch (error) {
                     console.error("Error:", error);
                     statusEl.className = "text-sm mt-3 font-medium text-rose-600";
-                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel sesuai.";
+                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel sesuai (4 kolom).";
                 }
             };
             reader.readAsArrayBuffer(file);
