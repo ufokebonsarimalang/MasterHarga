@@ -239,7 +239,7 @@
             resultContainer.innerHTML = html;
         });
 
-     // Upload Excel Multi-Sheet (Mendukung banyak sheet sekaligus)
+     // Upload Excel (Hanya 3 Kolom: Brand, Tipe, Modal) + Rumus Pembulatan Otomatis
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
@@ -252,7 +252,7 @@
 
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-blue-600";
-            statusEl.innerText = "⏳ Sedang membaca semua Sheet di Excel...";
+            statusEl.innerText = "⏳ Sedang membaca file Excel & menghitung harga...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -260,37 +260,49 @@
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     
-                    statusEl.innerText = "🚀 Mengirim data dari semua Sheet ke Firebase Cloud...";
+                    statusEl.innerText = "🚀 Menghitung rumus & mengirim data ke Firebase...";
                     let successCount = 0;
 
-                    // Perulangan untuk membaca SEMUA Sheet yang ada di file Excel
+                    // Mendukung pembacaan banyak Sheet sekaligus
                     for (let sheetName of workbook.SheetNames) {
                         const worksheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                         
-                        // Lewati sheet jika kosong
                         if (jsonData.length <= 1) continue;
 
-                        // Baca baris data dari sheet tersebut (mulai baris ke-1, lewati header baris ke-0)
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
-                            if (row && row.length >= 4) {
+                            // Cek minimal 3 kolom (Brand, Tipe, Modal)
+                            if (row && row.length >= 3) {
                                 const brand = String(row[0] || "").trim();
                                 const tipe = String(row[1] || "").trim();
                                 const modal = Number(String(row[2] || "").replace(/[^0-9]/g, ''));
-                                const jual = Number(String(row[3] || "").replace(/[^0-9]/g, ''));
 
-                                // Lewati baris jika itu judul kolom (Header)
+                                // Lewati baris header judul kolom
                                 if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
 
-                                if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
+                                if (brand && tipe && !isNaN(modal) && modal > 0) {
+                                    
+                                    // ==========================================
+                                    // TERJEMAHAN RUMUS EXCEL KE JAVASCRIPT
+                                    // ==========================================
+                                    // Rumus Excel Asli: =A2*1.08 - MOD(A2*1.08,100000) + IF(MOD(A2*1.08,100000)<50000,48000,98000)
+                                    // (Kamu cukup ganti angka 1.08 di bawah jika ingin mengubah persentasenya, misal jadi 1.10)
+                                    const pengali = 1.08; 
+                                    const nilaiDasar = modal * pengali;
+                                    const sisaMod = nilaiDasar % 100000;
+                                    const pembulatanBawah = nilaiDasar - sisaMod;
+                                    const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
+                                    
+                                    const hargaJual = Math.round(pembulatanBawah + tambahanAkhir);
+
                                     const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
                                     
                                     await setDoc(doc(db, "master_harga", docId), {
                                         brand: brand,
                                         tipe: tipe,
                                         modal: modal,
-                                        jual: jual,
+                                        jual: hargaJual,
                                         updated_at: new Date().toISOString()
                                     });
                                     successCount++;
@@ -300,14 +312,14 @@
                     }
 
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-600";
-                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk dari seluruh Sheet.`;
+                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk dengan rumus otomatis.`;
                     fileInput.value = "";
                     await loadMasterData();
 
                 } catch (error) {
                     console.error("Error:", error);
                     statusEl.className = "text-sm mt-4 font-medium text-rose-600";
-                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format setiap Sheet 4 kolom.";
+                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel minimal 3 kolom (Brand, Tipe, Modal).";
                 }
             };
             reader.readAsArrayBuffer(file);
