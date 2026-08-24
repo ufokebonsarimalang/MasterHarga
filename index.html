@@ -16,63 +16,61 @@
 </head>
 <body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col md:flex-row">
 
-    <!-- SIDEBAR (Menu Navigasi Kiri) -->
-    <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-6 shrink-0 shadow-lg">
-        <div>
-            <!-- Logo / Judul App -->
-            <div class="flex items-center gap-3 mb-8">
-                <div class="p-2.5 bg-blue-600 text-white rounded-xl shadow-md">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                </div>
-                <div>
-                    <h1 class="font-bold text-white text-base tracking-wide">Master Harga</h1>
-                    <p class="text-xs text-slate-400">Cloud Database</p>
-                </div>
+    <!-- SIDEBAR (Desktop) / NAVBAR (Mobile di Atas) -->
+    <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-row md:flex-col justify-between p-4 md:p-6 shrink-0 shadow-lg items-center md:items-stretch">
+        <!-- Logo / Judul App -->
+        <div class="flex items-center gap-3">
+            <div class="p-2 bg-blue-600 md:p-2.5 text-white rounded-xl shadow-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
-
-            <!-- Tombol Menu -->
-            <nav class="space-y-2">
-                <button onclick="switchTab('cari')" id="btnCari" 
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    Cari Harga
-                </button>
-                <button onclick="switchTab('upload')" id="btnUpload" 
-                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                    Upload Master Harga
-                </button>
-            </nav>
+            <div class="hidden sm:block">
+                <h1 class="font-bold text-white text-sm md:text-base tracking-wide">Master Harga</h1>
+                <p class="text-[10px] md:text-xs text-slate-400">Cloud Database</p>
+            </div>
         </div>
 
-        <!-- Status Koneksi di Bawah Sidebar -->
-        <div class="pt-6 border-t border-slate-800 text-xs flex items-center gap-2 text-slate-400">
+        <!-- Tombol Menu (Berjajar di HP, Ke bawah di PC) -->
+        <nav class="flex md:flex-col gap-2">
+            <button onclick="switchTab('cari')" id="btnCari" 
+                class="flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition bg-blue-600 text-white shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span class="hidden sm:inline">Cari Harga</span>
+            </button>
+            <button onclick="switchTab('upload')" id="btnUpload" 
+                class="flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                <span class="hidden sm:inline">Upload Excel</span>
+            </button>
+        </nav>
+
+        <!-- Status Koneksi (Hanya muncul di Desktop) -->
+        <div class="hidden md:flex pt-6 border-t border-slate-800 text-xs items-center gap-2 text-slate-400">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>Firebase Online</span>
         </div>
     </aside>
 
     <!-- KONTEN UTAMA DI KANAN -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+    <main class="flex-1 p-4 md:p-10 overflow-y-auto">
         
         <!-- HALAMAN 1: CARI HARGA -->
-        <section id="tabCari" class="space-y-6 max-w-6xl mx-auto">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+        <section id="tabCari" class="space-y-4 md:space-y-6 max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">Pencarian Harga Instan</h2>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-900">Pencarian Harga Instan</h2>
                     <p class="text-xs text-slate-500 mt-0.5">Ketik brand atau tipe handphone untuk melihat modal, harga jual, dan margin.</p>
                 </div>
                 <!-- Kotak Pencarian Lebar -->
                 <div class="relative w-full md:w-80">
                     <input type="text" id="searchInput" placeholder="Cari: Samsung, Reno 10..." 
-                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-sm font-medium">
+                        class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-sm font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
             </div>
 
-            <!-- Hasil Pencarian (Satu Layar / Grid Luas) -->
-            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="col-span-full py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
+            <!-- Hasil Pencarian -->
+            <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+                <div class="col-span-full py-16 md:py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
                     🔍 Ketik kata kunci pada kotak pencarian di atas untuk melihat produk.
                 </div>
             </div>
@@ -80,13 +78,13 @@
 
         <!-- HALAMAN 2: UPLOAD MASTER HARGA (Hidden default) -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-bold text-slate-900">Upload Master Harga Excel</h2>
+                        <h2 class="text-lg md:text-xl font-bold text-slate-900">Upload Master Harga Excel</h2>
                         <p class="text-xs text-slate-500">Perbarui data produk secara massal dengan cepat.</p>
                     </div>
                 </div>
@@ -121,7 +119,7 @@
         // ==========================================
         // CONFIG FIREBASE KAMU
         // ==========================================
-        const firebaseConfig = {
+         const firebaseConfig = {
 
   apiKey: "AIzaSyAzDlIWFWrpHyf2xgLYMifLcGmBqc10EW0",
 
@@ -138,6 +136,7 @@
   measurementId: "G-N660XBC2L4"
 
 };
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -170,13 +169,13 @@
             if (tabName === 'cari') {
                 tabCari.classList.remove('hidden');
                 tabUpload.classList.add('hidden');
-                btnCari.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm";
-                btnUpload.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
+                btnCari.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition bg-blue-600 text-white shadow-sm";
+                btnUpload.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
             } else {
                 tabUpload.classList.remove('hidden');
                 tabCari.classList.add('hidden');
-                btnUpload.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm";
-                btnCari.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
+                btnUpload.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm";
+                btnCari.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
             }
         }
 
@@ -187,7 +186,7 @@
             
             if (keyword === "") {
                 resultContainer.innerHTML = `
-                    <div class="col-span-full py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
+                    <div class="col-span-full py-16 md:py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
                         🔍 Ketik kata kunci pada kotak pencarian di atas untuk melihat produk.
                     </div>`;
                 return;
@@ -214,24 +213,24 @@
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                 html += `
-                    <div class="border border-slate-200 p-5 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                    <div class="border border-slate-200 p-4 md:p-5 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-3">
                         <div>
-                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
-                            <h3 class="text-lg font-bold text-slate-900 mt-2">${item.tipe}</h3>
+                            <span class="text-[10px] md:text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
+                            <h3 class="text-base md:text-lg font-bold text-slate-900 mt-2">${item.tipe}</h3>
                         </div>
                         <div class="grid grid-cols-3 gap-2 pt-3 border-t border-slate-100 text-sm">
-                            <div class="bg-slate-50 p-2.5 rounded-xl">
-                                <span class="text-slate-400 text-[11px] block mb-0.5 font-medium">Modal</span>
+                            <div class="bg-slate-50 p-2 md:p-2.5 rounded-xl">
+                                <span class="text-slate-400 text-[10px] md:text-[11px] block mb-0.5 font-medium">Modal</span>
                                 <span class="font-bold text-slate-700 text-xs md:text-sm">Rp ${modal.toLocaleString('id-ID')}</span>
                             </div>
-                            <div class="bg-emerald-50/60 p-2.5 rounded-xl">
-                                <span class="text-emerald-600/80 text-[11px] block mb-0.5 font-medium">Jual</span>
+                            <div class="bg-emerald-50/60 p-2 md:p-2.5 rounded-xl">
+                                <span class="text-emerald-600/80 text-[10px] md:text-[11px] block mb-0.5 font-medium">Jual</span>
                                 <span class="font-bold text-emerald-700 text-xs md:text-sm">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
-                            <div class="bg-blue-50 p-2.5 rounded-xl text-right">
-                                <span class="text-blue-500 text-[11px] block mb-0.5 font-medium">Margin</span>
+                            <div class="bg-blue-50 p-2 md:p-2.5 rounded-xl text-right">
+                                <span class="text-blue-500 text-[10px] md:text-[11px] block mb-0.5 font-medium">Margin</span>
                                 <span class="font-bold text-blue-700 text-xs md:text-sm">+${persentaseMargin}%</span>
-                                <span class="text-[10px] text-blue-600 block">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                <span class="text-[9px] md:text-[10px] text-blue-600 block">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                             </div>
                         </div>
                     </div>
@@ -273,13 +272,16 @@
                     statusEl.innerText = "🚀 Mengirim data ke Firebase Cloud...";
                     let successCount = 0;
 
-                    for (let i = 1; i < jsonData.length; i++) {
+                    for (let i = 0; i < jsonData.length; i++) {
                         const row = jsonData[i];
                         if (row && row.length >= 4) {
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
                             const modal = Number(String(row[2] || "").replace(/[^0-9]/g, ''));
                             const jual = Number(String(row[3] || "").replace(/[^0-9]/g, ''));
+
+                            // Lewati baris jika baris pertama adalah judul kolom (Header)
+                            if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
 
                             if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
                                 const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
