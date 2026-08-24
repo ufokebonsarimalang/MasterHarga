@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Harga Cloud - Firebase</title>
+    <title>Master Harga Elektronik - Firebase</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Inter -->
@@ -63,10 +63,10 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-5 md:p-6 rounded-2xl shadow-sm border border-slate-200">
                 <div>
                     <h2 class="text-lg md:text-xl font-bold text-slate-900">Pencarian Harga Instan</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Ketik brand atau tipe handphone untuk melihat modal, harga jual, dan margin.</p>
+                    <p class="text-xs text-slate-500 mt-0.5">Ketik brand atau tipe elektronik untuk melihat modal, harga jual, dan margin.</p>
                 </div>
                 <div class="relative w-full md:w-80">
-                    <input type="text" id="searchInput" placeholder="Cari: Samsung, Reno 10..." 
+                    <input type="text" id="searchInput" placeholder="Cari: Kulkas, TV, Mesin Cuci..." 
                         class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-sm font-medium">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
@@ -88,7 +88,7 @@
                     </div>
                     <div>
                         <h2 class="text-lg md:text-xl font-bold text-slate-900">Upload Master Harga Excel</h2>
-                        <p class="text-xs text-slate-500">Sistem otomatis menghitung harga jual sesuai persentase margin tiap brand.</p>
+                        <p class="text-xs text-slate-500">Sistem otomatis menghitung harga jual sesuai persentase margin tiap brand elektronik.</p>
                     </div>
                 </div>
                 
@@ -120,7 +120,7 @@
                     </div>
                     <div>
                         <h2 class="text-lg md:text-xl font-bold text-slate-900">Pengaturan Persentase Margin Brand</h2>
-                        <p class="text-xs text-slate-500">Atur besaran persen (%) markup untuk masing-masing brand langsung di sini.</p>
+                        <p class="text-xs text-slate-500">Atur besaran persen (%) markup untuk masing-masing brand elektronik langsung di sini.</p>
                     </div>
                 </div>
 
@@ -128,9 +128,9 @@
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 mb-6">
                     <p class="text-xs font-bold text-slate-700">Tambah atau Perbarui Persen Brand:</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
+                        <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung, Sharp)" 
                             class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
-                        <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 8 untuk 8%)" 
+                        <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 10 untuk 10%)" 
                             class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
                     </div>
                     <button onclick="simpanPengaturanBrand()" 
@@ -287,7 +287,7 @@
             }
         }
 
-        // Pencarian Realtime (Ukuran Font Diperbesar)
+        // Pencarian Realtime (Ukuran Font Diperbesar Khusus HP & PC)
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
@@ -308,7 +308,7 @@
             if (filtered.length === 0) {
                 resultContainer.innerHTML = `
                     <div class="col-span-full py-12 text-center bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 text-sm font-medium">
-                        ❌ Produk atau brand tidak ditemukan di database.
+                        ❌ Produk atau brand elektronik tidak ditemukan di database.
                     </div>`;
                 return;
             }
@@ -321,24 +321,24 @@
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                 html += `
-                    <div class="border border-slate-200 p-5 md:p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
+                    <div class="border border-slate-200 p-4 md:p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                         <div>
                             <span class="text-xs md:text-sm bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
-                            <h3 class="text-lg md:text-xl font-bold text-slate-900 mt-3">${item.tipe}</h3>
+                            <h3 class="text-xl md:text-2xl font-bold text-slate-900 mt-2">${item.tipe}</h3>
                         </div>
-                        <div class="grid grid-cols-3 gap-3 pt-3 border-t border-slate-100 text-sm">
+                        <div class="grid grid-cols-3 gap-2 md:gap-3 pt-3 border-t border-slate-100">
                             <div class="bg-slate-50 p-3 rounded-xl">
-                                <span class="text-slate-500 text-xs block mb-1 font-semibold">Modal</span>
+                                <span class="text-slate-500 text-xs md:text-sm block mb-1 font-semibold">Modal</span>
                                 <span class="font-bold text-slate-800 text-sm md:text-base">Rp ${modal.toLocaleString('id-ID')}</span>
                             </div>
                             <div class="bg-emerald-50/60 p-3 rounded-xl">
-                                <span class="text-emerald-700 text-xs block mb-1 font-semibold">Jual</span>
-                                <span class="font-bold text-emerald-800 text-sm md:text-base">Rp ${jual.toLocaleString('id-ID')}</span>
+                                <span class="text-emerald-700 text-xs md:text-sm block mb-1 font-semibold">Jual</span>
+                                <span class="font-bold text-emerald-800 text-base md:text-lg">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
                             <div class="bg-blue-50 p-3 rounded-xl text-right">
-                                <span class="text-blue-600 text-xs block mb-1 font-semibold">Margin</span>
-                                <span class="font-bold text-blue-800 text-sm md:text-base">+${persentaseMargin}%</span>
-                                <span class="text-xs text-blue-700 block mt-0.5 font-medium">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                <span class="text-blue-600 text-xs md:text-sm block mb-1 font-semibold">Margin</span>
+                                <span class="font-bold text-blue-800 text-base md:text-lg">+${persentaseMargin}%</span>
+                                <span class="text-xs md:text-sm text-blue-700 block mt-0.5 font-bold">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                             </div>
                         </div>
                     </div>
@@ -414,7 +414,7 @@
                     }
 
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-600";
-                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk dengan margin otomatis.`;
+                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk elektronik dengan margin otomatis.`;
                     fileInput.value = "";
                     await loadMasterData();
 
