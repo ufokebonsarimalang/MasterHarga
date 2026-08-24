@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+v<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -14,84 +14,106 @@
         body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col md:flex-row">
 
-    <!-- Navbar / Header -->
-    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg py-6 px-4 md:px-8 mb-8">
-        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">⚡ Master Harga & Margin Otomatis</h1>
-                <p class="text-blue-100 text-sm mt-1">Cari harga instan, hitung margin otomatis dari modal & jual, sinkronisasi cloud.</p>
-            </div>
-            <div class="bg-blue-500/30 border border-blue-400/30 px-4 py-2 rounded-xl text-xs backdrop-blur-sm flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Database Terhubung</span>
-            </div>
-        </div>
-    </header>
-
-    <main class="max-w-5xl mx-auto px-4 md:px-8 space-y-8 pb-12">
-        
-        <!-- Bagian 1: Pencarian Harga (Kasir / Staff) -->
-        <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+    <!-- SIDEBAR (Menu Navigasi Kiri) -->
+    <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between p-6 shrink-0 shadow-lg">
+        <div>
+            <!-- Logo / Judul App -->
+            <div class="flex items-center gap-3 mb-8">
+                <div class="p-2.5 bg-blue-600 text-white rounded-xl shadow-md">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
                 </div>
                 <div>
-                    <h2 class="text-lg font-bold text-slate-900">Cari Harga Produk</h2>
-                    <p class="text-xs text-slate-500">Ketik nama brand atau tipe barang untuk melihat rincian harga & margin.</p>
+                    <h1 class="font-bold text-white text-base tracking-wide">Master Harga</h1>
+                    <p class="text-xs text-slate-400">Cloud Database</p>
                 </div>
             </div>
 
-            <div class="relative">
-                <input type="text" id="searchInput" placeholder="Cari contoh: Samsung, Reno 10, A54..." 
-                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-slate-900 placeholder:text-slate-400 font-medium">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <!-- Tombol Menu -->
+            <nav class="space-y-2">
+                <button onclick="switchTab('cari')" id="btnCari" 
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    Cari Harga
+                </button>
+                <button onclick="switchTab('upload')" id="btnUpload" 
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    Upload Master Harga
+                </button>
+            </nav>
+        </div>
+
+        <!-- Status Koneksi di Bawah Sidebar -->
+        <div class="pt-6 border-t border-slate-800 text-xs flex items-center gap-2 text-slate-400">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Firebase Online</span>
+        </div>
+    </aside>
+
+    <!-- KONTEN UTAMA DI KANAN -->
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        
+        <!-- HALAMAN 1: CARI HARGA -->
+        <section id="tabCari" class="space-y-6 max-w-6xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900">Pencarian Harga Instan</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Ketik brand atau tipe handphone untuk melihat modal, harga jual, dan margin.</p>
+                </div>
+                <!-- Kotak Pencarian Lebar -->
+                <div class="relative w-full md:w-80">
+                    <input type="text" id="searchInput" placeholder="Cari: Samsung, Reno 10..." 
+                        class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-sm font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
             </div>
-            
-            <!-- Hasil Pencarian -->
-            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                <div class="col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 text-sm">
-                    Ketik kata kunci pada kolom di atas untuk mulai mencari harga...
+
+            <!-- Hasil Pencarian (Satu Layar / Grid Luas) -->
+            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="col-span-full py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
+                    🔍 Ketik kata kunci pada kotak pencarian di atas untuk melihat produk.
                 </div>
             </div>
         </section>
 
-        <!-- Bagian 2: Upload Excel (Admin) -->
-        <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+        <!-- HALAMAN 2: UPLOAD MASTER HARGA (Hidden default) -->
+        <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">Upload Master Harga Excel</h2>
+                        <p class="text-xs text-slate-500">Perbarui data produk secara massal dengan cepat.</p>
+                    </div>
                 </div>
-                <div>
-                    <h2 class="text-lg font-bold text-slate-900">Upload Master Harga (Excel 4 Kolom)</h2>
-                    <p class="text-xs text-slate-500">Perbarui database secara massal lewat file Excel (.xlsx / .csv).</p>
-                </div>
-            </div>
-            
-            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 text-xs text-slate-600 space-y-1">
-                <p class="font-semibold text-slate-700">Panduan Urutan Kolom Excel (Baris 1 adalah Header):</p>
-                <p>Kolom A: <span class="font-mono text-blue-600">Brand</span> | Kolom B: <span class="font-mono text-blue-600">Tipe</span> | Kolom C: <span class="font-mono text-blue-600">Harga Modal</span> | Kolom D: <span class="font-mono text-blue-600">Harga Jual</span></p>
-                <p class="text-slate-400 italic mt-1">*Margin keuntungan akan dihitung otomatis oleh sistem.</p>
-            </div>
-            
-            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-                <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-200 rounded-xl cursor-pointer bg-slate-50">
                 
-                <button onclick="prosesUploadFileExcel()" 
-                    class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-sm hover:shadow whitespace-nowrap flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                    Proses Upload
-                </button>
+                <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 text-xs text-slate-600 space-y-1.5">
+                    <p class="font-semibold text-slate-700">Format Wajib File Excel (4 Kolom):</p>
+                    <p>Baris pertama adalah Header / Judul Kolom.</p>
+                    <p>Kolom A: <span class="font-mono text-blue-600 font-bold">Brand</span> | Kolom B: <span class="font-mono text-blue-600 font-bold">Tipe</span> | Kolom C: <span class="font-mono text-blue-600 font-bold">Harga Modal</span> | Kolom D: <span class="font-mono text-blue-600 font-bold">Harga Jual</span></p>
+                </div>
+                
+                <div class="space-y-4">
+                    <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" 
+                        class="block w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-200 rounded-xl cursor-pointer bg-slate-50">
+                    
+                    <button onclick="prosesUploadFileExcel()" 
+                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-sm hover:shadow flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                        Proses & Sinkronisasi ke Firebase
+                    </button>
+                </div>
+                <p id="statusUpload" class="text-sm mt-4 font-medium text-center"></p>
             </div>
-            <p id="statusUpload" class="text-sm mt-3 font-medium"></p>
         </section>
 
     </main>
 
-    <!-- Firebase SDK (Modular v10) -->
+    <!-- Firebase SDK (Modular v10) & Logika Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -99,7 +121,7 @@
         // ==========================================
         // CONFIG FIREBASE KAMU
         // ==========================================
-     const firebaseConfig = {
+        const firebaseConfig = {
 
   apiKey: "AIzaSyAzDlIWFWrpHyf2xgLYMifLcGmBqc10EW0",
 
@@ -116,7 +138,6 @@
   measurementId: "G-N660XBC2L4"
 
 };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -139,6 +160,26 @@
 
         loadMasterData();
 
+        // Fungsi Ganti Menu (Tab Switcher)
+        window.switchTab = function(tabName) {
+            const tabCari = document.getElementById('tabCari');
+            const tabUpload = document.getElementById('tabUpload');
+            const btnCari = document.getElementById('btnCari');
+            const btnUpload = document.getElementById('btnUpload');
+
+            if (tabName === 'cari') {
+                tabCari.classList.remove('hidden');
+                tabUpload.classList.add('hidden');
+                btnCari.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm";
+                btnUpload.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
+            } else {
+                tabUpload.classList.remove('hidden');
+                tabCari.classList.add('hidden');
+                btnUpload.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm";
+                btnCari.className = "w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
+            }
+        }
+
         // Pencarian Realtime
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
@@ -146,8 +187,8 @@
             
             if (keyword === "") {
                 resultContainer.innerHTML = `
-                    <div class="col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 text-sm">
-                        Ketik kata kunci pada kolom di atas untuk mulai mencari harga...
+                    <div class="col-span-full py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
+                        🔍 Ketik kata kunci pada kotak pencarian di atas untuk melihat produk.
                     </div>`;
                 return;
             }
@@ -159,7 +200,7 @@
 
             if (filtered.length === 0) {
                 resultContainer.innerHTML = `
-                    <div class="col-span-full py-10 text-center bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-sm font-medium">
+                    <div class="col-span-full py-12 text-center bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 text-sm font-medium">
                         ❌ Produk atau brand tidak ditemukan di database.
                     </div>`;
                 return;
@@ -167,7 +208,6 @@
 
             let html = "";
             filtered.forEach(item => {
-                // Hitung margin otomatis dari Modal & Jual
                 const modal = Number(item.modal) || 0;
                 const jual = Number(item.jual) || 0;
                 const selisihMargin = jual - modal;
@@ -177,7 +217,7 @@
                     <div class="border border-slate-200 p-5 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                         <div>
                             <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
-                            <h3 class="text-xl font-bold text-slate-900 mt-2">${item.tipe}</h3>
+                            <h3 class="text-lg font-bold text-slate-900 mt-2">${item.tipe}</h3>
                         </div>
                         <div class="grid grid-cols-3 gap-2 pt-3 border-t border-slate-100 text-sm">
                             <div class="bg-slate-50 p-2.5 rounded-xl">
@@ -200,19 +240,19 @@
             resultContainer.innerHTML = html;
         });
 
-        // Upload Excel (4 Kolom: Brand, Tipe, Modal, Jual)
+        // Upload Excel
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
             
             if (fileInput.files.length === 0) {
-                statusEl.className = "text-sm mt-3 font-medium text-rose-500";
+                statusEl.className = "text-sm mt-4 font-medium text-rose-500";
                 statusEl.innerText = "⚠️ Pilih file Excel terlebih dahulu!";
                 return;
             }
 
             const file = fileInput.files[0];
-            statusEl.className = "text-sm mt-3 font-medium text-blue-600";
+            statusEl.className = "text-sm mt-4 font-medium text-blue-600";
             statusEl.innerText = "⏳ Sedang membaca file Excel...";
 
             const reader = new FileReader();
@@ -225,7 +265,7 @@
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     
                     if (jsonData.length <= 1) {
-                        statusEl.className = "text-sm mt-3 font-medium text-rose-500";
+                        statusEl.className = "text-sm mt-4 font-medium text-rose-500";
                         statusEl.innerText = "❌ File Excel kosong atau tidak memiliki data.";
                         return;
                     }
@@ -235,7 +275,6 @@
 
                     for (let i = 1; i < jsonData.length; i++) {
                         const row = jsonData[i];
-                        // Minimal 4 kolom (Brand, Tipe, Modal, Jual)
                         if (row && row.length >= 4) {
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
@@ -257,14 +296,14 @@
                         }
                     }
 
-                    statusEl.className = "text-sm mt-3 font-medium text-emerald-600";
+                    statusEl.className = "text-sm mt-4 font-medium text-emerald-600";
                     statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk ke database.`;
                     fileInput.value = "";
                     await loadMasterData();
 
                 } catch (error) {
                     console.error("Error:", error);
-                    statusEl.className = "text-sm mt-3 font-medium text-rose-600";
+                    statusEl.className = "text-sm mt-4 font-medium text-rose-600";
                     statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel sesuai (4 kolom).";
                 }
             };
