@@ -239,7 +239,7 @@
             resultContainer.innerHTML = html;
         });
 
-        // Upload Excel
+     // Upload Excel Multi-Sheet (Mendukung banyak sheet sekaligus)
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
@@ -252,61 +252,62 @@
 
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-blue-600";
-            statusEl.innerText = "⏳ Sedang membaca file Excel...";
+            statusEl.innerText = "⏳ Sedang membaca semua Sheet di Excel...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     
-                    if (jsonData.length <= 1) {
-                        statusEl.className = "text-sm mt-4 font-medium text-rose-500";
-                        statusEl.innerText = "❌ File Excel kosong atau tidak memiliki data.";
-                        return;
-                    }
-
-                    statusEl.innerText = "🚀 Mengirim data ke Firebase Cloud...";
+                    statusEl.innerText = "🚀 Mengirim data dari semua Sheet ke Firebase Cloud...";
                     let successCount = 0;
 
-                    for (let i = 0; i < jsonData.length; i++) {
-                        const row = jsonData[i];
-                        if (row && row.length >= 4) {
-                            const brand = String(row[0] || "").trim();
-                            const tipe = String(row[1] || "").trim();
-                            const modal = Number(String(row[2] || "").replace(/[^0-9]/g, ''));
-                            const jual = Number(String(row[3] || "").replace(/[^0-9]/g, ''));
+                    // Perulangan untuk membaca SEMUA Sheet yang ada di file Excel
+                    for (let sheetName of workbook.SheetNames) {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        // Lewati sheet jika kosong
+                        if (jsonData.length <= 1) continue;
 
-                            // Lewati baris jika baris pertama adalah judul kolom (Header)
-                            if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
+                        // Baca baris data dari sheet tersebut (mulai baris ke-1, lewati header baris ke-0)
+                        for (let i = 0; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (row && row.length >= 4) {
+                                const brand = String(row[0] || "").trim();
+                                const tipe = String(row[1] || "").trim();
+                                const modal = Number(String(row[2] || "").replace(/[^0-9]/g, ''));
+                                const jual = Number(String(row[3] || "").replace(/[^0-9]/g, ''));
 
-                            if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
-                                const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
-                                
-                                await setDoc(doc(db, "master_harga", docId), {
-                                    brand: brand,
-                                    tipe: tipe,
-                                    modal: modal,
-                                    jual: jual,
-                                    updated_at: new Date().toISOString()
-                                });
-                                successCount++;
+                                // Lewati baris jika itu judul kolom (Header)
+                                if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
+
+                                if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
+                                    const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
+                                    
+                                    await setDoc(doc(db, "master_harga", docId), {
+                                        brand: brand,
+                                        tipe: tipe,
+                                        modal: modal,
+                                        jual: jual,
+                                        updated_at: new Date().toISOString()
+                                    });
+                                    successCount++;
+                                }
                             }
                         }
                     }
 
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-600";
-                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk ke database.`;
+                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk dari seluruh Sheet.`;
                     fileInput.value = "";
                     await loadMasterData();
 
                 } catch (error) {
                     console.error("Error:", error);
                     statusEl.className = "text-sm mt-4 font-medium text-rose-600";
-                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel sesuai (4 kolom).";
+                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format setiap Sheet 4 kolom.";
                 }
             };
             reader.readAsArrayBuffer(file);
