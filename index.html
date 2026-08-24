@@ -3,9 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Harga Firebase</title>
-    <!-- Tailwind CSS untuk styling cepat dan rapi -->
+    <title>Master Harga Firebase - Upload Excel</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Library SheetJS untuk membaca file Excel (.xlsx / .xls) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen p-4 md:p-8">
 
@@ -14,7 +16,7 @@
         <!-- Header -->
         <div class="bg-white p-6 rounded-xl shadow-md">
             <h1 class="text-2xl font-bold text-gray-800">Aplikasi Master Harga Online</h1>
-            <p class="text-sm text-gray-500">Cari harga instan & Update massal dari Excel.</p>
+            <p class="text-sm text-gray-500">Cari harga instan & Upload file Excel.</p>
         </div>
 
         <!-- Bagian 1: Pencarian Harga (Untuk Kasir/Staff) -->
@@ -29,22 +31,24 @@
             </div>
         </div>
 
-        <!-- Bagian 2: Update Massal (Copy-Paste dari Excel) -->
+        <!-- Bagian 2: Upload File Excel (Admin) -->
         <div class="bg-white p-6 rounded-xl shadow-md">
-            <h2 class="text-lg font-semibold text-gray-700 mb-2">📋 Update Harga Massal (Copy-Paste Excel)</h2>
+            <h2 class="text-lg font-semibold text-gray-700 mb-2">📁 Upload File Master Harga (Excel / CSV)</h2>
             <p class="text-xs text-gray-500 mb-3">
-                Format kolom di Excel (urutan harus pas): <br>
-                <code class="bg-gray-100 px-1 py-0.5 rounded text-red-600">Brand [TAB] Tipe [TAB] Harga Modal [TAB] Harga Jual</code>
+                Format kolom di file Excel (Baris pertama harus header, urutan kolom: <br>
+                <code class="bg-gray-100 px-1 py-0.5 rounded text-red-600">Kolom 1: Brand | Kolom 2: Tipe | Kolom 3: Harga Modal | Kolom 4: Harga Jual</code>)
             </p>
             
-            <textarea id="pasteArea" rows="6" placeholder="Paste data dari Excel di sini..." 
-                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 mb-3 font-mono text-sm"></textarea>
-            
-            <button onclick="prosesUploadExcel()" 
-                class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition">
-                Simpan / Perbarui ke Firebase
-            </button>
-            <p id="statusUpload" class="text-sm mt-2 font-medium"></p>
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+                <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" 
+                    class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border rounded-lg cursor-pointer">
+                
+                <button onclick="prosesUploadFileExcel()" 
+                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition whitespace-nowrap">
+                    Upload ke Firebase
+                </button>
+            </div>
+            <p id="statusUpload" class="text-sm mt-3 font-medium"></p>
         </div>
 
     </div>
@@ -58,19 +62,28 @@
         // GANTI DENGAN CONFIG FIREBASE MILIKMU SENDIRI
         // ==========================================
         const firebaseConfig = {
-            apiKey: "AIzaSyD-CONTOH_API_KEY_KAMU",
-            authDomain: "project-kamu.firebaseapp.com",
-            projectId: "project-kamu",
-            storageBucket: "project-kamu.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcde"
-        };
+
+  apiKey: "AIzaSyAzDlIWFWrpHyf2xgLYMifLcGmBqc10EW0",
+
+  authDomain: "masterharga.firebaseapp.com",
+
+  projectId: "masterharga",
+
+  storageBucket: "masterharga.firebasestorage.app",
+
+  messagingSenderId: "761584806568",
+
+  appId: "1:761584806568:web:c6672e8fc0c695f15eb09d",
+
+  measurementId: "G-N660XBC2L4"
+
+};
 
         // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Cache data lokal agar pencarian cepat tanpa bolak-balik fetch ke server
+        // Cache data lokal agar pencarian instan
         let localMasterData = [];
 
         async function loadMasterData() {
@@ -79,7 +92,7 @@
                 localMasterData = [];
                 querySnapshot.forEach((docSnap) => {
                     localMasterData.push({
-                        id: docSnap.id, // ID dokumen berupa "Brand - Tipe"
+                        id: docSnap.id,
                         ...docSnap.data()
                     });
                 });
@@ -88,7 +101,7 @@
             }
         }
 
-        // Panggil saat halaman pertama kali dibuka
+        // Panggil saat halaman dimuat
         loadMasterData();
 
         // Fungsi Pencarian Realtime
@@ -101,7 +114,6 @@
                 return;
             }
 
-            // Filter data dari cache lokal
             const filtered = localMasterData.filter(item => 
                 item.brand.toLowerCase().includes(keyword) || 
                 item.tipe.toLowerCase().includes(keyword)
@@ -112,7 +124,6 @@
                 return;
             }
 
-            // Render hasil pencarian
             let html = "";
             filtered.forEach(item => {
                 html += `
@@ -137,62 +148,83 @@
             resultContainer.innerHTML = html;
         });
 
-        // Fungsi Proses Copas dari Excel
-        window.prosesUploadExcel = async function() {
-            const text = document.getElementById('pasteArea').value.trim();
+        // Fungsi Membaca dan Mengupload File Excel
+        window.prosesUploadFileExcel = function() {
+            const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
             
-            if (!text) {
-                statusEl.className = "text-sm mt-2 font-medium text-red-500";
-                statusEl.innerText = "Kotak paste masih kosong!";
+            if (fileInput.files.length === 0) {
+                statusEl.className = "text-sm mt-3 font-medium text-red-500";
+                statusEl.innerText = "Pilih file Excel terlebih dahulu!";
                 return;
             }
 
-            statusEl.className = "text-sm mt-2 font-medium text-blue-600";
-            statusEl.innerText = "Sedang memproses dan mengirim ke Firebase...";
+            const file = fileInput.files[0];
+            statusEl.className = "text-sm mt-3 font-medium text-blue-600";
+            statusEl.innerText = "Membaca file Excel...";
 
-            const rows = text.split('\n');
-            let successCount = 0;
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    
+                    // Ambil sheet pertama dari file Excel
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // Ubah sheet Excel menjadi format JSON array
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    if (jsonData.length <= 1) {
+                        statusEl.className = "text-sm mt-3 font-medium text-red-500";
+                        statusEl.innerText = "File Excel kosong atau tidak memiliki baris data.";
+                        return;
+                    }
 
-            try {
-                for (let row of rows) {
-                    // Pisahkan kolom berdasarkan Tab (hasil copy dari Excel)
-                    const cols = row.split('\t');
-                    if (cols.length >= 4) {
-                        const brand = cols[0].trim();
-                        const tipe = cols[1].trim();
-                        const modal = Number(cols[2].trim().replace(/[^0-9]/g, ''));
-                        const jual = Number(cols[3].trim().replace(/[^0-9]/g, ''));
+                    statusEl.innerText = "Mengirim data ke Firebase...";
+                    let successCount = 0;
 
-                        if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
-                            // Buat ID unik dokumen misal: "Samsung_Galaxy A54"
-                            const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
-                            
-                            // Simpan ke Firestore
-                            await setDoc(doc(db, "master_harga", docId), {
-                                brand: brand,
-                                tipe: tipe,
-                                modal: modal,
-                                jual: jual,
-                                updated_at: new Date().toISOString()
-                            });
-                            successCount++;
+                    // Mulai dari baris index 1 (melewati baris ke-0 / header judul kolom)
+                    for (let i = 1; i < jsonData.length; i++) {
+                        const row = jsonData[i];
+                        // Pastikan kolom minimal ada 4 (Brand, Tipe, Modal, Jual)
+                        if (row && row.length >= 4) {
+                            const brand = String(row[0] || "").trim();
+                            const tipe = String(row[1] || "").trim();
+                            const modal = Number(String(row[2] || "").replace(/[^0-9]/g, ''));
+                            const jual = Number(String(row[3] || "").replace(/[^0-9]/g, ''));
+
+                            if (brand && tipe && !isNaN(modal) && !isNaN(jual)) {
+                                const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
+                                
+                                await setDoc(doc(db, "master_harga", docId), {
+                                    brand: brand,
+                                    tipe: tipe,
+                                    modal: modal,
+                                    jual: jual,
+                                    updated_at: new Date().toISOString()
+                                });
+                                successCount++;
+                            }
                         }
                     }
+
+                    statusEl.className = "text-sm mt-3 font-medium text-green-600";
+                    statusEl.innerText = `Sukses! Berhasil memperbarui ${successCount} produk dari file Excel.`;
+                    fileInput.value = ""; // Reset input file
+                    
+                    // Refresh data lokal
+                    await loadMasterData();
+
+                } catch (error) {
+                    console.error("Error membaca/upload file:", error);
+                    statusEl.className = "text-sm mt-3 font-medium text-red-600";
+                    statusEl.innerText = "Gagal memproses file. Pastikan format Excel benar.";
                 }
+            };
 
-                statusEl.className = "text-sm mt-2 font-medium text-green-600";
-                statusEl.innerText = `Sukses! Berhasil memperbarui ${successCount} produk.`;
-                document.getElementById('pasteArea').value = ""; // Bersihkan textarea
-                
-                // Refresh data lokal agar pencarian langsung mendeteksi harga baru
-                await loadMasterData();
-
-            } catch (error) {
-                console.error("Error saat upload:", error);
-                statusEl.className = "text-sm mt-2 font-medium text-red-600";
-                statusEl.innerText = "Terjadi kesalahan saat menyimpan ke Firebase.";
-            }
+            reader.readAsArrayBuffer(file);
         };
     </script>
 </body>
