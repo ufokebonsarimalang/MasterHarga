@@ -355,7 +355,7 @@
             resultContainer.innerHTML = html;
         });
 
-        // Upload Excel + Hitung Otomatis Berdasarkan Margin Brand di Cloud
+       // Upload Excel + Hitung Otomatis Berdasarkan Margin Brand di Cloud
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
@@ -378,7 +378,7 @@
                     
                     statusEl.innerText = "🚀 Menghitung harga jual & mengirim data ke Firebase...";
                     let successCount = 0;
-                    const defaultPengali = 1.08; // Default 8% jika brand belum diatur
+                    const absoluteDefaultPengali = 1.10; // Ubah default mutlak jadi 1.10 (10%) kalau brand tidak ketemu
 
                     for (let sheetName of workbook.SheetNames) {
                         const worksheet = workbook.Sheets[sheetName];
@@ -396,9 +396,9 @@
                                 if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
 
                                 if (brand && tipe && !isNaN(modal) && modal > 0) {
-                                    // Ambil pengali sesuai pengaturan brand di cloud, kalau tidak ada pakai default 1.08
-                                    const brandKey = brand.toLowerCase();
-                                    const pengali = aturanMarginBrand[brandKey] || defaultPengali;
+                                    // Ambil pengali sesuai pengaturan brand di cloud (huruf kecil & hilangkan spasi ekstra)
+                                    const brandKey = brand.toLowerCase().trim();
+                                    const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
 
                                     // Rumus Pembulatan Otomatis
                                     const nilaiDasar = modal * pengali;
