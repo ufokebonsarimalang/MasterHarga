@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <!-- Tombol Menu (Berjajar di HP, Ke bawah di PC) -->
+        <!-- Tombol Menu -->
         <nav class="flex md:flex-col gap-2">
             <button onclick="switchTab('cari')" id="btnCari" 
                 class="flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition bg-blue-600 text-white shadow-sm">
@@ -41,9 +41,14 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 <span class="hidden sm:inline">Upload Excel</span>
             </button>
+            <button onclick="switchTab('pengaturan')" id="btnPengaturan" 
+                class="flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                <span class="hidden sm:inline">Pengaturan Margin</span>
+            </button>
         </nav>
 
-        <!-- Status Koneksi (Hanya muncul di Desktop) -->
+        <!-- Status Koneksi -->
         <div class="hidden md:flex pt-6 border-t border-slate-800 text-xs items-center gap-2 text-slate-400">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
             <span>Firebase Online</span>
@@ -60,7 +65,6 @@
                     <h2 class="text-lg md:text-xl font-bold text-slate-900">Pencarian Harga Instan</h2>
                     <p class="text-xs text-slate-500 mt-0.5">Ketik brand atau tipe handphone untuk melihat modal, harga jual, dan margin.</p>
                 </div>
-                <!-- Kotak Pencarian Lebar -->
                 <div class="relative w-full md:w-80">
                     <input type="text" id="searchInput" placeholder="Cari: Samsung, Reno 10..." 
                         class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-sm font-medium">
@@ -68,7 +72,6 @@
                 </div>
             </div>
 
-            <!-- Hasil Pencarian -->
             <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
                 <div class="col-span-full py-16 md:py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
                     🔍 Ketik kata kunci pada kotak pencarian di atas untuk melihat produk.
@@ -76,7 +79,7 @@
             </div>
         </section>
 
-        <!-- HALAMAN 2: UPLOAD MASTER HARGA (Hidden default) -->
+        <!-- HALAMAN 2: UPLOAD MASTER HARGA -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
             <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
                 <div class="flex items-center gap-3 mb-6">
@@ -85,14 +88,13 @@
                     </div>
                     <div>
                         <h2 class="text-lg md:text-xl font-bold text-slate-900">Upload Master Harga Excel</h2>
-                        <p class="text-xs text-slate-500">Perbarui data produk secara massal dengan cepat.</p>
+                        <p class="text-xs text-slate-500">Sistem otomatis menghitung harga jual sesuai persentase margin tiap brand.</p>
                     </div>
                 </div>
                 
                 <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 text-xs text-slate-600 space-y-1.5">
-                    <p class="font-semibold text-slate-700">Format Wajib File Excel (4 Kolom):</p>
-                    <p>Baris pertama adalah Header / Judul Kolom.</p>
-                    <p>Kolom A: <span class="font-mono text-blue-600 font-bold">Brand</span> | Kolom B: <span class="font-mono text-blue-600 font-bold">Tipe</span> | Kolom C: <span class="font-mono text-blue-600 font-bold">Harga Modal</span> | Kolom D: <span class="font-mono text-blue-600 font-bold">Harga Jual</span></p>
+                    <p class="font-semibold text-slate-700">Format Wajib File Excel (Cukup 3 Kolom):</p>
+                    <p>Kolom A: <span class="font-mono text-blue-600 font-bold">Brand</span> | Kolom B: <span class="font-mono text-blue-600 font-bold">Tipe</span> | Kolom C: <span class="font-mono text-blue-600 font-bold">Harga Modal</span></p>
                 </div>
                 
                 <div class="space-y-4">
@@ -102,10 +104,49 @@
                     <button onclick="prosesUploadFileExcel()" 
                         class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-sm hover:shadow flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        Proses & Sinkronisasi ke Firebase
+                        Proses & Hitung Otomatis ke Firebase
                     </button>
                 </div>
                 <p id="statusUpload" class="text-sm mt-4 font-medium text-center"></p>
+            </div>
+        </section>
+
+        <!-- HALAMAN 3: PENGATURAN MARGIN PER BRAND -->
+        <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-lg md:text-xl font-bold text-slate-900">Pengaturan Persentase Margin Brand</h2>
+                        <p class="text-xs text-slate-500">Atur besaran persen (%) markup untuk masing-masing brand langsung di sini.</p>
+                    </div>
+                </div>
+
+                <!-- Form Tambah / Ubah Margin Brand -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 mb-6">
+                    <p class="text-xs font-bold text-slate-700">Tambah atau Perbarui Persen Brand:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
+                            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                        <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 8 untuk 8%)" 
+                            class="w-full px-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    </div>
+                    <button onclick="simpanPengaturanBrand()" 
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-xl text-sm transition shadow-sm">
+                        Simpan Aturan Brand
+                    </button>
+                    <p id="statusPengaturan" class="text-xs font-medium text-center"></p>
+                </div>
+
+                <!-- Daftar Brand & Persen yang Aktif -->
+                <div>
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Daftar Margin Brand Saat Ini:</h3>
+                    <div id="listAturanBrand" class="space-y-2">
+                        <p class="text-xs text-slate-400 italic">Memuat pengaturan dari cloud...</p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -114,7 +155,7 @@
     <!-- Firebase SDK (Modular v10) & Logika Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ==========================================
         // CONFIG FIREBASE KAMU
@@ -141,41 +182,116 @@
         const db = getFirestore(app);
 
         let localMasterData = [];
+        let aturanMarginBrand = {}; // Menyimpan daftar persen per brand
 
+        // Ambil Data Master Harga
         async function loadMasterData() {
             try {
                 const querySnapshot = await getDocs(collection(db, "master_harga"));
                 localMasterData = [];
                 querySnapshot.forEach((docSnap) => {
-                    localMasterData.push({
-                        id: docSnap.id,
-                        ...docSnap.data()
-                    });
+                    localMasterData.push({ id: docSnap.id, ...docSnap.data() });
                 });
             } catch (error) {
-                console.error("Gagal memuat data:", error);
+                console.error("Gagal memuat data master:", error);
+            }
+        }
+
+        // Ambil Data Pengaturan Margin Brand dari Firebase
+        async function loadAturanBrand() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "pengaturan_margin"));
+                aturanMarginBrand = {};
+                let htmlList = "";
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const brandName = docSnap.id;
+                    const persen = data.persen;
+                    aturanMarginBrand[brandName.toLowerCase()] = 1 + (persen / 100); // Ubah ke pengali misal 8% jadi 1.08
+
+                    htmlList += `
+                        <div class="flex justify-between items-center bg-slate-50 border border-slate-200 px-4 py-2.5 rounded-xl text-sm">
+                            <span class="font-bold text-slate-800 uppercase">${brandName}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-bold text-xs">+${persen}%</span>
+                                <button onclick="hapusBrand('${brandName}')" class="text-rose-500 hover:text-rose-700 text-xs font-semibold">Hapus</button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                if (htmlList === "") {
+                    htmlList = `<p class="text-xs text-slate-400 italic">Belum ada aturan brand. Default sistem menggunakan 8% (1.08).</p>`;
+                }
+                document.getElementById('listAturanBrand').innerHTML = htmlList;
+            } catch (error) {
+                console.error("Gagal memuat aturan brand:", error);
             }
         }
 
         loadMasterData();
+        loadAturanBrand();
 
         // Fungsi Ganti Menu (Tab Switcher)
         window.switchTab = function(tabName) {
-            const tabCari = document.getElementById('tabCari');
-            const tabUpload = document.getElementById('tabUpload');
-            const btnCari = document.getElementById('btnCari');
-            const btnUpload = document.getElementById('btnUpload');
+            const tabs = ['tabCari', 'tabUpload', 'tabPengaturan'];
+            const btns = ['btnCari', 'btnUpload', 'btnPengaturan'];
+            
+            tabs.forEach((t, i) => {
+                const el = document.getElementById(t);
+                const btn = document.getElementById(btns[i]);
+                if (t === 'tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)) {
+                    el.classList.remove('hidden');
+                    btn.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition bg-blue-600 text-white shadow-sm";
+                } else {
+                    el.classList.add('hidden');
+                    btn.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
+                }
+            });
+        }
 
-            if (tabName === 'cari') {
-                tabCari.classList.remove('hidden');
-                tabUpload.classList.add('hidden');
-                btnCari.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-xs md:text-sm transition bg-blue-600 text-white shadow-sm";
-                btnUpload.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
-            } else {
-                tabUpload.classList.remove('hidden');
-                tabCari.classList.add('hidden');
-                btnUpload.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-sm transition bg-blue-600 text-white shadow-sm";
-                btnCari.className = "flex items-center gap-2 md:gap-3 px-3.5 md:px-4 py-2 md:py-3 rounded-xl font-medium text-sm transition hover:bg-slate-800 text-slate-400 hover:text-white";
+        // Simpan / Update Pengaturan Margin Brand ke Firebase
+        window.simpanPengaturanBrand = async function() {
+            const nama = document.getElementById('inputBrandNama').value.trim().toLowerCase();
+            const persen = parseFloat(document.getElementById('inputBrandPersen').value);
+            const statusEl = document.getElementById('statusPengaturan');
+
+            if (!nama || isNaN(persen)) {
+                statusEl.className = "text-xs font-medium text-rose-500";
+                statusEl.innerText = "⚠️ Masukkan nama brand dan angka persen yang valid!";
+                return;
+            }
+
+            try {
+                statusEl.className = "text-xs font-medium text-blue-600";
+                statusEl.innerText = "⏳ Menyimpan ke cloud...";
+
+                await setDoc(doc(db, "pengaturan_margin", nama), {
+                    persen: persen,
+                    updated_at: new Date().toISOString()
+                });
+
+                statusEl.className = "text-xs font-medium text-emerald-600";
+                statusEl.innerText = "✨ Berhasil menyimpan aturan margin brand!";
+                document.getElementById('inputBrandNama').value = "";
+                document.getElementById('inputBrandPersen').value = "";
+                await loadAturanBrand();
+            } catch (error) {
+                statusEl.className = "text-xs font-medium text-rose-600";
+                statusEl.innerText = "❌ Gagal menyimpan pengaturan.";
+            }
+        }
+
+        // Hapus Aturan Brand
+        window.hapusBrand = async function(brandName) {
+            if (confirm(`Hapus aturan margin untuk brand ${brandName}?`)) {
+                try {
+                    await deleteDoc(doc(db, "pengaturan_margin", brandName.toLowerCase()));
+                    await loadAturanBrand();
+                } catch (error) {
+                    alert("Gagal menghapus brand.");
+                }
             }
         }
 
@@ -239,7 +355,7 @@
             resultContainer.innerHTML = html;
         });
 
-     // Upload Excel (Hanya 3 Kolom: Brand, Tipe, Modal) + Rumus Pembulatan Otomatis
+        // Upload Excel + Hitung Otomatis Berdasarkan Margin Brand di Cloud
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
@@ -252,7 +368,7 @@
 
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-blue-600";
-            statusEl.innerText = "⏳ Sedang membaca file Excel & menghitung harga...";
+            statusEl.innerText = "⏳ Sedang membaca file Excel & menghitung margin...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -260,10 +376,10 @@
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     
-                    statusEl.innerText = "🚀 Menghitung rumus & mengirim data ke Firebase...";
+                    statusEl.innerText = "🚀 Menghitung harga jual & mengirim data ke Firebase...";
                     let successCount = 0;
+                    const defaultPengali = 1.08; // Default 8% jika brand belum diatur
 
-                    // Mendukung pembacaan banyak Sheet sekaligus
                     for (let sheetName of workbook.SheetNames) {
                         const worksheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -272,30 +388,25 @@
 
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
-                            // Cek minimal 3 kolom (Brand, Tipe, Modal)
                             if (row && row.length >= 3) {
                                 const brand = String(row[0] || "").trim();
                                 const tipe = String(row[1] || "").trim();
                                 const modal = Number(String(row[2] || "").replace(/[^0-9]/g, ''));
 
-                                // Lewati baris header judul kolom
                                 if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
 
                                 if (brand && tipe && !isNaN(modal) && modal > 0) {
-                                    
-                                    // ==========================================
-                                    // TERJEMAHAN RUMUS EXCEL KE JAVASCRIPT
-                                    // ==========================================
-                                    // Rumus Excel Asli: =A2*1.08 - MOD(A2*1.08,100000) + IF(MOD(A2*1.08,100000)<50000,48000,98000)
-                                    // (Kamu cukup ganti angka 1.08 di bawah jika ingin mengubah persentasenya, misal jadi 1.10)
-                                    const pengali = 1.08; 
+                                    // Ambil pengali sesuai pengaturan brand di cloud, kalau tidak ada pakai default 1.08
+                                    const brandKey = brand.toLowerCase();
+                                    const pengali = aturanMarginBrand[brandKey] || defaultPengali;
+
+                                    // Rumus Pembulatan Otomatis
                                     const nilaiDasar = modal * pengali;
                                     const sisaMod = nilaiDasar % 100000;
                                     const pembulatanBawah = nilaiDasar - sisaMod;
                                     const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
                                     
                                     const hargaJual = Math.round(pembulatanBawah + tambahanAkhir);
-
                                     const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
                                     
                                     await setDoc(doc(db, "master_harga", docId), {
@@ -312,14 +423,14 @@
                     }
 
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-600";
-                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk dengan rumus otomatis.`;
+                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk dengan margin otomatis.`;
                     fileInput.value = "";
                     await loadMasterData();
 
                 } catch (error) {
                     console.error("Error:", error);
                     statusEl.className = "text-sm mt-4 font-medium text-rose-600";
-                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel minimal 3 kolom (Brand, Tipe, Modal).";
+                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel minimal 3 kolom.";
                 }
             };
             reader.readAsArrayBuffer(file);
