@@ -3,55 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Harga Firebase - Upload Excel</title>
+    <title>Master Harga Cloud - Firebase</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Library SheetJS untuk membaca file Excel (.xlsx / .xls) -->
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SheetJS untuk Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 md:p-8">
+<body class="bg-slate-50 text-slate-800 min-h-screen">
 
-    <div class="max-w-4xl mx-auto space-y-6">
-        
-        <!-- Header -->
-        <div class="bg-white p-6 rounded-xl shadow-md">
-            <h1 class="text-2xl font-bold text-gray-800">Aplikasi Master Harga Online</h1>
-            <p class="text-sm text-gray-500">Cari harga instan & Upload file Excel.</p>
-        </div>
-
-        <!-- Bagian 1: Pencarian Harga (Untuk Kasir/Staff) -->
-        <div class="bg-white p-6 rounded-xl shadow-md">
-            <h2 class="text-lg font-semibold text-gray-700 mb-3">🔍 Cari Harga Produk</h2>
-            <input type="text" id="searchInput" placeholder="Ketik Brand atau Tipe (Contoh: Samsung, Reno 10)..." 
-                class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4">
-            
-            <!-- Hasil Pencarian -->
-            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <p class="text-gray-400 italic">Ketik sesuatu untuk mulai mencari...</p>
+    <!-- Navbar / Header -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg py-6 px-4 md:px-8 mb-8">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold tracking-tight">⚡ Master Harga Online</h1>
+                <p class="text-blue-100 text-sm mt-1">Sistem pencarian harga instan & sinkronisasi database cloud.</p>
+            </div>
+            <div class="bg-blue-500/30 border border-blue-400/30 px-4 py-2 rounded-xl text-xs backdrop-blur-sm flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Database Terhubung</span>
             </div>
         </div>
+    </header>
 
-        <!-- Bagian 2: Upload File Excel (Admin) -->
-        <div class="bg-white p-6 rounded-xl shadow-md">
-            <h2 class="text-lg font-semibold text-gray-700 mb-2">📁 Upload File Master Harga (Excel / CSV)</h2>
-            <p class="text-xs text-gray-500 mb-3">
-                Format kolom di file Excel (Baris pertama harus header, urutan kolom: <br>
-                <code class="bg-gray-100 px-1 py-0.5 rounded text-red-600">Kolom 1: Brand | Kolom 2: Tipe | Kolom 3: Harga Modal | Kolom 4: Harga Jual</code>)
-            </p>
+    <main class="max-w-5xl mx-auto px-4 md:px-8 space-y-8 pb-12">
+        
+        <!-- Bagian 1: Pencarian Harga (Kasir / Staff) -->
+        <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-2.5 bg-blue-50 text-blue-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Cari Harga Produk</h2>
+                    <p class="text-xs text-slate-500">Ketik nama brand atau tipe barang untuk melihat harga secara instan.</p>
+                </div>
+            </div>
+
+            <div class="relative">
+                <input type="text" id="searchInput" placeholder="Cari contoh: Samsung, Reno 10, A54..." 
+                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition text-slate-900 placeholder:text-slate-400 font-medium">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            </div>
             
-            <div class="flex flex-col md:flex-row items-start md:items-center gap-4">
+            <!-- Hasil Pencarian -->
+            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                <div class="col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 text-sm">
+                    Ketik kata kunci pada kolom di atas untuk mulai mencari harga...
+                </div>
+            </div>
+        </section>
+
+        <!-- Bagian 2: Upload Excel (Admin) -->
+        <section class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Upload Master Harga (Excel)</h2>
+                    <p class="text-xs text-slate-500">Perbarui database secara massal lewat file Excel (.xlsx / .csv).</p>
+                </div>
+            </div>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-5 text-xs text-slate-600 space-y-1">
+                <p class="font-semibold text-slate-700">Panduan Format Kolom Excel (Baris 1 adalah Header):</p>
+                <p>Kolom A: <span class="font-mono text-blue-600">Brand</span> | Kolom B: <span class="font-mono text-blue-600">Tipe</span> | Kolom C: <span class="font-mono text-blue-600">Harga Modal</span> | Kolom D: <span class="font-mono text-blue-600">Harga Jual</span></p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
                 <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 border rounded-lg cursor-pointer">
+                    class="block w-full text-sm text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 border border-slate-200 rounded-xl cursor-pointer bg-slate-50">
                 
                 <button onclick="prosesUploadFileExcel()" 
-                    class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded-lg transition whitespace-nowrap">
-                    Upload ke Firebase
+                    class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-sm hover:shadow whitespace-nowrap flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Proses Upload
                 </button>
             </div>
             <p id="statusUpload" class="text-sm mt-3 font-medium"></p>
-        </div>
+        </section>
 
-    </div>
+    </main>
 
     <!-- Firebase SDK (Modular v10) -->
     <script type="module">
@@ -59,9 +96,9 @@
         import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // ==========================================
-        // GANTI DENGAN CONFIG FIREBASE MILIKMU SENDIRI
+        // CONFIG FIREBASE KAMU
         // ==========================================
-        const firebaseConfig = {
+         const firebaseConfig = {
 
   apiKey: "AIzaSyAzDlIWFWrpHyf2xgLYMifLcGmBqc10EW0",
 
@@ -78,12 +115,9 @@
   measurementId: "G-N660XBC2L4"
 
 };
-
-        // Inisialisasi Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Cache data lokal agar pencarian instan
         let localMasterData = [];
 
         async function loadMasterData() {
@@ -101,16 +135,18 @@
             }
         }
 
-        // Panggil saat halaman dimuat
         loadMasterData();
 
-        // Fungsi Pencarian Realtime
+        // Pencarian Realtime
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
             
             if (keyword === "") {
-                resultContainer.innerHTML = `<p class="text-gray-400 italic">Ketik sesuatu untuk mulai mencari...</p>`;
+                resultContainer.innerHTML = `
+                    <div class="col-span-full py-12 text-center border-2 border-dashed border-slate-200 rounded-xl text-slate-400 text-sm">
+                        Ketik kata kunci pada kolom di atas untuk mulai mencari harga...
+                    </div>`;
                 return;
             }
 
@@ -120,26 +156,29 @@
             );
 
             if (filtered.length === 0) {
-                resultContainer.innerHTML = `<p class="text-red-500">Barang tidak ditemukan di database.</p>`;
+                resultContainer.innerHTML = `
+                    <div class="col-span-full py-10 text-center bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-sm font-medium">
+                        ❌ Produk atau brand tidak ditemukan di database.
+                    </div>`;
                 return;
             }
 
             let html = "";
             filtered.forEach(item => {
                 html += `
-                    <div class="border p-4 rounded-lg bg-gray-50 flex flex-col justify-between">
+                    <div class="border border-slate-200 p-5 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                         <div>
-                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-semibold">${item.brand}</span>
-                            <h3 class="text-lg font-bold text-gray-800 mt-1">${item.tipe}</h3>
+                            <span class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
+                            <h3 class="text-xl font-bold text-slate-900 mt-2">${item.tipe}</h3>
                         </div>
-                        <div class="mt-3 pt-2 border-t flex justify-between text-sm">
-                            <div>
-                                <span class="text-gray-500 block">Modal:</span>
-                                <span class="font-bold text-red-600">Rp ${Number(item.modal).toLocaleString('id-ID')}</span>
+                        <div class="grid grid-cols-2 gap-4 pt-3 border-t border-slate-100 text-sm">
+                            <div class="bg-slate-50 p-3 rounded-xl">
+                                <span class="text-slate-400 text-xs block mb-0.5 font-medium">Harga Modal</span>
+                                <span class="font-bold text-slate-700 text-base">Rp ${Number(item.modal).toLocaleString('id-ID')}</span>
                             </div>
-                            <div class="text-right">
-                                <span class="text-gray-500 block">Jual:</span>
-                                <span class="font-bold text-green-600">Rp ${Number(item.jual).toLocaleString('id-ID')}</span>
+                            <div class="bg-emerald-50/60 p-3 rounded-xl text-right">
+                                <span class="text-emerald-600/80 text-xs block mb-0.5 font-medium">Harga Jual</span>
+                                <span class="font-bold text-emerald-700 text-base">Rp ${Number(item.jual).toLocaleString('id-ID')}</span>
                             </div>
                         </div>
                     </div>
@@ -148,47 +187,41 @@
             resultContainer.innerHTML = html;
         });
 
-        // Fungsi Membaca dan Mengupload File Excel
+        // Upload Excel
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
             
             if (fileInput.files.length === 0) {
-                statusEl.className = "text-sm mt-3 font-medium text-red-500";
-                statusEl.innerText = "Pilih file Excel terlebih dahulu!";
+                statusEl.className = "text-sm mt-3 font-medium text-rose-500";
+                statusEl.innerText = "⚠️ Pilih file Excel terlebih dahulu!";
                 return;
             }
 
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-3 font-medium text-blue-600";
-            statusEl.innerText = "Membaca file Excel...";
+            statusEl.innerText = "⏳ Sedang membaca file Excel...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    
-                    // Ambil sheet pertama dari file Excel
                     const firstSheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[firstSheetName];
-                    
-                    // Ubah sheet Excel menjadi format JSON array
                     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                     
                     if (jsonData.length <= 1) {
-                        statusEl.className = "text-sm mt-3 font-medium text-red-500";
-                        statusEl.innerText = "File Excel kosong atau tidak memiliki baris data.";
+                        statusEl.className = "text-sm mt-3 font-medium text-rose-500";
+                        statusEl.innerText = "❌ File Excel kosong atau tidak memiliki data.";
                         return;
                     }
 
-                    statusEl.innerText = "Mengirim data ke Firebase...";
+                    statusEl.innerText = "🚀 Mengirim data ke Firebase Cloud...";
                     let successCount = 0;
 
-                    // Mulai dari baris index 1 (melewati baris ke-0 / header judul kolom)
                     for (let i = 1; i < jsonData.length; i++) {
                         const row = jsonData[i];
-                        // Pastikan kolom minimal ada 4 (Brand, Tipe, Modal, Jual)
                         if (row && row.length >= 4) {
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
@@ -210,20 +243,17 @@
                         }
                     }
 
-                    statusEl.className = "text-sm mt-3 font-medium text-green-600";
-                    statusEl.innerText = `Sukses! Berhasil memperbarui ${successCount} produk dari file Excel.`;
-                    fileInput.value = ""; // Reset input file
-                    
-                    // Refresh data lokal
+                    statusEl.className = "text-sm mt-3 font-medium text-emerald-600";
+                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk ke database.`;
+                    fileInput.value = "";
                     await loadMasterData();
 
                 } catch (error) {
-                    console.error("Error membaca/upload file:", error);
-                    statusEl.className = "text-sm mt-3 font-medium text-red-600";
-                    statusEl.innerText = "Gagal memproses file. Pastikan format Excel benar.";
+                    console.error("Error:", error);
+                    statusEl.className = "text-sm mt-3 font-medium text-rose-600";
+                    statusEl.innerText = "❌ Gagal memproses file. Pastikan format Excel sesuai.";
                 }
             };
-
             reader.readAsArrayBuffer(file);
         };
     </script>
