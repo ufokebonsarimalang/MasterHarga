@@ -104,7 +104,7 @@
                     <button onclick="prosesUploadFileExcel()" 
                         class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition shadow-sm hover:shadow flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        Proses & Hitung Otomatis ke Firebase
+                        Proses & Simpan Modal ke Firebase
                     </button>
                 </div>
                 <p id="statusUpload" class="text-sm mt-4 font-medium text-center"></p>
@@ -200,6 +200,7 @@
                     const data = docSnap.data();
                     const brandName = docSnap.id;
                     const persen = data.persen;
+                    // Simpan sebagai multiplier pengali (misal: 10% jadi 1.10)
                     aturanMarginBrand[brandName.toLowerCase()] = 1 + (persen / 100); 
 
                     htmlList += `
@@ -222,8 +223,12 @@
             }
         }
 
-        loadMasterData();
-        loadAturanBrand();
+        // Jalankan saat pertama kali dibuka
+        async function initApp() {
+            await loadAturanBrand();
+            await loadMasterData();
+        }
+        initApp();
 
         // Fungsi Ganti Menu (Tab Switcher)
         window.switchTab = function(tabName) {
@@ -243,7 +248,7 @@
             });
         }
 
-        // Simpan / Update Pengaturan Margin Brand ke Firebase
+        // Simpan / Update Pengaturan Margin Brand ke Firebase & Refresh Data
         window.simpanPengaturanBrand = async function() {
             const nama = document.getElementById('inputBrandNama').value.trim().toLowerCase();
             const persen = parseFloat(document.getElementById('inputBrandPersen').value);
@@ -265,10 +270,10 @@
                 });
 
                 statusEl.className = "text-xs font-medium text-emerald-600";
-                statusEl.innerText = "✨ Berhasil menyimpan aturan margin brand!";
+                statusEl.innerText = "✨ Berhasil menyimpan! Harga jual otomatis terupdate.";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
-                await loadAturanBrand();
+                await loadAturanBrand(); // Muat ulang margin terbaru agar langsung aktif
             } catch (error) {
                 statusEl.className = "text-xs font-medium text-rose-600";
                 statusEl.innerText = "❌ Gagal menyimpan pengaturan.";
@@ -287,7 +292,7 @@
             }
         }
 
-        // Pencarian Realtime (Tampilan Kartu Super Rapi & Lega)
+        // Pencarian Realtime + Hitung Harga Jual Otomatis Berdasarkan Margin Terbaru
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
@@ -316,7 +321,17 @@
             let html = "";
             filtered.forEach(item => {
                 const modal = Number(item.modal) || 0;
-                const jual = Number(item.jual) || 0;
+                const brandKey = item.brand.toLowerCase().trim();
+                const absoluteDefaultPengali = 1.10; // Default 10% jika brand tidak diatur
+
+                // Hitung harga jual otomatis secara live dari persen margin aktif
+                const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
+                const nilaiDasar = modal * pengali;
+                const sisaMod = nilaiDasar % 100000;
+                const pembulatanBawah = nilaiDasar - sisaMod;
+                const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
+                const jual = Math.round(pembulatanBawah + tambahanAkhir);
+
                 const selisihMargin = jual - modal;
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
@@ -330,15 +345,15 @@
                             <h3 class="text-xl md:text-2xl font-bold text-slate-900 mt-3 tracking-tight">${item.tipe}</h3>
                         </div>
 
-                        <!-- Layout Harga Vertikal yang Lega dan Sempurna untuk PC & HP -->
+                        <!-- Layout Harga Vertikal Otomatis Live -->
                         <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <!-- Harga Jual (Full Lebar ke Bawah, Angka Dijamin Tidak Kepotong) -->
+                            <!-- Harga Jual -->
                             <div class="bg-emerald-50/80 p-3.5 rounded-xl border border-emerald-100 flex flex-col justify-between">
-                                <span class="text-emerald-700 text-[11px] font-extrabold uppercase tracking-wider">Harga Jual</span>
+                                <span class="text-emerald-700 text-[11px] font-extrabold uppercase tracking-wider">Harga Jual (Live)</span>
                                 <span class="font-extrabold text-emerald-800 text-lg md:text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
 
-                            <!-- Modal & Profit (Berjajar Rapi di Bawahnya) -->
+                            <!-- Modal & Profit -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col justify-between">
                                     <span class="text-slate-400 text-[11px] uppercase tracking-wider font-bold">Modal</span>
@@ -359,7 +374,7 @@
             resultContainer.innerHTML = html;
         });
 
-        // Upload Excel Multi-Sheet + Hitung Otomatis Berdasarkan Margin Brand di Cloud
+        // Upload Excel Cukup Simpan Modal Saja ke Firebase
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
@@ -372,7 +387,7 @@
 
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-blue-600";
-            statusEl.innerText = "⏳ Sedang membaca file Excel & menghitung margin...";
+            statusEl.innerText = "⏳ Membaca file Excel & menyimpan data modal ke Firebase...";
 
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -380,9 +395,7 @@
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     
-                    statusEl.innerText = "🚀 Menghitung harga jual & mengirim data ke Firebase...";
                     let successCount = 0;
-                    const absoluteDefaultPengali = 1.10; 
 
                     for (let sheetName of workbook.SheetNames) {
                         const worksheet = workbook.Sheets[sheetName];
@@ -400,26 +413,14 @@
                                 if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
 
                                 if (brand && tipe && !isNaN(modal) && modal > 0) {
-                                    const brandKey = brand.toLowerCase().trim();
-                                    const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
-
-                                    // Rumus Pembulatan Otomatis
-                                    const nilaiDasar = modal * pengali;
-                                    const sisaMod = nilaiDasar % 100000;
-                                    const pembulatanBawah = nilaiDasar - sisaMod;
-                                    const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
-                                    
-                                    const hargaJual = Math.round(pembulatanBawah + tambahanAkhir);
-                                    
-                                    // Pembersihan karakter '/' agar aman dibaca Firebase
                                     const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                                     const docId = `${brand}_${cleanTipe}`;
                                     
+                                    // Hanya simpan brand, tipe, dan modal dasar ke database
                                     await setDoc(doc(db, "master_harga", docId), {
                                         brand: brand,
                                         tipe: tipe,
                                         modal: modal,
-                                        jual: hargaJual,
                                         updated_at: new Date().toISOString()
                                     });
                                     successCount++;
@@ -429,7 +430,7 @@
                     }
 
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-600";
-                    statusEl.innerText = `✨ Sukses! Berhasil memperbarui ${successCount} produk elektronik dengan margin otomatis.`;
+                    statusEl.innerText = `✨ Sukses! Berhasil menyimpan ${successCount} data modal. Margin sekarang dihitung otomatis real-time.`;
                     fileInput.value = "";
                     await loadMasterData();
 
