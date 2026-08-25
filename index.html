@@ -287,7 +287,7 @@
             }
         }
 
-        // Pencarian Realtime (Tampilan Super Rapi untuk HP & PC)
+        // Pencarian Realtime (Tampilan Kartu Super Rapi & Lega)
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
@@ -319,7 +319,8 @@
                 const jual = Number(item.jual) || 0;
                 const selisihMargin = jual - modal;
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
-html += `
+
+                html += `
                     <div class="border border-slate-200 p-5 md:p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                         <div>
                             <div class="flex justify-between items-start gap-2">
@@ -329,15 +330,15 @@ html += `
                             <h3 class="text-xl md:text-2xl font-bold text-slate-900 mt-3 tracking-tight">${item.tipe}</h3>
                         </div>
 
-                        <!-- Layout Harga yang Dirapikan agar Sempurna di PC & HP -->
+                        <!-- Layout Harga Vertikal yang Lega dan Sempurna untuk PC & HP -->
                         <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <!-- Harga Jual (Dipaksa satu baris rapi ke samping) -->
-                            <div class="bg-emerald-50/80 p-4 rounded-xl border border-emerald-100 flex items-center justify-between gap-3">
-                                <span class="text-emerald-700 text-xs font-extrabold uppercase tracking-wider shrink-0">Harga Jual</span>
-                                <span class="font-extrabold text-emerald-800 text-base md:text-lg tracking-tight text-right">Rp ${jual.toLocaleString('id-ID')}</span>
+                            <!-- Harga Jual (Full Lebar ke Bawah, Angka Dijamin Tidak Kepotong) -->
+                            <div class="bg-emerald-50/80 p-3.5 rounded-xl border border-emerald-100 flex flex-col justify-between">
+                                <span class="text-emerald-700 text-[11px] font-extrabold uppercase tracking-wider">Harga Jual</span>
+                                <span class="font-extrabold text-emerald-800 text-lg md:text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
 
-                            <!-- Modal & Profit (Berjajar di Bawah) -->
+                            <!-- Modal & Profit (Berjajar Rapi di Bawahnya) -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col justify-between">
                                     <span class="text-slate-400 text-[11px] uppercase tracking-wider font-bold">Modal</span>
@@ -353,10 +354,10 @@ html += `
                             </div>
                         </div>
                     </div>
-                `;`;
+                `;
             });
             resultContainer.innerHTML = html;
-        }); // <-- Tanda penutup penjelajah pencarian yang tadi hilang!
+        });
 
         // Upload Excel Multi-Sheet + Hitung Otomatis Berdasarkan Margin Brand di Cloud
         window.prosesUploadFileExcel = function() {
