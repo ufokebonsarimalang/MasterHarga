@@ -287,7 +287,7 @@
             }
         }
 
-        // Pencarian Realtime Kilat (Tampilan Lengkap, Tanpa Delay)
+        // Pencarian Kilat Tanpa Delay (Maksimal render 30 data teratas agar HP tetap ngebut)
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
@@ -313,15 +313,18 @@
                 return;
             }
 
+            // Batasi 30 hasil pertama agar pengetikan di HP tidak lag/berat
+            const limitedFiltered = filtered.slice(0, 30);
+
             let html = "";
-            filtered.forEach(item => {
+            limitedFiltered.forEach(item => {
                 const modal = Number(item.modal) || 0;
                 const jual = Number(item.jual) || 0;
                 const selisihMargin = jual - modal;
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                 html += `
-                    <div class="border border-slate-200 p-4 md:p-6 rounded-2xl bg-white shadow-sm transition flex flex-col justify-between space-y-4">
+                    <div class="border border-slate-200 p-4 md:p-6 rounded-2xl bg-white shadow-sm flex flex-col justify-between space-y-4">
                         <div>
                             <span class="text-xs md:text-sm bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg font-bold uppercase tracking-wider">${item.brand}</span>
                             <h3 class="text-xl md:text-2xl font-bold text-slate-900 mt-2">${item.tipe}</h3>
@@ -344,6 +347,11 @@
                     </div>
                 `;
             });
+
+            if (filtered.length > 30) {
+                html += `<p class="text-xs text-slate-400 col-span-full text-center mt-2">Menampilkan 30 dari ${filtered.length} hasil pencarian...</p>`;
+            }
+
             resultContainer.innerHTML = html;
         });
 
