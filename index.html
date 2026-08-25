@@ -300,11 +300,12 @@
         }
 
         // Pencarian Realtime + Hitung Harga Jual Otomatis Berdasarkan Margin Terbaru
+     // Pencarian Cerdas & Fleksibel (Aman dari spasi atau tanda hubung minus)
         document.getElementById('searchInput').addEventListener('input', function(e) {
-            const keyword = e.target.value.toLowerCase().trim();
+            const rawKeyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
             
-            if (keyword === "") {
+            if (rawKeyword === "") {
                 resultContainer.innerHTML = `
                     <div class="col-span-full py-16 md:py-20 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-white text-slate-400 text-sm">
                         🔍 Ketik kata kunci pada kotak pencarian di atas untuk melihat produk.
@@ -312,10 +313,15 @@
                 return;
             }
 
-            const filtered = localMasterData.filter(item => 
-                item.brand.toLowerCase().includes(keyword) || 
-                item.tipe.toLowerCase().includes(keyword)
-            );
+            // Bersihkan keyword dari tanda hubung/simbol dan spasi agar pencarian lebih fleksibel
+            const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+
+            const filtered = localMasterData.filter(item => {
+                const cleanBrand = item.brand.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                const cleanTipe = item.tipe.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                
+                return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
+            });
 
             if (filtered.length === 0) {
                 resultContainer.innerHTML = `
@@ -329,7 +335,7 @@
             filtered.forEach(item => {
                 const modal = Number(item.modal) || 0;
                 const brandKey = item.brand.toLowerCase().trim();
-                const absoluteDefaultPengali = 1.10; // Default 10% jika brand tidak diatur
+                const absoluteDefaultPengali = 1.10; 
 
                 // Hitung harga jual otomatis secara live dari persen margin aktif
                 const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
@@ -380,7 +386,6 @@
             });
             resultContainer.innerHTML = html;
         });
-
         // Upload Excel Cukup Simpan Modal Saja ke Firebase
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
