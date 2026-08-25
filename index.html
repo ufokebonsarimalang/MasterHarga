@@ -334,7 +334,7 @@
                 const selisihMargin = jual - modal;
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
-              html += `
+                html += `
                     <div class="border border-slate-800/80 p-6 rounded-3xl bg-slate-900/60 backdrop-blur-xl shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between space-y-5 group">
                         <!-- Header Kartu -->
                         <div>
@@ -345,31 +345,35 @@
                             <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight group-hover:text-indigo-300 transition-colors">${item.tipe}</h3>
                         </div>
 
-                        <!-- Layout Harga Jual, Modal, & Margin (Clean & Vertical Aman dari Tabrakan Border) -->
+                        <!-- Layout Harga Jual, Modal, & Margin (Aman dari Tabrakan Border dengan Ukuran Proporsional) -->
                         <div class="space-y-3 pt-3 border-t border-slate-800/80">
-                            <!-- Harga Jual (Disusun Vertikal agar Lega dan Tidak Menabrak Border) -->
+                            <!-- Harga Jual -->
                             <div class="bg-gradient-to-r from-emerald-950/40 to-slate-950/60 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
-                                <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Harga Jual</span>
-                                <span class="font-extrabold text-emerald-300 text-2xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
+                                <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual</span>
+                                <span class="font-extrabold text-emerald-300 text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
 
                             <!-- Modal & Margin -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-slate-950/50 p-3.5 rounded-2xl border border-slate-800/60 flex flex-col">
                                     <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Modal</span>
-                                    <span class="font-bold text-slate-200 text-sm mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                                    <span class="font-bold text-slate-200 text-xs mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
                                 </div>
                                 <div class="bg-indigo-950/30 p-3.5 rounded-2xl border border-indigo-500/20 flex flex-col">
                                     <span class="text-indigo-400 text-[10px] font-bold uppercase tracking-wider">Margin</span>
-                                    <div class="mt-1 flex items-baseline gap-1.5">
-                                        <span class="font-extrabold text-indigo-300 text-sm">+${persentaseMargin}%</span>
-                                        <span class="text-[11px] font-medium text-indigo-400/80">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                    <div class="mt-1 flex flex-col">
+                                        <span class="font-extrabold text-indigo-300 text-xs">+${persentaseMargin}%</span>
+                                        <span class="text-[10px] font-medium text-indigo-400/80">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
+            });
+            resultContainer.innerHTML = html;
+        });
+
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
