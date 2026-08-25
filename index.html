@@ -287,7 +287,7 @@
             }
         }
 
-        // Pencarian Kilat Tanpa Delay (Maksimal render 30 data teratas agar HP tetap ngebut)
+        // Pencarian Realtime Kilat (Tampilan Bagus + Maksimal 30 Hasil Teratas agar Ngebut di HP)
         document.getElementById('searchInput').addEventListener('input', function(e) {
             const keyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
@@ -313,7 +313,7 @@
                 return;
             }
 
-            // Batasi 30 hasil pertama agar pengetikan di HP tidak lag/berat
+            // Batasi 30 hasil pertama agar render DOM di HP instan tanpa delay
             const limitedFiltered = filtered.slice(0, 30);
 
             let html = "";
