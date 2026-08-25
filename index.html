@@ -398,7 +398,9 @@
                                     const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
                                     
                                     const hargaJual = Math.round(pembulatanBawah + tambahanAkhir);
-                                    const docId = `${brand}_${tipe}`.replace(/\s+/g, '_');
+                                    // Ganti baris const docId lama dengan ini:
+const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
+const docId = `${brand}_${cleanTipe}`;
                                     
                                     await setDoc(doc(db, "master_harga", docId), {
                                         brand: brand,
