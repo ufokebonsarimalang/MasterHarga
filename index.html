@@ -17,16 +17,14 @@
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #334155; }
         
-        /* Efek Garis Glow Kartu */
+        /* Efek Garis Glow Kartu (Dioptimalkan agar ringan di HP) */
         .glass-card {
-            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(3, 7, 18, 0.8) 100%);
-            backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
             border: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
         .glass-card:hover {
             border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
         }
     </style>
 </head>
@@ -37,7 +35,7 @@
     <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
     <!-- SIDEBAR UTAMA (Fixed Menempel di Kiri Full Tinggi Layar) -->
-    <aside class="w-full md:w-72 h-auto md:h-screen sticky top-0 bg-slate-900/80 backdrop-blur-2xl border-r border-slate-800/80 flex flex-row md:flex-col justify-between p-4 md:p-6 shrink-0 z-30 items-center md:items-stretch shadow-2xl overflow-y-auto">
+    <aside class="w-full md:w-72 h-auto md:h-screen sticky top-0 bg-slate-900/90 backdrop-blur-xl border-r border-slate-800/80 flex flex-row md:flex-col justify-between p-4 md:p-6 shrink-0 z-30 items-center md:items-stretch shadow-2xl overflow-y-auto">
         <!-- Logo / Judul App -->
         <div class="flex items-center gap-3.5">
             <div class="p-2.5 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white rounded-2xl shadow-lg shadow-indigo-500/30 ring-1 ring-white/20">
@@ -52,17 +50,17 @@
         <!-- Tombol Menu Navigasi -->
         <nav class="flex md:flex-col gap-2 mt-0 md:mt-6">
             <button onclick="switchTab('cari')" id="btnCari" 
-                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs md:text-sm transition-all duration-300 bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/30 ring-1 ring-white/20">
+                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs md:text-sm transition-all duration-200 bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/30 ring-1 ring-white/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <span class="hidden sm:inline">Cari Harga</span>
             </button>
             <button onclick="switchTab('upload')" id="btnUpload" 
-                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50">
+                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 <span class="hidden sm:inline">Upload Excel</span>
             </button>
             <button onclick="switchTab('pengaturan')" id="btnPengaturan" 
-                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50">
+                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 <span class="hidden sm:inline">Pengaturan Margin</span>
             </button>
@@ -255,10 +253,10 @@
                 const btn = document.getElementById(btns[i]);
                 if (t === 'tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)) {
                     el.classList.remove('hidden');
-                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs md:text-sm transition-all duration-300 bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/30 ring-1 ring-white/20";
+                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs md:text-sm transition-all duration-200 bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/30 ring-1 ring-white/20";
                 } else {
                     el.classList.add('hidden');
-                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-300 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50";
+                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50";
                 }
             });
         }
@@ -305,8 +303,10 @@
             }
         }
 
-        // Pencarian Cerdas Fleksibel + Pembatasan Maksimal 30 Hasil (Supaya Ngebut di HP)
+        // Pencarian Cerdas Super Kilat dengan Debounce & Limit 24 Item (Sangat Ringan di HP)
+        let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
             const rawKeyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
             
@@ -318,84 +318,83 @@
                 return;
             }
 
-            const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+            // Jeda 50ms agar pengetikan cepat tidak membebani browser HP
+            searchTimeout = setTimeout(() => {
+                const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
 
-            const filtered = localMasterData.filter(item => {
-                const cleanBrand = item.brand.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                const cleanTipe = item.tipe.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
-            });
+                const filtered = localMasterData.filter(item => {
+                    const cleanBrand = item.brand.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    const cleanTipe = item.tipe.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
+                });
 
-            if (filtered.length === 0) {
-                resultContainer.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-3xl text-rose-400 text-sm font-medium">
-                        ❌ Produk atau brand elektronik tidak ditemukan di database cloud.
-                    </div>`;
-                return;
-            }
+                if (filtered.length === 0) {
+                    resultContainer.innerHTML = `
+                        <div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-3xl text-rose-400 text-sm font-medium">
+                            ❌ Produk atau brand elektronik tidak ditemukan di database cloud.
+                        </div>`;
+                    return;
+                }
 
-            // Batasi 30 hasil teratas agar performa pengetikan di HP instan & bebas lag
-            const limitedFiltered = filtered.slice(0, 30);
+                // Batasi 24 hasil teratas agar render DOM instan tanpa jeda
+                const limitedFiltered = filtered.slice(0, 24);
 
-            let html = "";
-            limitedFiltered.forEach(item => {
-                const modal = Number(item.modal) || 0;
-                const brandKey = item.brand.toLowerCase().trim();
-                const absoluteDefaultPengali = 1.10; 
+                let html = "";
+                limitedFiltered.forEach(item => {
+                    const modal = Number(item.modal) || 0;
+                    const brandKey = item.brand.toLowerCase().trim();
+                    const absoluteDefaultPengali = 1.10; 
 
-                const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
-                const nilaiDasar = modal * pengali;
-                const sisaMod = nilaiDasar % 100000;
-                const pembulatanBawah = nilaiDasar - sisaMod;
-                const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
-                const jual = Math.round(pembulatanBawah + tambahanAkhir);
+                    const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
+                    const nilaiDasar = modal * pengali;
+                    const sisaMod = nilaiDasar % 100000;
+                    const pembulatanBawah = nilaiDasar - sisaMod;
+                    const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
+                    const jual = Math.round(pembulatanBawah + tambahanAkhir);
 
-                const selisihMargin = jual - modal;
-                const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
+                    const selisihMargin = jual - modal;
+                    const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
-                html += `
-                    <div class="glass-card p-6 rounded-3xl transition-all duration-300 flex flex-col justify-between space-y-5 group">
-                        <!-- Header Kartu -->
-                        <div>
-                            <div class="flex justify-between items-start gap-2">
-                                <span class="text-[11px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">${item.brand}</span>
-                                <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800/80 shadow-inner">${item.tipe}</span>
-                            </div>
-                            <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight group-hover:text-indigo-300 transition-colors">${item.tipe}</h3>
-                        </div>
-
-                        <!-- Layout Harga Jual, Modal, & Margin -->
-                        <div class="space-y-3 pt-3 border-t border-slate-800/80">
-                            <!-- Harga Jual -->
-                            <div class="bg-gradient-to-r from-emerald-950/50 via-slate-950/80 to-slate-950/80 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
-                                <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual</span>
-                                <span class="font-black text-emerald-300 text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
-                            </div>
-
-                            <!-- Modal & Margin -->
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/60 flex flex-col shadow-inner">
-                                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Modal</span>
-                                    <span class="font-bold text-slate-200 text-xs mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                    html += `
+                        <div class="glass-card p-6 rounded-3xl flex flex-col justify-between space-y-5">
+                            <div>
+                                <div class="flex justify-between items-start gap-2">
+                                    <span class="text-[11px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">${item.brand}</span>
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800/80 shadow-inner">${item.tipe}</span>
                                 </div>
-                                <div class="bg-indigo-950/50 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
-                                    <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Margin</span>
-                                    <div class="mt-1 flex flex-col">
-                                        <span class="font-extrabold text-cyan-300 text-xs">+${persentaseMargin}%</span>
-                                        <span class="text-[10px] font-semibold text-sky-200">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight">${item.tipe}</h3>
+                            </div>
+
+                            <div class="space-y-3 pt-3 border-t border-slate-800/80">
+                                <div class="bg-gradient-to-r from-emerald-950/50 via-slate-950/80 to-slate-950/80 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
+                                    <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual</span>
+                                    <span class="font-black text-emerald-300 text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/60 flex flex-col shadow-inner">
+                                        <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Modal</span>
+                                        <span class="font-bold text-slate-200 text-xs mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                                    </div>
+                                    <div class="bg-indigo-950/50 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
+                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Margin</span>
+                                        <div class="mt-1 flex flex-col">
+                                            <span class="font-extrabold text-cyan-300 text-xs">+${persentaseMargin}%</span>
+                                            <span class="text-[10px] font-semibold text-sky-200">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
 
-            if (filtered.length > 30) {
-                html += `<p class="text-xs text-slate-500 col-span-full text-center mt-2">Menampilkan 30 dari total ${filtered.length} hasil pencarian...</p>`;
-            }
+                if (filtered.length > 24) {
+                    html += `<p class="text-xs text-slate-500 col-span-full text-center mt-2">Menampilkan 24 dari total ${filtered.length} hasil pencarian...</p>`;
+                }
 
-            resultContainer.innerHTML = html;
+                resultContainer.innerHTML = html;
+            }, 50);
         });
 
         window.prosesUploadFileExcel = function() {
