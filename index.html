@@ -12,7 +12,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        /* Custom Smooth Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
@@ -21,8 +20,7 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col md:flex-row selection:bg-indigo-500 selection:text-white">
 
-    <!-- SIDEBAR MODERN (Desktop) / NAVBAR (Mobile) -->
-<!-- SIDEBAR UTAMA (Menempel Sempurna di Kiri Full Tinggi Layar) -->
+    <!-- SIDEBAR UTAMA (Fixed Menempel di Kiri Full Tinggi Layar) -->
     <aside class="w-full md:w-72 h-auto md:h-screen sticky top-0 bg-slate-900/90 backdrop-blur-xl border-r border-slate-800 flex flex-row md:flex-col justify-between p-4 md:p-6 shrink-0 z-30 items-center md:items-stretch shadow-2xl overflow-y-auto">
         <!-- Logo / Judul App -->
         <div class="flex items-center gap-3.5">
@@ -30,7 +28,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <div class="hidden sm:block">
-                <h1 class="font-extrabold text-white text-base tracking-tight">NexPrice <span class="text-indigo-400 text-xs px-1.5 py-0.5 bg-indigo-500/10 rounded-md border border-indigo-500/20">v2.5</span></h1>
+                <h1 class="font-extrabold text-white text-base tracking-tight">NexPrice <span class="text-indigo-400 text-xs px-1.5 py-0.5 bg-indigo-500/10 rounded-md border border-indigo-500/20">v2.9</span></h1>
                 <p class="text-[11px] text-slate-400 font-medium tracking-wide">Enterprise Pricing Engine</p>
             </div>
         </div>
@@ -55,7 +53,7 @@
         </nav>
 
         <!-- Status Koneksi -->
-        <div class="hidden md:flex pt-6 border-t border-slate-800/80 text-xs items-center gap-3 text-slate-400">
+        <div class="hidden md:flex pt-6 border-t border-slate-800 text-xs items-center gap-3 text-slate-400">
             <span class="relative flex h-2.5 w-2.5">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -72,7 +70,7 @@
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-900/60 backdrop-blur-xl p-6 rounded-3xl shadow-xl border border-slate-800/80">
                 <div>
                     <h2 class="text-xl md:text-2xl font-extrabold text-white tracking-tight">Pencarian Produk Instan</h2>
-                    <p class="text-xs text-slate-400 mt-1">Cari berdasarkan brand atau tipe unit untuk melihat rincian harga jual live.</p>
+                    <p class="text-xs text-slate-400 mt-1">Cari berdasarkan brand atau tipe unit untuk melihat rincian harga.</p>
                 </div>
                 <div class="relative w-full md:w-96">
                     <input type="text" id="searchInput" placeholder="Cari: AQR-D, Samsung, Kulkas..." 
@@ -247,12 +245,6 @@
                     btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50";
                 }
             });
-
-            document.getElementById('searchInput').value = "";
-            document.getElementById('searchResult').innerHTML = `
-                <div class="col-span-full py-20 text-center border border-dashed border-slate-800 rounded-3xl bg-slate-900/30 text-slate-500 text-sm">
-                    🔍 Ketik kata kunci pada kotak pencarian di atas untuk memulai.
-                </div>`;
         }
 
         window.simpanPengaturanBrand = async function() {
@@ -344,33 +336,34 @@
 
                 html += `
                     <div class="border border-slate-800/80 p-6 rounded-3xl bg-slate-900/60 backdrop-blur-xl shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between space-y-5 group">
+                        <!-- Header Kartu -->
                         <div>
                             <div class="flex justify-between items-start gap-2">
                                 <span class="text-[11px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">${item.brand}</span>
-                                <span class="text-xs font-mono text-slate-500 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">${item.tipe}</span>
+                                <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800">${item.tipe}</span>
                             </div>
                             <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight group-hover:text-indigo-300 transition-colors">${item.tipe}</h3>
                         </div>
 
-                        <!-- Layout Harga Vertikal Premium Modern -->
+                        <!-- Layout Harga Jual, Modal, & Margin (Bersih Tanpa Embel-embel) -->
                         <div class="space-y-3 pt-3 border-t border-slate-800/80">
                             <!-- Harga Jual -->
-                            <div class="bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 flex flex-col justify-between shadow-inner">
-                                <span class="text-emerald-400 text-[10px] font-extrabold uppercase tracking-widest">Harga Jual (Live Calculation)</span>
-                                <span class="font-extrabold text-emerald-300 text-xl md:text-2xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
+                            <div class="bg-gradient-to-r from-emerald-950/40 to-slate-950/60 p-4.5 rounded-2xl border border-emerald-500/30 flex items-center justify-between shadow-inner">
+                                <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Harga Jual</span>
+                                <span class="font-extrabold text-emerald-300 text-2xl tracking-tight">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
 
-                            <!-- Modal & Profit -->
+                            <!-- Modal & Margin -->
                             <div class="grid grid-cols-2 gap-3">
-                                <div class="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80 flex flex-col justify-between">
-                                    <span class="text-slate-500 text-[10px] uppercase tracking-wider font-bold">Modal Dasar</span>
-                                    <span class="font-bold text-slate-300 text-xs md:text-sm mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                                <div class="bg-slate-950/50 p-3.5 rounded-2xl border border-slate-800/60 flex flex-col">
+                                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Modal</span>
+                                    <span class="font-bold text-slate-200 text-sm mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
                                 </div>
-                                <div class="bg-blue-500/10 p-3.5 rounded-2xl border border-blue-500/20 flex flex-col justify-between">
-                                    <span class="text-blue-400 text-[10px] uppercase tracking-wider font-bold">Estimated Profit</span>
-                                    <div class="mt-1 flex flex-col">
-                                        <span class="font-extrabold text-blue-300 text-xs md:text-sm">+${persentaseMargin}%</span>
-                                        <span class="text-[10px] font-semibold text-blue-400/80">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                <div class="bg-indigo-950/30 p-3.5 rounded-2xl border border-indigo-500/20 flex flex-col">
+                                    <span class="text-indigo-400 text-[10px] font-bold uppercase tracking-wider">Margin</span>
+                                    <div class="mt-1 flex items-baseline gap-1.5">
+                                        <span class="font-extrabold text-indigo-300 text-sm">+${persentaseMargin}%</span>
+                                        <span class="text-[11px] font-medium text-indigo-400/80">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                                     </div>
                                 </div>
                             </div>
