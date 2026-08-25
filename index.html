@@ -319,8 +319,7 @@
                 const jual = Number(item.jual) || 0;
                 const selisihMargin = jual - modal;
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
-
-               html += `
+html += `
                     <div class="border border-slate-200 p-5 md:p-6 rounded-2xl bg-white shadow-sm hover:shadow-md transition flex flex-col justify-between space-y-4">
                         <div>
                             <div class="flex justify-between items-start gap-2">
@@ -330,31 +329,31 @@
                             <h3 class="text-xl md:text-2xl font-bold text-slate-900 mt-3 tracking-tight">${item.tipe}</h3>
                         </div>
 
-                        <!-- Layout Harga yang Lebih Lega & Tidak Kepotong -->
+                        <!-- Layout Harga yang Dirapikan agar Sempurna di PC & HP -->
                         <div class="space-y-3 pt-3 border-t border-slate-100">
-                            <!-- Harga Jual (Paling Menonjol di Atas) -->
-                            <div class="bg-emerald-50/80 p-4 rounded-xl border border-emerald-100 flex items-center justify-between">
-                                <span class="text-emerald-700 text-xs md:text-sm uppercase tracking-wider font-extrabold">Harga Jual</span>
-                                <span class="font-extrabold text-emerald-800 text-lg md:text-xl">Rp ${jual.toLocaleString('id-ID')}</span>
+                            <!-- Harga Jual (Dipaksa satu baris rapi ke samping) -->
+                            <div class="bg-emerald-50/80 p-4 rounded-xl border border-emerald-100 flex items-center justify-between gap-3">
+                                <span class="text-emerald-700 text-xs font-extrabold uppercase tracking-wider shrink-0">Harga Jual</span>
+                                <span class="font-extrabold text-emerald-800 text-base md:text-lg tracking-tight text-right">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
 
                             <!-- Modal & Profit (Berjajar di Bawah) -->
                             <div class="grid grid-cols-2 gap-3">
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 flex flex-col justify-between">
                                     <span class="text-slate-400 text-[11px] uppercase tracking-wider font-bold">Modal</span>
-                                    <span class="font-bold text-slate-700 text-sm mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                                    <span class="font-bold text-slate-700 text-xs md:text-sm mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
                                 </div>
                                 <div class="bg-blue-50/80 p-3 rounded-xl border border-blue-100 flex flex-col justify-between">
                                     <span class="text-blue-600 text-[11px] uppercase tracking-wider font-bold">Profit</span>
-                                    <div class="mt-1 flex items-baseline gap-1.5">
-                                        <span class="font-extrabold text-blue-800 text-sm">+${persentaseMargin}%</span>
-                                        <span class="text-[11px] font-bold text-blue-600">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                    <div class="mt-1 flex flex-col">
+                                        <span class="font-extrabold text-blue-800 text-xs md:text-sm">+${persentaseMargin}%</span>
+                                        <span class="text-[10px] md:text-xs font-bold text-blue-700">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                `;
+                `;`;
             });
             resultContainer.innerHTML = html;
         }); // <-- Tanda penutup penjelajah pencarian yang tadi hilang!
