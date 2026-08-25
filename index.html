@@ -305,8 +305,11 @@
             }
         }
 
-        // Pencarian Cerdas Fleksibel
+        // Pencarian Cerdas Fleksibel dengan Optimasi Debounce (Anti-Delay di HP)
+        let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            
             const rawKeyword = e.target.value.toLowerCase().trim();
             const resultContainer = document.getElementById('searchResult');
             
@@ -318,76 +321,77 @@
                 return;
             }
 
-            const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+            // Jeda 250ms agar pengetikan di HP tidak lag/delay
+            searchTimeout = setTimeout(() => {
+                const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
 
-            const filtered = localMasterData.filter(item => {
-                const cleanBrand = item.brand.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                const cleanTipe = item.tipe.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
-            });
+                const filtered = localMasterData.filter(item => {
+                    const cleanBrand = item.brand.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    const cleanTipe = item.tipe.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
+                });
 
-            if (filtered.length === 0) {
-                resultContainer.innerHTML = `
-                    <div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-3xl text-rose-400 text-sm font-medium">
-                        ❌ Produk atau brand elektronik tidak ditemukan di database cloud.
-                    </div>`;
-                return;
-            }
+                if (filtered.length === 0) {
+                    resultContainer.innerHTML = `
+                        <div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-3xl text-rose-400 text-sm font-medium">
+                            ❌ Produk atau brand elektronik tidak ditemukan di database cloud.
+                        </div>`;
+                    return;
+                }
 
-            let html = "";
-            filtered.forEach(item => {
-                const modal = Number(item.modal) || 0;
-                const brandKey = item.brand.toLowerCase().trim();
-                const absoluteDefaultPengali = 1.10; 
+                let html = "";
+                filtered.forEach(item => {
+                    const modal = Number(item.modal) || 0;
+                    const brandKey = item.brand.toLowerCase().trim();
+                    const absoluteDefaultPengali = 1.10; 
 
-                const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
-                const nilaiDasar = modal * pengali;
-                const sisaMod = nilaiDasar % 100000;
-                const pembulatanBawah = nilaiDasar - sisaMod;
-                const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
-                const jual = Math.round(pembulatanBawah + tambahanAkhir);
+                    const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
+                    const nilaiDasar = modal * pengali;
+                    const sisaMod = nilaiDasar % 100000;
+                    const pembulatanBawah = nilaiDasar - sisaMod;
+                    const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
+                    const jual = Math.round(pembulatanBawah + tambahanAkhir);
 
-                const selisihMargin = jual - modal;
-                const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
+                    const selisihMargin = jual - modal;
+                    const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
-                html += `
-                    <div class="glass-card p-6 rounded-3xl transition-all duration-300 flex flex-col justify-between space-y-5 group">
-                        <!-- Header Kartu -->
-                        <div>
-                            <div class="flex justify-between items-start gap-2">
-                                <span class="text-[11px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">${item.brand}</span>
-                                <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800/80 shadow-inner">${item.tipe}</span>
-                            </div>
-                            <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight group-hover:text-indigo-300 transition-colors">${item.tipe}</h3>
-                        </div>
-
-                        <!-- Layout Harga Jual, Modal, & Margin (Ultra Modern Glossy Style) -->
-                        <div class="space-y-3 pt-3 border-t border-slate-800/80">
-                            <!-- Harga Jual -->
-                            <div class="bg-gradient-to-r from-emerald-950/50 via-slate-950/80 to-slate-950/80 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
-                                <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual</span>
-                                <span class="font-black text-emerald-300 text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
-                            </div>
-
-                            <!-- Modal & Margin -->
-                            <div class="grid grid-cols-2 gap-3">
-                                <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/60 flex flex-col shadow-inner">
-                                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Modal</span>
-                                    <span class="font-bold text-slate-200 text-xs mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                    html += `
+                        <div class="glass-card p-6 rounded-3xl transition-all duration-300 flex flex-col justify-between space-y-5 group">
+                            <!-- Header Kartu -->
+                            <div>
+                                <div class="flex justify-between items-start gap-2">
+                                    <span class="text-[11px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">${item.brand}</span>
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800/80 shadow-inner">${item.tipe}</span>
                                 </div>
-                                <div class="bg-indigo-950/50 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
-                                    <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Margin</span>
-                                    <div class="mt-1 flex flex-col">
-                                        <span class="font-extrabold text-cyan-300 text-xs">+${persentaseMargin}%</span>
-                                        <span class="text-[10px] font-semibold text-sky-200">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight group-hover:text-indigo-300 transition-colors">${item.tipe}</h3>
+                            </div>
+
+                            <!-- Layout Harga Jual, Modal, & Margin -->
+                            <div class="space-y-3 pt-3 border-t border-slate-800/80">
+                                <div class="bg-gradient-to-r from-emerald-950/50 via-slate-950/80 to-slate-950/80 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
+                                    <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual</span>
+                                    <span class="font-black text-emerald-300 text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-slate-950/70 p-3.5 rounded-2xl border border-slate-800/60 flex flex-col shadow-inner">
+                                        <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Modal</span>
+                                        <span class="font-bold text-slate-200 text-xs mt-1">Rp ${modal.toLocaleString('id-ID')}</span>
+                                    </div>
+                                    <div class="bg-indigo-950/50 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
+                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Margin</span>
+                                        <div class="mt-1 flex flex-col">
+                                            <span class="font-extrabold text-cyan-300 text-xs">+${persentaseMargin}%</span>
+                                            <span class="text-[10px] font-semibold text-sky-200">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                `;
-            });
-            resultContainer.innerHTML = html;
+                    `;
+                });
+                resultContainer.innerHTML = html;
+            }, 250);
         });
 
         window.prosesUploadFileExcel = function() {
