@@ -334,7 +334,7 @@
                 const selisihMargin = jual - modal;
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
-                html += `
+              html += `
                     <div class="border border-slate-800/80 p-6 rounded-3xl bg-slate-900/60 backdrop-blur-xl shadow-xl hover:border-indigo-500/50 transition-all duration-300 flex flex-col justify-between space-y-5 group">
                         <!-- Header Kartu -->
                         <div>
@@ -345,12 +345,12 @@
                             <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight group-hover:text-indigo-300 transition-colors">${item.tipe}</h3>
                         </div>
 
-                        <!-- Layout Harga Jual, Modal, & Margin (Bersih Tanpa Embel-embel) -->
+                        <!-- Layout Harga Jual, Modal, & Margin (Clean & Vertical Aman dari Tabrakan Border) -->
                         <div class="space-y-3 pt-3 border-t border-slate-800/80">
-                            <!-- Harga Jual -->
-                            <div class="bg-gradient-to-r from-emerald-950/40 to-slate-950/60 p-4.5 rounded-2xl border border-emerald-500/30 flex items-center justify-between shadow-inner">
+                            <!-- Harga Jual (Disusun Vertikal agar Lega dan Tidak Menabrak Border) -->
+                            <div class="bg-gradient-to-r from-emerald-950/40 to-slate-950/60 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
                                 <span class="text-emerald-400 text-xs font-bold uppercase tracking-wider">Harga Jual</span>
-                                <span class="font-extrabold text-emerald-300 text-2xl tracking-tight">Rp ${jual.toLocaleString('id-ID')}</span>
+                                <span class="font-extrabold text-emerald-300 text-2xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
                             </div>
 
                             <!-- Modal & Margin -->
@@ -370,10 +370,6 @@
                         </div>
                     </div>
                 `;
-            });
-            resultContainer.innerHTML = html;
-        });
-
         window.prosesUploadFileExcel = function() {
             const fileInput = document.getElementById('excelFile');
             const statusEl = document.getElementById('statusUpload');
