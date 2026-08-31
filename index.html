@@ -121,8 +121,8 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-white tracking-tight">Template Excel Standar</h2>
-                        <p class="text-xs text-slate-400">Gunakan format ini agar data dari supplier apa pun pasti terbaca akurat.</p>
+                        <h2 class="text-xl font-black text-white tracking-tight">Template Excel Standar (Tanpa Kategori)</h2>
+                        <p class="text-xs text-slate-400">Gunakan format ini: Kolom 1 = Model, Kolom 2 = Harga 1, Kolom 3 = Harga 2.</p>
                     </div>
                 </div>
                 <button onclick="downloadTemplateExcel()" 
@@ -139,7 +139,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-black text-white tracking-tight">Upload Harga Jual Jadi (Net)</h2>
-                        <p class="text-xs text-slate-400">Pastikan kolom header baris pertama: Kategori, Model, Harga 1, Harga 2.</p>
+                        <p class="text-xs text-slate-400">Urutan Kolom: 1. Model | 2. Harga 1 | 3. Harga 2</p>
                     </div>
                 </div>
                 <div class="space-y-4">
@@ -161,7 +161,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-black text-white tracking-tight">Upload Master Harga Modal</h2>
-                        <p class="text-xs text-slate-400">Pastikan kolom header baris pertama: Brand, Tipe, Harga Modal.</p>
+                        <p class="text-xs text-slate-400">Urutan Kolom: 1. Brand | 2. Tipe | 3. Harga Modal</p>
                     </div>
                 </div>
                 <div class="space-y-4">
@@ -330,12 +330,12 @@
             triggerSearch();
         }
 
-        // Fungsi Download Template Excel Standar
+        // Fungsi Download Template Excel Standar (Tanpa Kategori)
         window.downloadTemplateExcel = function() {
             const templateData = [
-                ["Kategori", "Model", "Harga 1", "Harga 2"],
-                ["TV", "32LR650BPSA", 2398000, 2298000],
-                ["AC", "T06EV4", 3698000, 3598000]
+                ["Model", "Harga 1", "Harga 2"],
+                ["32LR650BPSA", 2398000, 2298000],
+                ["T06EV4", 3698000, 3598000]
             ];
             const ws = XLSX.utils.aoa_to_sheet(templateData);
             const wb = XLSX.utils.book_new();
@@ -411,8 +411,7 @@
             if (currentSearchMode === 'jual') {
                 const filteredJual = localHargaJualData.filter(item => {
                     const cleanModel = (item.model || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                    const cleanKategori = (item.kategori || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                    return cleanModel.includes(cleanKeyword) || cleanKategori.includes(cleanKeyword);
+                    return cleanModel.includes(cleanKeyword);
                 });
 
                 if (filteredJual.length === 0) {
@@ -425,7 +424,7 @@
                         <div class="glass-card p-6 rounded-3xl flex flex-col justify-between space-y-5 border-indigo-500/30">
                             <div>
                                 <div class="flex justify-between items-start gap-2">
-                                    <span class="text-[11px] bg-violet-500/10 text-violet-400 border border-violet-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">NET JUAL (${item.kategori || 'Umum'})</span>
+                                    <span class="text-[11px] bg-violet-500/10 text-violet-400 border border-violet-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">NET JUAL</span>
                                     <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800/80 shadow-inner">FIX PRICE</span>
                                 </div>
                                 <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight">${item.model}</h3>
@@ -591,10 +590,10 @@
                             const row = jsonData[i];
                             if (!row || row.length < 3) continue;
 
-                            const kategori = String(row[0] || sheetName).trim();
-                            const model = String(row[1] || "").trim();
-                            const rawHarga1 = String(row[2] || "").replace(/[^0-9]/g, '');
-                            const rawHarga2 = String(row[3] || row[2] || "").replace(/[^0-9]/g, '');
+                            // Kolom 0 = Model, Kolom 1 = Harga 1, Kolom 2 = Harga 2 (Tanpa Kategori)
+                            const model = String(row[0] || "").trim();
+                            const rawHarga1 = String(row[1] || "").replace(/[^0-9]/g, '');
+                            const rawHarga2 = String(row[2] || row[1] || "").replace(/[^0-9]/g, '');
                             
                             const harga1 = Number(rawHarga1);
                             const harga2 = Number(rawHarga2);
@@ -603,8 +602,8 @@
                             if (!model || model === 'undefined' || isNaN(harga1) || harga1 <= 0) continue;
 
                             const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
-                            const docId = `${kategori}_${cleanModel}`;
-                            await setDoc(doc(db, "harga_jual_jadi", docId), { kategori, model, gradeA: harga1, gradeB: harga2, updated_at: new Date().toISOString() });
+                            const docId = `Jual_${cleanModel}`;
+                            await setDoc(doc(db, "harga_jual_jadi", docId), { model, gradeA: harga1, gradeB: harga2, updated_at: new Date().toISOString() });
                             successCount++;
                         }
                     }
@@ -613,6 +612,7 @@
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
+                    console.error(err);
                     statusEl.className = "text-sm mt-4 font-medium text-rose-400";
                     statusEl.innerText = "❌ Gagal memproses file.";
                 }
