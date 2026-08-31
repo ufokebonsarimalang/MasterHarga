@@ -121,13 +121,13 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-white tracking-tight">Template Excel Standar (Tanpa Kategori)</h2>
-                        <p class="text-xs text-slate-400">Gunakan format ini: Kolom 1 = Model, Kolom 2 = Harga 1, Kolom 3 = Harga 2.</p>
+                        <h2 class="text-xl font-black text-white tracking-tight">Template Excel 6 Kolom Lengkap</h2>
+                        <p class="text-xs text-slate-400">Urutan: Model | Harga | Grade A | Grade B | Offline | Online</p>
                     </div>
                 </div>
                 <button onclick="downloadTemplateExcel()" 
                     class="w-full bg-slate-900 hover:bg-slate-800 text-indigo-300 font-bold py-3 rounded-xl border border-indigo-500/30 transition-all text-sm flex items-center justify-center gap-2">
-                    📥 Download Contoh Format Excel Standar
+                    📥 Download Contoh Format Excel Standar (6 Kolom)
                 </button>
             </div>
 
@@ -139,7 +139,7 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-black text-white tracking-tight">Upload Harga Jual Jadi (Net)</h2>
-                        <p class="text-xs text-slate-400">Urutan Kolom: 1. Model | 2. Harga 1 | 3. Harga 2</p>
+                        <p class="text-xs text-slate-400">Kolom: Model | Harga | Grade A | Grade B | Offline | Online</p>
                     </div>
                 </div>
                 <div class="space-y-4">
@@ -330,17 +330,17 @@
             triggerSearch();
         }
 
-        // Fungsi Download Template Excel Standar (Tanpa Kategori)
+        // Fungsi Download Template 6 Kolom
         window.downloadTemplateExcel = function() {
             const templateData = [
-                ["Model", "Harga 1", "Harga 2"],
-                ["32LR650BPSA", 2398000, 2298000],
-                ["T06EV4", 3698000, 3598000]
+                ["Model", "Harga", "Grade A", "Grade B", "Offline", "Online"],
+                ["32LR650BPSA", 2000000, 2398000, 2298000, 2350000, 2300000],
+                ["T06EV4", 3200000, 3698000, 3598000, 3650000, 3600000]
             ];
             const ws = XLSX.utils.aoa_to_sheet(templateData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Template_Harga");
-            XLSX.writeFile(wb, "Template_Master_Harga.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Template_Harga_Lengkap");
+            XLSX.writeFile(wb, "Template_Master_Harga_6Kolom.xlsx");
         }
 
         window.simpanPengaturanBrand = async function() {
@@ -430,14 +430,28 @@
                                 <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight">${item.model}</h3>
                             </div>
                             <div class="space-y-3 pt-3 border-t border-slate-800/80">
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="bg-emerald-950/40 p-3.5 rounded-2xl border border-emerald-500/30 flex flex-col shadow-inner">
-                                        <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Harga 1</span>
-                                        <span class="font-bold text-emerald-300 text-sm mt-1">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
+                                <div class="bg-slate-950/70 p-3 rounded-2xl border border-slate-800/60 flex justify-between items-center shadow-inner">
+                                    <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">Harga Utama</span>
+                                    <span class="font-bold text-slate-200 text-sm">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</span>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-emerald-950/40 p-3 rounded-2xl border border-emerald-500/30 flex flex-col shadow-inner">
+                                        <span class="text-emerald-400 text-[9px] font-bold uppercase tracking-wider">Grade A</span>
+                                        <span class="font-bold text-emerald-300 text-xs mt-0.5">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div class="bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
-                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Harga 2</span>
-                                        <span class="font-bold text-indigo-300 text-sm mt-1">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
+                                    <div class="bg-indigo-950/40 p-3 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
+                                        <span class="text-indigo-300 text-[9px] font-bold uppercase tracking-wider">Grade B</span>
+                                        <span class="font-bold text-indigo-300 text-xs mt-0.5">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-sky-950/40 p-3 rounded-2xl border border-sky-500/30 flex flex-col shadow-inner">
+                                        <span class="text-sky-400 text-[9px] font-bold uppercase tracking-wider">Offline</span>
+                                        <span class="font-bold text-sky-300 text-xs mt-0.5">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
+                                    </div>
+                                    <div class="bg-purple-950/40 p-3 rounded-2xl border border-purple-500/30 flex flex-col shadow-inner">
+                                        <span class="text-purple-400 text-[9px] font-bold uppercase tracking-wider">Online</span>
+                                        <span class="font-bold text-purple-300 text-xs mt-0.5">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -573,7 +587,7 @@
             }
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-indigo-400";
-            statusEl.innerText = "⏳ Memproses...";
+            statusEl.innerText = "⏳ Memproses 6 kolom harga...";
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
@@ -588,27 +602,36 @@
 
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
-                            if (!row || row.length < 3) continue;
+                            if (!row || row.length < 2) continue;
 
-                            // Kolom 0 = Model, Kolom 1 = Harga 1, Kolom 2 = Harga 2 (Tanpa Kategori)
+                            // Urutan Kolom: 0=Model, 1=Harga, 2=GradeA, 3=GradeB, 4=Offline, 5=Online
                             const model = String(row[0] || "").trim();
-                            const rawHarga1 = String(row[1] || "").replace(/[^0-9]/g, '');
-                            const rawHarga2 = String(row[2] || row[1] || "").replace(/[^0-9]/g, '');
-                            
-                            const harga1 = Number(rawHarga1);
-                            const harga2 = Number(rawHarga2);
+                            const harga = Number(String(row[1] || "").replace(/[^0-9]/g, '')) || 0;
+                            const gradeA = Number(String(row[2] || "").replace(/[^0-9]/g, '')) || 0;
+                            const gradeB = Number(String(row[3] || "").replace(/[^0-9]/g, '')) || 0;
+                            const offline = Number(String(row[4] || "").replace(/[^0-9]/g, '')) || 0;
+                            const online = Number(String(row[5] || "").replace(/[^0-9]/g, '')) || 0;
 
                             if (i === 0 && (model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD')) continue;
-                            if (!model || model === 'undefined' || isNaN(harga1) || harga1 <= 0) continue;
+                            if (!model || model === 'undefined') continue;
 
                             const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                             const docId = `Jual_${cleanModel}`;
-                            await setDoc(doc(db, "harga_jual_jadi", docId), { model, gradeA: harga1, gradeB: harga2, updated_at: new Date().toISOString() });
+                            
+                            await setDoc(doc(db, "harga_jual_jadi", docId), { 
+                                model, 
+                                harga, 
+                                gradeA, 
+                                gradeB, 
+                                offline, 
+                                online, 
+                                updated_at: new Date().toISOString() 
+                            });
                             successCount++;
                         }
                     }
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data harga jual tersimpan.`;
+                    statusEl.innerText = `✨ Sukses! ${successCount} data harga jual (lengkap 6 kolom) tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
