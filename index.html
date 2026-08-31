@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Harga Elektronik - Enterprise Cloud</title>
+    <title>Master Harga & Jual Elektronik - Enterprise Cloud</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Inter -->
@@ -17,7 +17,6 @@
         ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
         ::-webkit-scrollbar-thumb:hover { background: #334155; }
         
-        /* Efek Garis Glow Kartu (Dioptimalkan agar ringan di HP) */
         .glass-card {
             background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%);
             border: 1px solid rgba(255, 255, 255, 0.07);
@@ -34,9 +33,8 @@
     <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
     <div class="absolute bottom-10 right-10 w-96 h-96 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
 
-    <!-- SIDEBAR UTAMA (Fixed Menempel di Kiri Full Tinggi Layar) -->
+    <!-- SIDEBAR UTAMA -->
     <aside class="w-full md:w-72 h-auto md:h-screen sticky top-0 bg-slate-900/90 backdrop-blur-xl border-r border-slate-800/80 flex flex-row md:flex-col justify-between p-4 md:p-6 shrink-0 z-30 items-center md:items-stretch shadow-2xl overflow-y-auto">
-        <!-- Logo / Judul App -->
         <div class="flex items-center gap-3.5">
             <div class="p-2.5 bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white rounded-2xl shadow-lg shadow-indigo-500/30 ring-1 ring-white/20">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
@@ -47,7 +45,6 @@
             </div>
         </div>
 
-        <!-- Tombol Menu Navigasi -->
         <nav class="flex md:flex-col gap-2 mt-0 md:mt-6">
             <button onclick="switchTab('cari')" id="btnCari" 
                 class="flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs md:text-sm transition-all duration-200 bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg shadow-indigo-600/30 ring-1 ring-white/20">
@@ -66,7 +63,6 @@
             </button>
         </nav>
 
-        <!-- Status Koneksi -->
         <div class="hidden md:flex pt-6 border-t border-slate-800/80 text-xs items-center gap-3 text-slate-400">
             <span class="relative flex h-2.5 w-2.5">
               <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -87,7 +83,7 @@
                     <p class="text-xs text-slate-400 mt-1">Cari berdasarkan brand atau tipe unit untuk melihat rincian harga live.</p>
                 </div>
                 <div class="relative w-full md:w-96">
-                    <input type="text" id="searchInput" placeholder="Cari: AQR-D, Samsung, Kulkas..." 
+                    <input type="text" id="searchInput" placeholder="Cari: Model, Tipe, Brand (cth: LG, 32LR650)..." 
                         class="w-full pl-11 pr-4 py-3.5 bg-slate-950/90 border border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm font-medium text-white placeholder-slate-500 shadow-inner">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-400 absolute left-4 top-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </div>
@@ -100,36 +96,58 @@
             </div>
         </section>
 
-        <!-- HALAMAN 2: UPLOAD MASTER HARGA -->
+        <!-- HALAMAN 2: UPLOAD EXCEL (2 PILIHAN: MODAL ATAU HARGA JADI) -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
+            
+            <!-- UPLOAD 1: MASTER HARGA MODAL -->
             <div class="glass-card p-6 md:p-8 rounded-3xl">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 shadow-inner">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-white tracking-tight">Upload Master Harga Excel</h2>
-                        <p class="text-xs text-slate-400">Sinkronisasi data modal database pusat.</p>
+                        <h2 class="text-xl font-black text-white tracking-tight">1. Upload Master Harga Modal</h2>
+                        <p class="text-xs text-slate-400">Format 3 Kolom: Brand | Tipe | Harga Modal</p>
                     </div>
                 </div>
-                
-                <div class="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-4 mb-6 text-xs text-slate-400 space-y-1.5 shadow-inner">
-                    <p class="font-semibold text-slate-300">Struktur Format File Excel (3 Kolom):</p>
-                    <p>Kolom A: <span class="font-mono text-indigo-400 font-bold">Brand</span> | Kolom B: <span class="font-mono text-indigo-400 font-bold">Tipe</span> | Kolom C: <span class="font-mono text-indigo-400 font-bold">Harga Modal</span></p>
-                </div>
-                
                 <div class="space-y-4">
-                    <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" 
+                    <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
                         class="block w-full text-sm text-slate-400 file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 border border-slate-800 rounded-2xl cursor-pointer bg-slate-950/90 transition-all">
-                    
-                    <button onclick="prosesUploadFileExcel()" 
+                    <button onclick="prosesUploadModal()" 
                         class="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-emerald-600/25 flex items-center justify-center gap-2 text-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-                        Proses & Sinkronisasi ke Cloud
+                        Upload & Proses Harga Modal
                     </button>
                 </div>
-                <p id="statusUpload" class="text-xs mt-4 font-medium text-center"></p>
+                <p id="statusUploadModal" class="text-xs mt-4 font-medium text-center"></p>
             </div>
+
+            <!-- UPLOAD 2: HARGA JUAL JADI (NET / GRADE A & B) -->
+            <div class="glass-card p-6 md:p-8 rounded-3xl">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3.5 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-white tracking-tight">2. Upload Harga Jual Jadi (Net / Grade A & B)</h2>
+                        <p class="text-xs text-slate-400">Format seperti File LG (Mendukung Multi-Sheet: TV, AC, Lemari Es, dll)</p>
+                    </div>
+                </div>
+                <div class="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-4 mb-6 text-xs text-slate-400 space-y-1">
+                    <p class="font-semibold text-slate-300">Struktur Terbaca Otomatis:</p>
+                    <p>• Kolom Model / Tipe</p>
+                    <p>• Kolom Harga Grade A & Grade B</p>
+                </div>
+                <div class="space-y-4">
+                    <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
+                        class="block w-full text-sm text-slate-400 file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-500/10 file:text-indigo-400 hover:file:bg-indigo-500/20 border border-slate-800 rounded-2xl cursor-pointer bg-slate-950/90 transition-all">
+                    <button onclick="prosesUploadHargaJual()" 
+                        class="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-indigo-600/25 flex items-center justify-center gap-2 text-sm">
+                        Upload & Proses Harga Jual Jadi
+                    </button>
+                </div>
+                <p id="statusUploadJual" class="text-xs mt-4 font-medium text-center"></p>
+            </div>
+
         </section>
 
         <!-- HALAMAN 3: PENGATURAN MARGIN PER BRAND -->
@@ -141,11 +159,10 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-black text-white tracking-tight">Aturan Margin Brand</h2>
-                        <p class="text-xs text-slate-400">Atur markup persen laba otomatis per merek.</p>
+                        <p class="text-xs text-slate-400">Atur markup persen laba otomatis per merek untuk data modal.</p>
                     </div>
                 </div>
 
-                <!-- Form Tambah / Ubah Margin Brand -->
                 <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800/80 space-y-4 mb-6 shadow-inner">
                     <p class="text-xs font-bold text-slate-300">Tambah / Perbarui Persen Brand:</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -161,7 +178,6 @@
                     <p id="statusPengaturan" class="text-xs font-medium text-center"></p>
                 </div>
 
-                <!-- Daftar Brand & Persen yang Aktif -->
                 <div>
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Daftar Persentase Aktif:</h3>
                     <div id="listAturanBrand" class="space-y-2.5">
@@ -192,6 +208,7 @@
         const db = getFirestore(app);
 
         let localMasterData = [];
+        let localHargaJualData = [];
         let aturanMarginBrand = {}; 
 
         async function loadMasterData() {
@@ -200,6 +217,12 @@
                 localMasterData = [];
                 querySnapshot.forEach((docSnap) => {
                     localMasterData.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                const queryJual = await getDocs(collection(db, "harga_jual_jadi"));
+                localHargaJualData = [];
+                queryJual.forEach((docSnap) => {
+                    localHargaJualData.push({ id: docSnap.id, ...docSnap.data() });
                 });
             } catch (error) {
                 console.error("Gagal memuat data master:", error);
@@ -303,7 +326,7 @@
             }
         }
 
-        // Pencarian Cerdas Super Kilat dengan Debounce & Limit 24 Item (Sangat Ringan di HP)
+        // Pencarian Cerdas Gabungan (Master Modal & Harga Jual Jadi)
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function(e) {
             clearTimeout(searchTimeout);
@@ -318,17 +341,24 @@
                 return;
             }
 
-            // Jeda 50ms agar pengetikan cepat tidak membebani browser HP
             searchTimeout = setTimeout(() => {
                 const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
 
-                const filtered = localMasterData.filter(item => {
-                    const cleanBrand = item.brand.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                    const cleanTipe = item.tipe.toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                // 1. Filter Master Harga Modal
+                const filteredModal = localMasterData.filter(item => {
+                    const cleanBrand = (item.brand || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    const cleanTipe = (item.tipe || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
                     return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
                 });
 
-                if (filtered.length === 0) {
+                // 2. Filter Harga Jual Jadi (Net)
+                const filteredJual = localHargaJualData.filter(item => {
+                    const cleanModel = (item.model || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    const cleanKategori = (item.kategori || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
+                    return cleanModel.includes(cleanKeyword) || cleanKategori.includes(cleanKeyword);
+                });
+
+                if (filteredModal.length === 0 && filteredJual.length === 0) {
                     resultContainer.innerHTML = `
                         <div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-3xl text-rose-400 text-sm font-medium">
                             ❌ Produk atau brand elektronik tidak ditemukan di database cloud.
@@ -336,13 +366,39 @@
                     return;
                 }
 
-                // Batasi 24 hasil teratas agar render DOM instan tanpa jeda
-                const limitedFiltered = filtered.slice(0, 24);
-
                 let html = "";
-                limitedFiltered.forEach(item => {
+
+                // Render Hasil Harga Jual Jadi (Net)
+                filteredJual.forEach(item => {
+                    html += `
+                        <div class="glass-card p-6 rounded-3xl flex flex-col justify-between space-y-5 border-indigo-500/30">
+                            <div>
+                                <div class="flex justify-between items-start gap-2">
+                                    <span class="text-[11px] bg-violet-500/10 text-violet-400 border border-violet-500/20 px-3 py-1 rounded-xl font-bold uppercase tracking-wider">NET JUAL (${item.kategori || 'LG'})</span>
+                                    <span class="text-xs font-mono text-slate-400 bg-slate-950 px-3 py-1 rounded-lg border border-slate-800/80 shadow-inner">FIX PRICE</span>
+                                </div>
+                                <h3 class="text-xl font-extrabold text-white mt-3.5 tracking-tight">${item.model}</h3>
+                            </div>
+                            <div class="space-y-3 pt-3 border-t border-slate-800/80">
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-emerald-950/40 p-3.5 rounded-2xl border border-emerald-500/30 flex flex-col shadow-inner">
+                                        <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Grade A</span>
+                                        <span class="font-bold text-emerald-300 text-sm mt-1">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
+                                    </div>
+                                    <div class="bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
+                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Grade B</span>
+                                        <span class="font-bold text-indigo-300 text-sm mt-1">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Render Hasil Master Harga Modal (Kalkulasi Otomatis)
+                filteredModal.forEach(item => {
                     const modal = Number(item.modal) || 0;
-                    const brandKey = item.brand.toLowerCase().trim();
+                    const brandKey = (item.brand || "").toLowerCase().trim();
                     const absoluteDefaultPengali = 1.10; 
 
                     const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
@@ -367,7 +423,7 @@
 
                             <div class="space-y-3 pt-3 border-t border-slate-800/80">
                                 <div class="bg-gradient-to-r from-emerald-950/50 via-slate-950/80 to-slate-950/80 p-4 rounded-2xl border border-emerald-500/30 flex flex-col justify-between shadow-inner">
-                                    <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual</span>
+                                    <span class="text-emerald-400 text-[11px] font-bold uppercase tracking-wider">Harga Jual Hitung</span>
                                     <span class="font-black text-emerald-300 text-xl tracking-tight mt-1">Rp ${jual.toLocaleString('id-ID')}</span>
                                 </div>
 
@@ -389,21 +445,18 @@
                     `;
                 });
 
-                if (filtered.length > 24) {
-                    html += `<p class="text-xs text-slate-500 col-span-full text-center mt-2">Menampilkan 24 dari total ${filtered.length} hasil pencarian...</p>`;
-                }
-
                 resultContainer.innerHTML = html;
             }, 50);
         });
 
-        window.prosesUploadFileExcel = function() {
-            const fileInput = document.getElementById('excelFile');
-            const statusEl = document.getElementById('statusUpload');
+        // 1. Fungsi Upload Master Harga Modal
+        window.prosesUploadModal = function() {
+            const fileInput = document.getElementById('excelFileModal');
+            const statusEl = document.getElementById('statusUploadModal');
             
             if (fileInput.files.length === 0) {
                 statusEl.className = "text-sm mt-4 font-medium text-rose-400";
-                statusEl.innerText = "⚠️ Pilih file Excel terlebih dahulu!";
+                statusEl.innerText = "⚠️ Pilih file Excel Master Modal terlebih dahulu!";
                 return;
             }
 
@@ -416,7 +469,6 @@
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
-                    
                     let successCount = 0;
 
                     for (let sheetName of workbook.SheetNames) {
@@ -451,14 +503,97 @@
                     }
 
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} produk berhasil disinkronkan ke database.`;
+                    statusEl.innerText = `✨ Sukses! ${successCount} data modal berhasil disinkronkan.`;
                     fileInput.value = "";
                     await loadMasterData();
-
                 } catch (error) {
-                    console.error("Error:", error);
                     statusEl.className = "text-sm mt-4 font-medium text-rose-400";
-                    statusEl.innerText = "❌ Gagal memproses file.";
+                    statusEl.innerText = "❌ Gagal memproses file modal.";
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        };
+
+        // 2. Fungsi Upload Harga Jual Jadi (Net / Seperti File LG)
+        window.prosesUploadHargaJual = function() {
+            const fileInput = document.getElementById('excelFileJual');
+            const statusEl = document.getElementById('statusUploadJual');
+            
+            if (fileInput.files.length === 0) {
+                statusEl.className = "text-sm mt-4 font-medium text-rose-400";
+                statusEl.innerText = "⚠️ Pilih file Excel Harga Jual terlebih dahulu!";
+                return;
+            }
+
+            const file = fileInput.files[0];
+            statusEl.className = "text-sm mt-4 font-medium text-indigo-400";
+            statusEl.innerText = "⏳ Membaca seluruh sheet & mengunggah ke cloud...";
+
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    let successCount = 0;
+
+                    // Looping setiap sheet (Misal: TV, AC, Lemari Es, dll)
+                    for (let sheetName of workbook.SheetNames) {
+                        const worksheet = workbook.Sheets[sheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        if (jsonData.length <= 1) continue;
+
+                        let colModel = 1; // Default kolom B
+                        let colGradeA = 3; // Default kolom D
+                        let colGradeB = 4; // Default kolom E
+
+                        // Deteksi letak header kolom secara otomatis
+                        for (let r = 0; r < Math.min(jsonData.length, 3); r++) {
+                            const row = jsonData[r];
+                            if (row) {
+                                row.forEach((cell, cIdx) => {
+                                    const val = String(cell || "").toUpperCase();
+                                    if (val.includes('MODEL')) colModel = cIdx;
+                                    if (val.includes('GRADE A')) colGradeA = cIdx;
+                                    if (val.includes('GRADE B')) colGradeB = cIdx;
+                                });
+                            }
+                        }
+
+                        for (let i = 0; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (row && row.length > colModel) {
+                                const model = String(row[colModel] || "").trim();
+                                const gradeA = Number(String(row[colGradeA] || "").replace(/[^0-9]/g, ''));
+                                const gradeB = Number(String(row[colGradeB] || row[colGradeA] || "").replace(/[^0-9]/g, ''));
+
+                                if (i === 0 && (model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD')) continue;
+
+                                if (model && model !== 'undefined' && !isNaN(gradeA) && gradeA > 0) {
+                                    const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
+                                    const docId = `${sheetName}_${cleanModel}`;
+
+                                    await setDoc(doc(db, "harga_jual_jadi", docId), {
+                                        kategori: sheetName,
+                                        model: model,
+                                        gradeA: gradeA,
+                                        gradeB: gradeB,
+                                        updated_at: new Date().toISOString()
+                                    });
+                                    successCount++;
+                                }
+                            }
+                        }
+                    }
+
+                    statusEl.className = "text-sm mt-4 font-medium text-emerald-400";
+                    statusEl.innerText = `✨ Sukses! ${successCount} produk harga jual jadi (Grade A & B) tersimpan.`;
+                    fileInput.value = "";
+                    await loadMasterData();
+                } catch (error) {
+                    console.error(error);
+                    statusEl.className = "text-sm mt-4 font-medium text-rose-400";
+                    statusEl.innerText = "❌ Gagal memproses file harga jual.";
                 }
             };
             reader.readAsArrayBuffer(file);
