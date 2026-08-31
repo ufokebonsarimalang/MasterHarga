@@ -546,6 +546,7 @@
             reader.readAsArrayBuffer(file);
         };
 
+     // Upload Harga Jual Jadi (Fleksibel untuk Grade A/B, Offline/Online, dll)
         window.prosesUploadHargaJual = function() {
             const fileInput = document.getElementById('excelFileJual');
             const statusEl = document.getElementById('statusUploadJual');
@@ -556,7 +557,7 @@
             }
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-indigo-400";
-            statusEl.innerText = "⏳ Membaca multi-sheet & membersihkan baris kosong...";
+            statusEl.innerText = "⏳ Membaca multi-sheet & mendeteksi kolom otomatis...";
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
@@ -569,42 +570,79 @@
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                         if (jsonData.length === 0) continue;
 
-                        let colModel = 1, colGradeA = 3, colGradeB = 4;
+                        let colModel = 1;
+                        let hargaCols = []; // Menyimpan semua indeks kolom yang berisi angka harga
+
+                        // 1. Cari letak kolom Model / Tipe / Produk
                         for (let r = 0; r < Math.min(jsonData.length, 5); r++) {
                             const row = jsonData[r];
                             if (row) {
                                 row.forEach((cell, cIdx) => {
                                     const val = String(cell || "").toUpperCase();
-                                    if (val.includes('MODEL') || val.includes('PROD') || val.includes('TYPE')) colModel = cIdx;
-                                    if (val.includes('GRADE A') || val.includes('GRADE A & B')) colGradeA = cIdx;
-                                    if (val.includes('GRADE B')) colGradeB = cIdx;
+                                    if (val.includes('MODEL') || val.includes('PROD') || val.includes('TYPE') || val.includes('PRODUCT')) {
+                                        colModel = cIdx;
+                                    }
                                 });
                             }
                         }
 
+                        // 2. Deteksi otomatis kolom yang berisi nominal harga di baris header atau baris data
+                        for (let i = 0; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (!row) continue;
+
+                            row.forEach((cell, cIdx) => {
+                                if (cIdx === colModel) return;
+                                const cleanedNum = Number(String(cell || "").replace(/[^0-9]/g, ''));
+                                // Jika sel berisi angka harga di atas 10.000, anggap itu kolom harga
+                                if (!isNaN(cleanedNum) && cleanedNum > 10000) {
+                                    if (!hargaCols.includes(cIdx)) {
+                                        hargaCols.push(cIdx);
+                                    }
+                                }
+                            });
+                        }
+
+                        // Urutkan indeks kolom harga dari kiri ke kanan
+                        hargaCols.sort((a, b) => a - b);
+
+                        // Ambil kolom harga pertama dan kedua secara otomatis
+                        let colHarga1 = hargaCols[0] !== undefined ? hargaCols[0] : 3;
+                        let colHarga2 = hargaCols[1] !== undefined ? hargaCols[1] : colHarga1;
+
+                        // 3. Proses simpan data baris demi baris
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
                             if (!row || row.length === 0) continue;
 
                             const model = String(row[colModel] || "").trim();
-                            const rawGradeA = String(row[colGradeA] || "").replace(/[^0-9]/g, '');
-                            const rawGradeB = String(row[colGradeB] || row[colGradeA] || "").replace(/[^0-9]/g, '');
+                            const rawHarga1 = String(row[colHarga1] || "").replace(/[^0-9]/g, '');
+                            const rawHarga2 = String(row[colHarga2] || row[colHarga1] || "").replace(/[^0-9]/g, '');
                             
-                            const gradeA = Number(rawGradeA);
-                            const gradeB = Number(rawGradeB);
+                            const harga1 = Number(rawHarga1);
+                            const harga2 = Number(rawHarga2);
 
-                            if (!model || model === 'undefined' || model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD' || isNaN(gradeA) || gradeA <= 0) {
+                            // Lewati baris judul header atau baris kosong
+                            if (!model || model === 'undefined' || model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD' || isNaN(harga1) || harga1 <= 0) {
                                 continue;
                             }
 
                             const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                             const docId = `${sheetName}_${cleanModel}`;
-                            await setDoc(doc(db, "harga_jual_jadi", docId), { kategori: sheetName, model, gradeA, gradeB, updated_at: new Date().toISOString() });
+
+                            // Disimpan ke database dengan label fleksibel
+                            await setDoc(doc(db, "harga_jual_jadi", docId), { 
+                                kategori: sheetName, 
+                                model, 
+                                gradeA: harga1, // Harga Kolom Pertama (Bisa Offline / Grade A)
+                                gradeB: harga2, // Harga Kolom Kedua (Bisa Online / Grade B)
+                                updated_at: new Date().toISOString() 
+                            });
                             successCount++;
                         }
                     }
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data harga jual bersih tersimpan.`;
+                    statusEl.innerText = `✨ Sukses! ${successCount} data harga (Offline/Online/Grade) berhasil tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
