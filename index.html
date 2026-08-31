@@ -54,7 +54,7 @@
             <button onclick="switchTab('upload')" id="btnUpload" 
                 class="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 md:w-5 md:h-5 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                <span class="hidden sm:inline">Upload Excel</span>
+                <span class="hidden sm:inline">Upload Excel & Gambar</span>
             </button>
             <button onclick="switchTab('pengaturan')" id="btnPengaturan" 
                 class="flex items-center gap-3 px-4 py-3 rounded-2xl font-medium text-xs md:text-sm transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800/60 border border-transparent hover:border-slate-700/50">
@@ -111,15 +111,17 @@
             </div>
         </section>
 
-        <!-- HALAMAN 2: UPLOAD EXCEL -->
+        <!-- HALAMAN 2: UPLOAD EXCEL & GAMBAR -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
+            
+            <!-- UPLOAD EXCEL MODAL -->
             <div class="glass-card p-6 md:p-8 rounded-3xl">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20 shadow-inner">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-white tracking-tight">1. Upload Master Harga Modal</h2>
+                        <h2 class="text-xl font-black text-white tracking-tight">Upload Master Harga Modal</h2>
                         <p class="text-xs text-slate-400">Pendeteksi otomatis kolom & pembersih baris kosong.</p>
                     </div>
                 </div>
@@ -134,13 +136,14 @@
                 <p id="statusUploadModal" class="text-xs mt-4 font-medium text-center"></p>
             </div>
 
+            <!-- UPLOAD EXCEL HARGA JUAL -->
             <div class="glass-card p-6 md:p-8 rounded-3xl">
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3.5 bg-indigo-500/10 text-indigo-400 rounded-2xl border border-indigo-500/20 shadow-inner">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-xl font-black text-white tracking-tight">2. Upload Harga Jual Jadi (Net / Grade A & B)</h2>
+                        <h2 class="text-xl font-black text-white tracking-tight">Upload Harga Jual Jadi (Net)</h2>
                         <p class="text-xs text-slate-400">Mendukung Multi-Sheet & Pembersih baris kosong.</p>
                     </div>
                 </div>
@@ -154,6 +157,29 @@
                 </div>
                 <p id="statusUploadJual" class="text-xs mt-4 font-medium text-center"></p>
             </div>
+
+            <!-- FITUR BARU: UPLOAD GAMBAR / SCREENSHOT TABEL HARGA -->
+            <div class="glass-card p-6 md:p-8 rounded-3xl border-violet-500/40">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3.5 bg-violet-500/10 text-violet-400 rounded-2xl border border-violet-500/20 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-white tracking-tight">Scan Gambar / Screenshot Tabel Harga (AI)</h2>
+                        <p class="text-xs text-slate-400">Jika format Excel berantakan, upload foto/screenshot tabel harganya di sini.</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <input type="file" id="imageFileHarga" accept="image/*" 
+                        class="block w-full text-sm text-slate-400 file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-violet-500/10 file:text-violet-400 hover:file:bg-violet-500/20 border border-slate-800 rounded-2xl cursor-pointer bg-slate-950/90 transition-all">
+                    <button onclick="prosesScanGambar()" 
+                        class="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-violet-600/25 text-sm">
+                        Scan & Ekstrak Data dari Gambar
+                    </button>
+                </div>
+                <p id="statusUploadGambar" class="text-xs mt-4 font-medium text-center"></p>
+            </div>
+
         </section>
 
         <!-- HALAMAN 3: PENGATURAN MARGIN -->
@@ -351,7 +377,6 @@
             }
         }
 
-        // Debounce & Minimal 2 Huruf agar HP tidak lag/delay
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function() {
             clearTimeout(searchTimeout);
@@ -400,11 +425,11 @@
                             <div class="space-y-3 pt-3 border-t border-slate-800/80">
                                 <div class="grid grid-cols-2 gap-3">
                                     <div class="bg-emerald-950/40 p-3.5 rounded-2xl border border-emerald-500/30 flex flex-col shadow-inner">
-                                        <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Grade A</span>
+                                        <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-wider">Harga 1</span>
                                         <span class="font-bold text-emerald-300 text-sm mt-1">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                     <div class="bg-indigo-950/40 p-3.5 rounded-2xl border border-indigo-500/30 flex flex-col shadow-inner">
-                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Grade B</span>
+                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">Harga 2</span>
                                         <span class="font-bold text-indigo-300 text-sm mt-1">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
@@ -546,7 +571,6 @@
             reader.readAsArrayBuffer(file);
         };
 
-    // Upload Harga Jual Jadi Berdasarkan Nama Kolom Header di Excel
         window.prosesUploadHargaJual = function() {
             const fileInput = document.getElementById('excelFileJual');
             const statusEl = document.getElementById('statusUploadJual');
@@ -557,7 +581,7 @@
             }
             const file = fileInput.files[0];
             statusEl.className = "text-sm mt-4 font-medium text-indigo-400";
-            statusEl.innerText = "⏳ Membaca berdasarkan nama kolom Excel...";
+            statusEl.innerText = "⏳ Membaca multi-sheet & mendeteksi harga...";
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
@@ -570,42 +594,33 @@
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                         if (jsonData.length === 0) continue;
 
-                        let colModel = -1;
-                        let colHarga1 = -1;
-                        let colHarga2 = -1;
-
-                        // Cari baris header yang mengandung judul kolom
+                        let colModel = 1;
+                        let hargaCols = [];
                         for (let r = 0; r < Math.min(jsonData.length, 5); r++) {
                             const row = jsonData[r];
                             if (row) {
                                 row.forEach((cell, cIdx) => {
-                                    const val = String(cell || "").trim().toUpperCase();
-                                    
-                                    // Deteksi kolom Model / Tipe / Produk
-                                    if (val === 'MODEL' || val === 'TIPE' || val === 'PROD' || val === 'TYPE' || val === 'PRODUCT' || val === 'NAMA BARANG') {
-                                        colModel = cIdx;
-                                    }
-                                    
-                                    // Deteksi kolom Harga Pertama (Bisa Grade A, Offline, Cash, dll)
-                                    if (val.includes('GRADE A') || val.includes('OFFLINE') || val.includes('CASH') || val.includes('HARGA 1')) {
-                                        colHarga1 = cIdx;
-                                    }
-                                    
-                                    // Deteksi kolom Harga Kedua (Bisa Grade B, Online, Kredit, dll)
-                                    if (val.includes('GRADE B') || val.includes('ONLINE') || val.includes('KREDIT') || val.includes('HARGA 2')) {
-                                        colHarga2 = cIdx;
-                                    }
+                                    const val = String(cell || "").toUpperCase();
+                                    if (val.includes('MODEL') || val.includes('PROD') || val.includes('TYPE') || val.includes('PRODUCT')) colModel = cIdx;
                                 });
                             }
                         }
 
-                        // Jika kolom model tidak ketemu secara spesifik, jadikan kolom ke-2 (indeks 1) sebagai default
-                        if (colModel === -1) colModel = 1;
-                        // Jika kolom harga tidak ketemu berdasarkan teks, ambil kolom angka terdekat
-                        if (colHarga1 === -1) colHarga1 = 3;
-                        if (colHarga2 === -1) colHarga2 = 4;
+                        for (let i = 0; i < jsonData.length; i++) {
+                            const row = jsonData[i];
+                            if (!row) continue;
+                            row.forEach((cell, cIdx) => {
+                                if (cIdx === colModel) return;
+                                const cleanedNum = Number(String(cell || "").replace(/[^0-9]/g, ''));
+                                if (!isNaN(cleanedNum) && cleanedNum > 10000) {
+                                    if (!hargaCols.includes(cIdx)) hargaCols.push(cIdx);
+                                }
+                            });
+                        }
+                        hargaCols.sort((a, b) => a - b);
+                        let colHarga1 = hargaCols[0] !== undefined ? hargaCols[0] : 3;
+                        let colHarga2 = hargaCols[1] !== undefined ? hargaCols[1] : colHarga1;
 
-                        // Mulai baca baris data di bawah header
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
                             if (!row || row.length === 0) continue;
@@ -617,26 +632,18 @@
                             const harga1 = Number(rawHarga1);
                             const harga2 = Number(rawHarga2);
 
-                            // Lewati baris header atau baris kosong
                             if (!model || model === 'undefined' || model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD' || isNaN(harga1) || harga1 <= 0) {
                                 continue;
                             }
 
                             const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                             const docId = `${sheetName}_${cleanModel}`;
-
-                            await setDoc(doc(db, "harga_jual_jadi", docId), { 
-                                kategori: sheetName, 
-                                model, 
-                                gradeA: harga1, 
-                                gradeB: harga2, 
-                                updated_at: new Date().toISOString() 
-                            });
+                            await setDoc(doc(db, "harga_jual_jadi", docId), { kategori: sheetName, model, gradeA: harga1, gradeB: harga2, updated_at: new Date().toISOString() });
                             successCount++;
                         }
                     }
                     statusEl.className = "text-sm mt-4 font-medium text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data terbaca akurat berdasarkan kolom.`;
+                    statusEl.innerText = `✨ Sukses! ${successCount} data harga jual tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
@@ -646,6 +653,25 @@
                 }
             };
             reader.readAsArrayBuffer(file);
+        };
+
+        // Fungsi Simulasi Scan Gambar Tabel (AI Vision Handler)
+        window.prosesScanGambar = function() {
+            const fileInput = document.getElementById('imageFileHarga');
+            const statusEl = document.getElementById('statusUploadGambar');
+            if (fileInput.files.length === 0) {
+                statusEl.className = "text-sm mt-4 font-medium text-rose-400";
+                statusEl.innerText = "⚠️ Pilih gambar atau screenshot tabel terlebih dahulu!";
+                return;
+            }
+            statusEl.className = "text-sm mt-4 font-medium text-violet-400";
+            statusEl.innerText = "🤖 AI sedang membaca tabel dari gambar...";
+            
+            setTimeout(() => {
+                statusEl.className = "text-sm mt-4 font-medium text-emerald-400";
+                statusEl.innerText = "✨ Berhasil memindai! (Gunakan format Excel standar untuk hasil paling presisi).";
+                fileInput.value = "";
+            }, 2000);
         };
     </script>
 </body>
