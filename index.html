@@ -186,16 +186,18 @@
                     </div>
                     <div>
                         <h2 class="text-xl font-black text-white tracking-tight">Aturan Margin Brand</h2>
-                        <p class="text-xs text-slate-400">Atur markup persen laba otomatis per merek untuk data modal.</p>
+                        <p class="text-xs text-slate-400">Atur markup persen laba & tambahan nominal tetap per merek.</p>
                     </div>
                 </div>
 
                 <div class="bg-slate-950/80 p-5 rounded-2xl border border-slate-800/80 space-y-4 mb-6 shadow-inner">
-                    <p class="text-xs font-bold text-slate-300">Tambah / Perbarui Persen Brand:</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <p class="text-xs font-bold text-slate-300">Tambah / Perbarui Aturan Margin Brand:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
                             class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                        <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12 untuk 12%)" 
+                        <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
+                            class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" 
                             class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <button onclick="simpanPengaturanBrand()" 
@@ -206,7 +208,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Daftar Persentase Aktif:</h3>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Daftar Aturan Aktif:</h3>
                     <div id="listAturanBrand" class="space-y-2.5">
                         <p class="text-xs text-slate-500 italic">Memuat data dari cloud...</p>
                     </div>
@@ -267,13 +269,20 @@
                     const data = docSnap.data();
                     const brandName = docSnap.id;
                     const persen = data.persen;
-                    aturanMarginBrand[brandName.toLowerCase()] = 1 + (persen / 100); 
+                    const tambahNominal = Number(data.tambahNominal) || 0;
+
+                    aturanMarginBrand[brandName.toLowerCase()] = {
+                        multiplier: 1 + (persen / 100),
+                        tambahNominal: tambahNominal
+                    };
+
+                    let infoNominal = tambahNominal > 0 ? ` + Rp ${tambahNominal.toLocaleString('id-ID')}` : '';
 
                     htmlList += `
                         <div class="flex justify-between items-center bg-slate-950/80 border border-slate-800/80 px-4 py-3 rounded-2xl text-sm shadow-inner">
                             <span class="font-bold text-white uppercase tracking-wider text-xs">${brandName}</span>
                             <div class="flex items-center gap-3">
-                                <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-xl font-bold text-xs">+${persen}%</span>
+                                <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-xl font-bold text-xs">+${persen}%${infoNominal}</span>
                                 <button onclick="hapusBrand('${brandName}')" class="text-rose-400 hover:text-rose-300 text-xs font-semibold transition-colors">Hapus</button>
                             </div>
                         </div>
@@ -330,7 +339,6 @@
             triggerSearch();
         }
 
-        // Fungsi Download Template 6 Kolom
         window.downloadTemplateExcel = function() {
             const templateData = [
                 ["Model", "Harga", "Grade A", "Grade B", "Offline", "Online"],
@@ -346,6 +354,7 @@
         window.simpanPengaturanBrand = async function() {
             const nama = document.getElementById('inputBrandNama').value.trim().toLowerCase();
             const persen = parseFloat(document.getElementById('inputBrandPersen').value);
+            const tambahNominal = parseFloat(document.getElementById('inputBrandNominalTambah').value) || 0;
             const statusEl = document.getElementById('statusPengaturan');
 
             if (!nama || isNaN(persen)) {
@@ -360,13 +369,15 @@
 
                 await setDoc(doc(db, "pengaturan_margin", nama), {
                     persen: persen,
+                    tambahNominal: tambahNominal,
                     updated_at: new Date().toISOString()
                 });
 
                 statusEl.className = "text-xs font-medium text-emerald-400";
-                statusEl.innerText = "✨ Berhasil! Harga live langsung diperbarui.";
+                statusEl.innerText = "✨ Berhasil! Aturan margin diperbarui.";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
+                document.getElementById('inputBrandNominalTambah').value = "";
                 await loadAturanBrand();
             } catch (error) {
                 statusEl.className = "text-xs font-medium text-rose-400";
@@ -474,10 +485,11 @@
                 filteredModal.slice(0, 20).forEach(item => {
                     const modal = Number(item.modal) || 0;
                     const brandKey = (item.brand || "").toLowerCase().trim();
-                    const absoluteDefaultPengali = 1.10; 
+                    
+                    const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
+                    const aturan = aturanMarginBrand[brandKey] || aturanDefault;
 
-                    const pengali = aturanMarginBrand[brandKey] || absoluteDefaultPengali;
-                    const nilaiDasar = modal * pengali;
+                    const nilaiDasar = (modal * aturan.multiplier) + aturan.tambahNominal;
                     const sisaMod = nilaiDasar % 100000;
                     const pembulatanBawah = nilaiDasar - sisaMod;
                     const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
@@ -604,7 +616,6 @@
                             const row = jsonData[i];
                             if (!row || row.length < 2) continue;
 
-                            // Urutan Kolom: 0=Model, 1=Harga, 2=GradeA, 3=GradeB, 4=Offline, 5=Online
                             const model = String(row[0] || "").trim();
                             const harga = Number(String(row[1] || "").replace(/[^0-9]/g, '')) || 0;
                             const gradeA = Number(String(row[2] || "").replace(/[^0-9]/g, '')) || 0;
