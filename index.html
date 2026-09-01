@@ -69,9 +69,35 @@
             border-radius: 1.5rem;
             transition: all 0.3s ease;
         }
+
+        /* Animasi Custom Modal */
+        .modal-backdrop {
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(8px);
+            transition: opacity 0.3s ease;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#c0c1ff] selection:text-[#1000a9]">
+
+    <!-- CUSTOM MODERN MODAL POPUP -->
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity">
+        <div class="pro-panel bg-[#171b26] border border-[#313540] p-6 sm:p-8 max-w-md w-full rounded-3xl shadow-2xl transform scale-95 transition-transform" id="modalBox">
+            <div id="modalIconContainer" class="w-12 h-12 rounded-2xl bg-[#c0c1ff]/10 text-[#c0c1ff] flex items-center justify-center mb-4 text-xl">
+                ⚠️
+            </div>
+            <h3 id="modalTitle" class="text-lg sm:text-xl font-black text-[#dfe2f1] mb-2">Konfirmasi Aksi</h3>
+            <p id="modalMessage" class="text-xs sm:text-sm text-[#c7c4d7] mb-6 leading-relaxed">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+            <div class="flex gap-3">
+                <button id="modalBtnCancel" class="flex-1 bg-[#0f131d] hover:bg-[#313540] text-[#c7c4d7] font-bold py-3 rounded-xl text-xs sm:text-sm transition-all border border-[#313540]">
+                    Batal
+                </button>
+                <button id="modalBtnConfirm" class="flex-1 bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3 rounded-xl text-xs sm:text-sm transition-all shadow-lg">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- HEADER & NAVIGATION -->
     <header class="w-full bg-[#0f131d]/90 backdrop-blur-xl border-b border-[#313540]/60 px-4 sm:px-6 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -233,6 +259,45 @@
         let aturanMarginBrand = {}; 
         let currentSearchMode = 'jual';
 
+        // Fungsi Helper untuk Modern Custom Modal (Pengganti alert/confirm jadul)
+        window.showCustomModal = function(title, message, onConfirm) {
+            const modal = document.getElementById('customModal');
+            const modalBox = document.getElementById('modalBox');
+            const btnConfirm = document.getElementById('modalBtnConfirm');
+            const btnCancel = document.getElementById('modalBtnCancel');
+            
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalMessage').innerText = message;
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalBox.classList.remove('scale-95');
+            }, 10);
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0');
+                modalBox.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                }, 300);
+            };
+
+            // Hapus event listener lama agar tidak menumpuk
+            const newConfirmBtn = btnConfirm.cloneNode(true);
+            const newCancelBtn = btnCancel.cloneNode(true);
+            btnConfirm.parentNode.replaceChild(newConfirmBtn, btnConfirm);
+            btnCancel.parentNode.replaceChild(newCancelBtn, btnCancel);
+
+            newConfirmBtn.onclick = () => {
+                closeModal();
+                if (onConfirm) onConfirm();
+            };
+            newCancelBtn.onclick = () => {
+                closeModal();
+            };
+        }
+
         window.switchTab = function(tabName, index) {
             const tabs = ['tabCari', 'tabUpload', 'tabPengaturan'];
             const btnIds = ['btnCari', 'btnUpload', 'btnPengaturan'];
@@ -291,12 +356,12 @@
             }
         }
 
-        window.refreshDataCache = async function() {
-            if(confirm("Sinkronisasi ulang data dari Cloud Firebase?")) {
+        window.refreshDataCache = function() {
+            showCustomModal("Sinkronisasi Cloud", "Apakah Anda ingin menarik ulang seluruh data terbaru dari Cloud Firebase?", async () => {
                 localStorage.clear();
                 await loadDataFromCacheOrCloud(true);
-                alert("Data berhasil disinkronkan ulang!");
-            }
+                showCustomModal("Berhasil", "Data berhasil disinkronkan ulang!", null);
+            });
         }
 
         async function loadAturanBrandFromCloud() {
@@ -404,8 +469,8 @@
             }
         }
 
-        window.hapusBrand = async function(brandName) {
-            if (confirm(`Hapus aturan margin untuk brand ${brandName}?`)) {
+        window.hapusBrand = function(brandName) {
+            showCustomModal("Hapus Aturan", `Apakah Anda yakin ingin menghapus aturan margin untuk brand ${brandName}?`, async () => {
                 try {
                     await deleteDoc(doc(db, "pengaturan_margin", brandName.toLowerCase()));
                     localStorage.removeItem('ufo_margin_data');
@@ -414,9 +479,9 @@
                         triggerSearch();
                     }
                 } catch (error) {
-                    alert("Gagal menghapus.");
+                    showCustomModal("Gagal", "Gagal menghapus data.", null);
                 }
-            }
+            });
         }
 
         let searchTimeout;
