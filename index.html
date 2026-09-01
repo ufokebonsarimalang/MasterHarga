@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASTER HARGA UFO - Pricing Management Engine</title>
+    <title>Harga UJL</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font Plus Jakarta Sans -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Google Font Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- SheetJS untuk Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
+            font-family: 'Inter', sans-serif; 
             background-color: #0b0f19; 
             color: #dfe2f1; 
         }
@@ -259,7 +259,6 @@
         let aturanMarginBrand = {}; 
         let currentSearchMode = 'jual';
 
-        // Fungsi Helper untuk Modern Custom Modal (Pengganti alert/confirm jadul)
         window.showCustomModal = function(title, message, onConfirm) {
             const modal = document.getElementById('customModal');
             const modalBox = document.getElementById('modalBox');
@@ -283,7 +282,6 @@
                 }, 300);
             };
 
-            // Hapus event listener lama agar tidak menumpuk
             const newConfirmBtn = btnConfirm.cloneNode(true);
             const newCancelBtn = btnCancel.cloneNode(true);
             btnConfirm.parentNode.replaceChild(newConfirmBtn, btnConfirm);
