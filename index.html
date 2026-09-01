@@ -6,20 +6,24 @@
     <title>NexPrice PRO - Pricing Management Engine</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font Plus Jakarta Sans (Sangat cocok untuk SaaS/Dashboard) -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Google Font Plus Jakarta Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- SheetJS untuk Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f8fafc; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #0b0f19; 
+            color: #dfe2f1; 
+        }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb { background: #313540; border-radius: 9999px; }
 
-        /* Styling Tab Animasi Geser */
+        /* Styling Tab Animasi Geser khas desain NexPrice PRO */
         .tab-container {
             background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1.5rem;
             padding: 6px;
@@ -32,8 +36,8 @@
             z-index: 10;
             padding: 10px 20px;
             font-size: 0.8rem;
-            font-weight: 700;
-            color: #94a3b8;
+            font-weight: 600;
+            color: #908fa0;
             transition: color 0.3s ease;
             text-align: center;
             cursor: pointer;
@@ -41,44 +45,50 @@
             white-space: nowrap;
         }
         .tab-btn.active {
-            color: #ffffff;
+            color: #1000a9;
         }
         .tab-indicator {
             position: absolute;
             top: 6px;
             bottom: 6px;
             left: 6px;
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            background: #c0c1ff;
             border-radius: 1rem;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 15px rgba(192, 193, 255, 0.3);
         }
 
-        .pro-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.37);
+        /* Glassmorphic Panels sesuai Design System */
+        .pro-panel {
+            background: rgba(23, 27, 38, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            border-radius: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .pro-panel:hover {
+            border-color: rgba(192, 193, 255, 0.2);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen flex flex-col selection:bg-[#c0c1ff] selection:text-[#1000a9]">
 
-    <!-- HEADER DENGAN MENU TAB ANIMASI GESER -->
-    <header class="w-full bg-[#0d1322]/90 backdrop-blur-xl border-b border-slate-800 px-4 sm:px-8 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3">
-            <div class="h-9 w-9 bg-gradient-to-tr from-indigo-600 to-violet-600 text-white rounded-xl flex items-center justify-center font-black text-sm shadow-lg shadow-indigo-600/30">
+    <!-- HEADER & NAVIGATION -->
+    <header class="w-full bg-[#0f131d]/90 backdrop-blur-xl border-b border-[#313540]/60 px-6 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="flex items-center gap-3.5">
+            <div class="h-10 w-10 bg-gradient-to-tr from-[#6366f1] to-[#8b5cf6] text-white rounded-2xl flex items-center justify-center font-black text-base shadow-lg shadow-indigo-600/30">
                 N
             </div>
             <div>
-                <h1 class="font-extrabold text-white text-sm tracking-tight flex items-center gap-1.5">
-                    NexPrice <span class="text-[9px] bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-1.5 py-0.5 rounded font-bold uppercase">PRO</span>
+                <h1 class="font-extrabold text-[#dfe2f1] text-base tracking-tight flex items-center gap-2">
+                    NexPrice <span class="text-[10px] bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 px-2 py-0.5 rounded-md font-bold uppercase">PRO</span>
                 </h1>
-                <p class="text-[10px] text-slate-400">Pricing Engine</p>
+                <p class="text-xs text-[#c7c4d7]">Enterprise Pricing Engine</p>
             </div>
         </div>
 
-        <!-- Menu Tab Animasi Model Pill -->
+        <!-- Menu Tab Animasi Pill -->
         <div class="tab-container" id="tabNavContainer">
             <div class="tab-indicator" id="tabIndicator"></div>
             <div onclick="switchTab('cari', 0)" class="tab-btn active" id="btnCari">🔍 Cari Harga</div>
@@ -88,23 +98,23 @@
     </header>
 
     <!-- KONTEN UTAMA -->
-    <main class="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6">
+    <main class="flex-1 p-6 md:p-8 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- HALAMAN 1: CARI HARGA -->
         <section id="tabCari" class="space-y-6">
-            <div class="pro-card p-5 sm:p-6 rounded-2xl flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="pro-panel p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
-                    <h2 class="text-base sm:text-lg font-extrabold text-white tracking-tight">Pusat Informasi Harga</h2>
-                    <p class="text-xs text-slate-400">Cari model produk atau hitung master harga modal secara instan.</p>
+                    <h2 class="text-xl font-bold text-[#dfe2f1] tracking-tight">Pusat Informasi Harga</h2>
+                    <p class="text-sm text-[#c7c4d7] mt-1">Cari model produk atau hitung master harga modal dengan sistem presisi tinggi.</p>
                 </div>
                 
-                <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 w-full md:w-auto">
+                <div class="flex bg-[#171b26] p-1.5 rounded-2xl border border-[#313540] w-full md:w-auto">
                     <button onclick="setSearchMode('jual')" id="filterBtnJual" 
-                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow">
+                        class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm">
                         Harga Jual Jadi
                     </button>
                     <button onclick="setSearchMode('modal')" id="filterBtnModal" 
-                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white">
+                        class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]">
                         Master Modal
                     </button>
                 </div>
@@ -112,85 +122,86 @@
 
             <!-- Input Pencarian -->
             <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none text-[#908fa0]">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </span>
                 <input type="text" id="searchInput" placeholder="Ketik minimal 2 huruf untuk mulai mencari..." 
-                    class="w-full pl-12 pr-4 py-4 bg-slate-900/90 border border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm font-semibold text-white placeholder-slate-500 shadow-inner">
+                    class="w-full pl-14 pr-6 py-4 bg-[#171b26] border border-[#313540] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c0c1ff] text-sm font-semibold text-[#dfe2f1] placeholder-[#908fa0] shadow-inner transition-all">
             </div>
 
             <!-- Grid Hasil Pencarian -->
             <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <div class="col-span-full py-20 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/30 text-slate-500 text-xs font-medium">
-                    🔍 Pilih mode di atas dan ketik minimal 2 huruf untuk mulai pencarian.
+                <div class="col-span-full py-24 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-sm font-semibold">
+                    🔍 Pilih kategori di atas dan ketik minimal 2 huruf untuk mulai pencarian.
                 </div>
             </div>
         </section>
 
         <!-- HALAMAN 2: UPLOAD & TEMPLATE -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="pro-card p-6 rounded-2xl border-indigo-500/20 bg-indigo-950/20">
-                <h2 class="text-sm font-bold text-white mb-1">Template Spreadsheet</h2>
-                <p class="text-xs text-slate-400 mb-4">Unduh format standar Excel untuk mengunggah data harga.</p>
+            <div class="pro-panel p-8 border-[#c0c1ff]/20 bg-gradient-to-br from-[#c0c1ff]/5 to-transparent">
+                <h2 class="text-base font-bold text-[#dfe2f1] mb-1">Template Spreadsheet</h2>
+                <p class="text-xs text-[#c7c4d7] mb-5">Unduh format standar Excel 6 kolom untuk mengunggah data harga.</p>
                 <button onclick="downloadTemplateExcel()" 
-                    class="w-full bg-slate-900 hover:bg-slate-800 text-indigo-400 font-bold py-3 rounded-xl border border-indigo-500/30 transition-all text-xs flex items-center justify-center gap-2">
+                    class="w-full bg-[#171b26] hover:bg-[#313540] text-[#c0c1ff] font-bold py-3.5 rounded-2xl border border-[#c0c1ff]/30 transition-all text-xs flex items-center justify-center gap-2 shadow-sm">
                     📥 Download Format Contoh Excel
                 </button>
             </div>
 
-            <div class="pro-card p-6 rounded-2xl">
-                <h2 class="text-sm font-bold text-white mb-1">Upload Harga Jual Jadi</h2>
-                <p class="text-xs text-slate-400 mb-4">Format 6 Kolom Net Jual.</p>
+            <div class="pro-panel p-8">
+                <h2 class="text-base font-bold text-[#dfe2f1] mb-1">Upload Harga Jual Jadi</h2>
+                <p class="text-xs text-[#c7c4d7] mb-5">Format file spreadsheet 6 kolom net jual.</p>
                 <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-xs text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-500/10 file:text-indigo-400 border border-slate-800 rounded-xl mb-4 bg-slate-900">
+                    class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#c0c1ff]/10 file:text-[#c0c1ff] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
                 <button onclick="prosesUploadHargaJual()" 
-                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-all text-xs shadow-md">
+                    class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-2xl transition-all text-xs shadow-lg shadow-indigo-500/10">
                     Proses Upload Harga Jual
                 </button>
-                <p id="statusUploadJual" class="text-xs mt-3 font-semibold text-center"></p>
+                <p id="statusUploadJual" class="text-xs mt-3 font-bold text-center"></p>
             </div>
 
-            <div class="pro-card p-6 rounded-2xl">
-                <h2 class="text-sm font-bold text-white mb-1">Upload Master Harga Modal</h2>
-                <p class="text-xs text-slate-400 mb-4">Kolom: Brand | Tipe | Harga Modal.</p>
+            <div class="pro-panel p-8">
+                <h2 class="text-base font-bold text-[#dfe2f1] mb-1">Upload Master Harga Modal</h2>
+                <p class="text-xs text-[#c7c4d7] mb-5">Format kolom: Brand | Tipe | Harga Modal.</p>
                 <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-xs text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500/10 file:text-emerald-400 border border-slate-800 rounded-xl mb-4 bg-slate-900">
+                    class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#4edea3]/10 file:text-[#4edea3] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
                 <button onclick="prosesUploadModal()" 
-                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all text-xs shadow-md">
+                    class="w-full bg-[#4edea3] hover:bg-[#00885d] text-[#003824] font-extrabold py-3.5 rounded-2xl transition-all text-xs shadow-lg">
                     Proses Upload Harga Modal
                 </button>
-                <p id="statusUploadModal" class="text-xs mt-3 font-semibold text-center"></p>
+                <p id="statusUploadModal" class="text-xs mt-3 font-bold text-center"></p>
             </div>
         </section>
 
         <!-- HALAMAN 3: PENGATURAN MARGIN -->
         <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="pro-card p-6 rounded-2xl">
-                <h2 class="text-sm font-bold text-white mb-1">Aturan Margin Brand</h2>
-                <p class="text-xs text-slate-400 mb-4">Atur markup persen laba & tambahan nominal tetap per merek.</p>
+            <div class="pro-panel p-8">
+                <h2 class="text-lg font-bold text-[#dfe2f1] mb-1">Aturan Margin Brand</h2>
+                <p class="text-xs text-[#c7c4d7] mb-6">Atur markup persen laba & tambahan nominal tetap per merek.</p>
 
-                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-3 mb-5">
-                    <input type="text" id="inputBrandNama" placeholder="Nama Brand" 
-                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:ring-2 focus:ring-indigo-500">
+                <div class="bg-[#171b26] p-5 rounded-2xl border border-[#313540] space-y-4 mb-6">
+                    <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
+                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
                     <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
-                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:ring-2 focus:ring-indigo-500">
-                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp" 
-                        class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:ring-2 focus:ring-indigo-500">
+                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
+                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" 
+                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
                     <button onclick="simpanPengaturanBrand()" 
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm">
+                        class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-xl text-xs shadow-sm">
                         Simpan Aturan Margin
                     </button>
-                    <p id="statusPengaturan" class="text-xs font-semibold text-center"></p>
+                    <p id="statusPengaturan" class="text-xs font-bold text-center"></p>
                 </div>
 
                 <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Daftar Aktif:</h3>
-                    <div id="listAturanBrand" class="space-y-2">
-                        <p class="text-xs text-slate-500 italic">Memuat data...</p>
+                    <h3 class="text-xs font-bold text-[#908fa0] uppercase tracking-widest mb-3">Daftar Aktif:</h3>
+                    <div id="listAturanBrand" class="space-y-3">
+                        <p class="text-xs text-[#908fa0] italic">Memuat data...</p>
                     </div>
                 </div>
             </div>
         </section>
+
     </main>
 
     <!-- Firebase SDK & Logika Script -->
@@ -216,7 +227,7 @@
         let aturanMarginBrand = {}; 
         let currentSearchMode = 'jual';
 
-        // Fungsi Animasi Indikator Tab Geser
+        // Animasi Indikator Tab
         window.switchTab = function(tabName, index) {
             const tabs = ['tabCari', 'tabUpload', 'tabPengaturan'];
             const btnIds = ['btnCari', 'btnUpload', 'btnPengaturan'];
@@ -253,7 +264,7 @@
                     localHargaJualData.push({ id: docSnap.id, ...docSnap.data() });
                 });
             } catch (error) {
-                console.error("Gagal memuat data:", error);
+                console.error("Gagal memuat data master:", error);
             }
         }
 
@@ -277,18 +288,18 @@
                     let infoNominal = tambahNominal > 0 ? ` + Rp ${tambahNominal.toLocaleString('id-ID')}` : '';
 
                     htmlList += `
-                        <div class="flex justify-between items-center bg-slate-900/60 border border-slate-800 px-3.5 py-2.5 rounded-xl text-xs">
-                            <span class="font-bold text-white uppercase tracking-wider">${brandName}</span>
+                        <div class="flex justify-between items-center bg-[#0f131d] border border-[#313540] px-4 py-3.5 rounded-2xl text-xs">
+                            <span class="font-bold text-[#dfe2f1] uppercase tracking-wider">${brandName}</span>
                             <div class="flex items-center gap-3">
-                                <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-lg font-bold">+${persen}%${infoNominal}</span>
-                                <button onclick="hapusBrand('${brandName}')" class="text-rose-400 font-bold hover:underline">Hapus</button>
+                                <span class="bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 px-3 py-1 rounded-xl font-bold">+${persen}%${infoNominal}</span>
+                                <button onclick="hapusBrand('${brandName}')" class="text-[#ffb4ab] font-extrabold hover:underline">Hapus</button>
                             </div>
                         </div>
                     `;
                 });
 
                 if (htmlList === "") {
-                    htmlList = `<p class="text-xs text-slate-500 italic">Belum ada aturan kustom.</p>`;
+                    htmlList = `<p class="text-xs text-[#908fa0] italic">Belum ada aturan kustom.</p>`;
                 }
                 document.getElementById('listAturanBrand').innerHTML = htmlList;
             } catch (error) {
@@ -309,12 +320,12 @@
             const inputField = document.getElementById('searchInput');
 
             if (mode === 'jual') {
-                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow";
-                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white";
+                btnJual.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
+                btnModal.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]";
                 inputField.placeholder = "Cari Harga Jual Jadi (Min. 2 huruf)...";
             } else {
-                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow";
-                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white";
+                btnModal.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
+                btnJual.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]";
                 inputField.placeholder = "Cari Master Harga Modal (Min. 2 huruf)...";
             }
             triggerSearch();
@@ -338,27 +349,27 @@
             const statusEl = document.getElementById('statusPengaturan');
 
             if (!nama || isNaN(persen)) {
-                statusEl.className = "text-xs font-semibold text-rose-400";
+                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                 statusEl.innerText = "⚠️ Masukkan nama brand dan persen yang valid!";
                 return;
             }
 
             try {
-                statusEl.className = "text-xs font-semibold text-indigo-400";
+                statusEl.className = "text-xs font-bold text-[#c0c1ff]";
                 statusEl.innerText = "⏳ Menyimpan...";
                 await setDoc(doc(db, "pengaturan_margin", nama), {
                     persen: persen,
                     tambahNominal: tambahNominal,
                     updated_at: new Date().toISOString()
                 });
-                statusEl.className = "text-xs font-semibold text-emerald-400";
+                statusEl.className = "text-xs font-bold text-[#4edea3]";
                 statusEl.innerText = "✨ Berhasil disimpan!";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
                 document.getElementById('inputBrandNominalTambah').value = "";
                 await loadAturanBrand();
             } catch (error) {
-                statusEl.className = "text-xs font-semibold text-rose-400";
+                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                 statusEl.innerText = "❌ Gagal menyimpan.";
             }
         }
@@ -383,7 +394,7 @@
         });
 
         // ==========================================
-        // UI KARTU DESAIN BARU (MENGAMBIL GAYA 21ST.DEV)
+        // RENDER KARTU SESUAI GAYA 21ST.DEV & DESIGN SYSTEM
         // ==========================================
         function triggerSearch() {
             const rawKeyword = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -391,7 +402,7 @@
             
             if (rawKeyword.length < 2) {
                 resultContainer.innerHTML = `
-                    <div class="col-span-full py-20 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/30 text-slate-500 text-xs font-medium">
+                    <div class="col-span-full py-24 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-sm font-semibold">
                         🔍 Ketik minimal 2 huruf untuk mencari produk...
                     </div>`;
                 return;
@@ -407,55 +418,54 @@
                 });
 
                 if (filteredJual.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-2xl text-rose-400 text-xs font-bold">❌ Data tidak ditemukan.</div>`;
+                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 rounded-3xl text-[#ffb4ab] text-xs font-bold">❌ Data tidak ditemukan.</div>`;
                     return;
                 }
 
                 filteredJual.slice(0, 20).forEach(item => {
-                    // KARTU HARGA JUAL JADI - TEMA PINK/FUCHSIA
                     html += `
-                        <div class="relative rounded-3xl p-[3px] bg-gradient-to-b from-pink-400 to-fuchsia-600 shadow-xl transition-transform hover:-translate-y-1">
-                            <div class="h-full rounded-[22px] bg-zinc-50 p-6 sm:p-8 flex flex-col ring-1 ring-zinc-200">
+                        <div class="relative rounded-3xl p-[3px] bg-gradient-to-b from-[#c0c1ff] to-[#8083ff] shadow-xl transition-transform hover:-translate-y-1">
+                            <div class="h-full rounded-[22px] bg-[#171b26] p-6 sm:p-8 flex flex-col border border-[#313540]">
                                 <div class="mb-2 grid place-items-center">
-                                    <span class="px-3 py-1 bg-pink-100 text-pink-600 rounded-full text-[10px] font-extrabold uppercase tracking-widest shadow-sm">NET JUAL</span>
+                                    <span class="px-3.5 py-1 bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 rounded-full text-[10px] font-extrabold uppercase tracking-widest">NET JUAL</span>
                                 </div>
-                                <h3 class="text-center text-xl sm:text-2xl font-black text-slate-900 tracking-tight">${item.model}</h3>
+                                <h3 class="text-center text-xl sm:text-2xl font-black text-[#dfe2f1] tracking-tight">${item.model}</h3>
                                 
-                                <div class="mt-6 mb-8 text-center text-pink-600">
-                                    <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Harga Utama</p>
+                                <div class="mt-6 mb-8 text-center text-[#c0c1ff]">
+                                    <p class="text-[10px] font-extrabold text-[#908fa0] uppercase tracking-widest mb-2">Harga Utama</p>
                                     <div class="flex justify-center items-start">
-                                        <span class="text-xl font-bold mt-1 mr-1">Rp</span>
-                                        <span class="text-4xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap">${Number(item.harga || 0).toLocaleString('id-ID')}</span>
+                                        <span class="text-xl font-bold mt-1 mr-1 text-[#c7c4d7]">Rp</span>
+                                        <span class="text-4xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap text-[#dfe2f1]">${Number(item.harga || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
 
-                                <ul class="mt-auto space-y-3.5 border-t border-slate-200 pt-5">
-                                    <li class="flex items-center gap-3 text-slate-700">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 ring-1 ring-emerald-200 text-emerald-600 text-[10px] font-bold">A</span>
+                                <ul class="mt-auto space-y-3.5 border-t border-[#313540] pt-5">
+                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-[#4edea3]/10 ring-1 ring-[#4edea3]/30 text-[#4edea3] text-[10px] font-bold">A</span>
                                         <div class="flex-1 flex justify-between items-center">
-                                            <span class="text-sm font-semibold">Grade A</span>
-                                            <span class="font-extrabold text-slate-900">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
+                                            <span class="text-xs font-semibold">Grade A</span>
+                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-3 text-slate-700">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-100 ring-1 ring-indigo-200 text-indigo-600 text-[10px] font-bold">B</span>
+                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-[#d0bcff]/10 ring-1 ring-[#d0bcff]/30 text-[#d0bcff] text-[10px] font-bold">B</span>
                                         <div class="flex-1 flex justify-between items-center">
-                                            <span class="text-sm font-semibold">Grade B</span>
-                                            <span class="font-extrabold text-slate-900">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
+                                            <span class="text-xs font-semibold">Grade B</span>
+                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-3 text-slate-700">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-sky-100 ring-1 ring-sky-200 text-sky-600 text-[10px]">🏢</span>
+                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-500/30 text-sky-400 text-[10px]">🏢</span>
                                         <div class="flex-1 flex justify-between items-center">
-                                            <span class="text-sm font-semibold">Offline</span>
-                                            <span class="font-extrabold text-slate-900">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
+                                            <span class="text-xs font-semibold">Offline</span>
+                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-3 text-slate-700">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-purple-100 ring-1 ring-purple-200 text-purple-600 text-[10px]">🌐</span>
+                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-purple-500/10 ring-1 ring-purple-500/30 text-purple-400 text-[10px]">🌐</span>
                                         <div class="flex-1 flex justify-between items-center">
-                                            <span class="text-sm font-semibold">Online</span>
-                                            <span class="font-extrabold text-slate-900">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
+                                            <span class="text-xs font-semibold">Online</span>
+                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -472,7 +482,7 @@
                 });
 
                 if (filteredModal.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-rose-500/10 border border-rose-500/20 rounded-2xl text-rose-400 text-xs font-bold">❌ Data tidak ditemukan.</div>`;
+                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 rounded-3xl text-[#ffb4ab] text-xs font-bold">❌ Data tidak ditemukan.</div>`;
                     return;
                 }
 
@@ -491,36 +501,35 @@
                     const selisihMargin = jual - modal;
                     const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
-                    // KARTU MASTER MODAL - TEMA BLUE/INDIGO
                     html += `
-                        <div class="relative rounded-3xl p-[3px] bg-gradient-to-b from-blue-400 to-indigo-600 shadow-xl transition-transform hover:-translate-y-1">
-                            <div class="h-full rounded-[22px] bg-zinc-50 p-6 sm:p-8 flex flex-col ring-1 ring-zinc-200">
+                        <div class="relative rounded-3xl p-[3px] bg-gradient-to-b from-[#4edea3] to-[#00885d] shadow-xl transition-transform hover:-translate-y-1">
+                            <div class="h-full rounded-[22px] bg-[#171b26] p-6 sm:p-8 flex flex-col border border-[#313540]">
                                 <div class="mb-2 grid place-items-center">
-                                    <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-[10px] font-extrabold uppercase tracking-widest shadow-sm">${item.brand}</span>
+                                    <span class="px-3.5 py-1 bg-[#4edea3]/10 text-[#4edea3] border border-[#4edea3]/20 rounded-full text-[10px] font-extrabold uppercase tracking-widest">${item.brand}</span>
                                 </div>
-                                <h3 class="text-center text-xl sm:text-2xl font-black text-slate-900 tracking-tight">${item.tipe}</h3>
+                                <h3 class="text-center text-xl sm:text-2xl font-black text-[#dfe2f1] tracking-tight">${item.tipe}</h3>
                                 
-                                <div class="mt-6 mb-8 text-center text-blue-600">
-                                    <p class="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-2">Harga Jual</p>
+                                <div class="mt-6 mb-8 text-center text-[#4edea3]">
+                                    <p class="text-[10px] font-extrabold text-[#908fa0] uppercase tracking-widest mb-2">Harga Jual</p>
                                     <div class="flex justify-center items-start">
-                                        <span class="text-xl font-bold mt-1 mr-1">Rp</span>
-                                        <span class="text-4xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap">${jual.toLocaleString('id-ID')}</span>
+                                        <span class="text-xl font-bold mt-1 mr-1 text-[#c7c4d7]">Rp</span>
+                                        <span class="text-4xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap text-[#dfe2f1]">${jual.toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
 
-                                <ul class="mt-auto space-y-4 border-t border-slate-200 pt-6">
-                                    <li class="flex items-center gap-3 text-slate-700">
-                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-slate-200 ring-1 ring-slate-300 text-slate-600 text-xs">📦</span>
+                                <ul class="mt-auto space-y-4 border-t border-[#313540] pt-6">
+                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#313540] text-[#dfe2f1] text-xs">📦</span>
                                         <div class="flex-1 flex justify-between items-center">
-                                            <span class="text-sm font-semibold">Modal</span>
-                                            <span class="text-base font-black text-slate-900">Rp ${modal.toLocaleString('id-ID')}</span>
+                                            <span class="text-xs font-semibold">Modal</span>
+                                            <span class="text-sm font-black text-[#dfe2f1]">Rp ${modal.toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-3 text-slate-700">
-                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-100 ring-1 ring-emerald-300 text-emerald-600 text-xs">📈</span>
+                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#4edea3]/10 text-[#4edea3] text-xs">📈</span>
                                         <div class="flex-1 flex justify-between items-center">
-                                            <span class="text-sm font-semibold">Margin (+${persen}%)</span>
-                                            <span class="text-base font-black text-emerald-600">+Rp ${selisihMargin.toLocaleString('id-ID')}</span>
+                                            <span class="text-xs font-semibold">Margin (+${aturan.multiplier ? ((aturan.multiplier-1)*100).toFixed(0) : 10}%)</span>
+                                            <span class="text-sm font-black text-[#4edea3]">+Rp ${selisihMargin.toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
                                 </ul>
@@ -537,12 +546,12 @@
             const fileInput = document.getElementById('excelFileModal');
             const statusEl = document.getElementById('statusUploadModal');
             if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs font-semibold text-rose-400";
+                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                 statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
                 return;
             }
             const file = fileInput.files[0];
-            statusEl.className = "text-xs font-semibold text-indigo-400";
+            statusEl.className = "text-xs font-bold text-[#c0c1ff]";
             statusEl.innerText = "⏳ Memproses...";
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -568,12 +577,12 @@
                             successCount++;
                         }
                     }
-                    statusEl.className = "text-xs font-semibold text-emerald-400";
+                    statusEl.className = "text-xs font-bold text-[#4edea3]";
                     statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
-                    statusEl.className = "text-xs font-semibold text-rose-400";
+                    statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                     statusEl.innerText = "❌ Gagal memproses file.";
                 }
             };
@@ -584,12 +593,12 @@
             const fileInput = document.getElementById('excelFileJual');
             const statusEl = document.getElementById('statusUploadJual');
             if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs font-semibold text-rose-400";
+                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                 statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
                 return;
             }
             const file = fileInput.files[0];
-            statusEl.className = "text-xs font-semibold text-indigo-400";
+            statusEl.className = "text-xs font-bold text-[#c0c1ff]";
             statusEl.innerText = "⏳ Memproses...";
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -617,13 +626,12 @@
                             successCount++;
                         }
                     }
-                    statusEl.className = "text-xs font-semibold text-emerald-400";
+                    statusEl.className = "text-xs font-bold text-[#4edea3]";
                     statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
-                    console.error(err);
-                    statusEl.className = "text-xs font-semibold text-rose-400";
+                    statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                     statusEl.innerText = "❌ Gagal memproses file.";
                 }
             };
