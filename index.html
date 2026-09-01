@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MASTER HARGA UFO - Pricing Management Engine</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- SheetJS untuk Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         body { 
@@ -70,6 +73,7 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-[#c0c1ff] selection:text-[#1000a9]">
 
+    <!-- HEADER & NAVIGATION -->
     <header class="w-full bg-[#0f131d]/90 backdrop-blur-xl border-b border-[#313540]/60 px-4 sm:px-6 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-3">
             <img src="logo.png" alt="Logo UFO" class="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-indigo-600/30" onerror="this.onerror=null; this.src='https://via.placeholder.com/40'">
@@ -80,6 +84,7 @@
             </div>
         </div>
 
+        <!-- Menu Tab Animasi Pill dengan Ikon SVG Modern -->
         <div class="tab-container overflow-x-auto max-w-full" id="tabNavContainer">
             <div class="tab-indicator" id="tabIndicator"></div>
             <div onclick="switchTab('cari', 0)" class="tab-btn active" id="btnCari">
@@ -97,8 +102,10 @@
         </div>
     </header>
 
+    <!-- KONTEN UTAMA -->
     <main class="flex-1 p-4 sm:p-6 md:p-10 max-w-7xl mx-auto w-full space-y-6 sm:space-y-8">
         
+        <!-- HALAMAN 1: CARI HARGA -->
         <section id="tabCari" class="space-y-5 sm:space-y-6">
             <div class="pro-panel p-4 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <button onclick="refreshDataCache()" class="text-xs bg-[#313540] hover:bg-[#484d5f] text-[#c0c1ff] px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm">
@@ -119,6 +126,7 @@
                 </div>
             </div>
 
+            <!-- Input Pencarian -->
             <div class="relative w-full">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-5 pointer-events-none text-[#908fa0]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -127,6 +135,7 @@
                     class="w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3.5 sm:py-4 bg-[#171b26] border border-[#313540] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c0c1ff] text-xs sm:text-sm md:text-base font-semibold text-[#dfe2f1] placeholder-[#908fa0] shadow-inner transition-all">
             </div>
 
+            <!-- Grid Hasil Pencarian -->
             <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 <div class="col-span-full py-20 sm:py-24 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-xs sm:text-sm font-semibold">
                     🔍 Hasil akan ditampilkan disini
@@ -134,6 +143,7 @@
             </div>
         </section>
 
+        <!-- HALAMAN 2: UPLOAD & TEMPLATE -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
             <div class="pro-panel p-6 sm:p-8 border-[#c0c1ff]/20 bg-gradient-to-br from-[#c0c1ff]/5 to-transparent">
                 <h2 class="text-base sm:text-lg font-bold text-[#dfe2f1] mb-1">Template Spreadsheet</h2>
@@ -169,6 +179,7 @@
             </div>
         </section>
 
+        <!-- HALAMAN 3: PENGATURAN MARGIN -->
         <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
             <div class="pro-panel p-6 sm:p-8">
                 <h2 class="text-lg sm:text-xl font-bold text-[#dfe2f1] mb-1">Aturan Margin Brand</h2>
@@ -199,6 +210,7 @@
 
     </main>
 
+    <!-- Firebase SDK & Logika Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -344,7 +356,6 @@
             triggerSearch();
         }
 
-        // TEMPLATE 6 KOLOM (Brand | Tipe | Grade A | Grade B | Online | Offline) Tanpa Kolom Harga
         window.downloadTemplateExcel = function() {
             const templateData = [
                 ["Brand", "Tipe", "Grade A", "Grade B", "Online", "Offline"],
@@ -381,7 +392,12 @@
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
                 document.getElementById('inputBrandNominalTambah').value = "";
+                
+                localStorage.removeItem('ufo_margin_data');
                 await loadAturanBrandFromCloud();
+                if (currentSearchMode === 'modal') {
+                    triggerSearch();
+                }
             } catch (error) {
                 statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                 statusEl.innerText = "❌ Gagal menyimpan.";
@@ -392,7 +408,11 @@
             if (confirm(`Hapus aturan margin untuk brand ${brandName}?`)) {
                 try {
                     await deleteDoc(doc(db, "pengaturan_margin", brandName.toLowerCase()));
+                    localStorage.removeItem('ufo_margin_data');
                     await loadAturanBrandFromCloud();
+                    if (currentSearchMode === 'modal') {
+                        triggerSearch();
+                    }
                 } catch (error) {
                     alert("Gagal menghapus.");
                 }
@@ -594,7 +614,6 @@
             reader.readAsArrayBuffer(file);
         };
 
-        // PROSES UPLOAD HARGA PRICETAG DENGAN FORMAT 6 KOLOM (Brand | Tipe | Grade A | Grade B | Online | Offline) TANPA HARGA UTAMA
         window.prosesUploadHargaJual = function() {
             const fileInput = document.getElementById('excelFileJual');
             const statusEl = document.getElementById('statusUploadJual');
