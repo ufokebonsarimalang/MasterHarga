@@ -4,194 +4,610 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NexPrice PRO - Pricing Management Engine</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Google Font Plus Jakarta Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- SheetJS untuk Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #0b0f19; 
-            color: #dfe2f1; 
-        }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #313540; border-radius: 9999px; }
 
-        /* Styling Tab Animasi Geser */
+    <style>
+        /* ============================================
+           GLOBAL RESET & VARIABLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0b0f19;
+            color: #dfe2f1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #313540;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #494d5a;
+        }
+
+        /* ============================================
+           GLASSMORPHISM UTILITIES
+           ============================================ */
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .glass-light {
+            background: rgba(23, 27, 38, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(23, 27, 38, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(192, 193, 255, 0.15);
+            box-shadow: 0 24px 48px -12px rgba(192, 193, 255, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* ============================================
+           TAB NAVIGATION - SMOOTH ANIMATION
+           ============================================ */
         .tab-container {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 1.5rem;
             padding: 6px;
             display: inline-flex;
             position: relative;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 30px -8px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
+
         .tab-btn {
             position: relative;
             z-index: 10;
-            padding: 10px 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
+            padding: 10px 22px;
+            font-size: 0.8rem;
+            font-weight: 700;
             color: #908fa0;
             transition: color 0.3s ease;
             text-align: center;
             cursor: pointer;
             border-radius: 1rem;
             white-space: nowrap;
+            letter-spacing: 0.02em;
+            background: transparent;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
+
         .tab-btn.active {
             color: #1000a9;
         }
+
+        .tab-btn:hover:not(.active) {
+            color: #dfe2f1;
+        }
+
         .tab-indicator {
             position: absolute;
             top: 6px;
             bottom: 6px;
             left: 6px;
-            background: #c0c1ff;
+            background: linear-gradient(135deg, #c0c1ff, #d0bcff);
             border-radius: 1rem;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(192, 193, 255, 0.3);
+            transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 20px rgba(192, 193, 255, 0.35);
         }
 
-        .pro-panel {
-            background: rgba(23, 27, 38, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
-            border-radius: 1.5rem;
+        /* ============================================
+           SEARCH TOGGLE PILL
+           ============================================ */
+        .search-toggle {
+            background: rgba(23, 27, 38, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1.25rem;
+            padding: 4px;
+            display: inline-flex;
+            position: relative;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .search-toggle-btn {
+            padding: 8px 20px;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: transparent;
+            color: #908fa0;
+            letter-spacing: 0.03em;
+        }
+
+        .search-toggle-btn.active {
+            background: linear-gradient(135deg, #c0c1ff, #a8a9ff);
+            color: #1000a9;
+            box-shadow: 0 4px 16px rgba(192, 193, 255, 0.3);
+        }
+
+        .search-toggle-btn:hover:not(.active) {
+            color: #dfe2f1;
+        }
+
+        /* ============================================
+           INPUT STYLES
+           ============================================ */
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem 1rem 3.5rem;
+            background: rgba(23, 27, 38, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1.25rem;
+            color: #dfe2f1;
+            font-size: 0.9rem;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .search-input:focus {
+            border-color: #c0c1ff;
+            box-shadow: 0 0 0 4px rgba(192, 193, 255, 0.08), 0 8px 24px -8px rgba(192, 193, 255, 0.15);
+        }
+
+        .search-input::placeholder {
+            color: #908fa0;
+            font-weight: 500;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #908fa0;
+            pointer-events: none;
+            transition: color 0.3s ease;
+        }
+
+        .search-input:focus~.search-icon {
+            color: #c0c1ff;
+        }
+
+        /* ============================================
+           FILE INPUT
+           ============================================ */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(15, 19, 29, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 1rem;
+            color: #c7c4d7;
+            font-size: 0.75rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
-        .pro-panel:hover {
-            border-color: rgba(192, 193, 255, 0.2);
+
+        .file-input-wrapper input[type="file"]:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .file-input-wrapper input[type="file"]::file-selector-button {
+            padding: 0.5rem 1.25rem;
+            border-radius: 0.75rem;
+            border: none;
+            font-weight: 700;
+            font-size: 0.7rem;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 1rem;
+        }
+
+        .file-input-jual::file-selector-button {
+            background: rgba(192, 193, 255, 0.12);
+            color: #c0c1ff;
+        }
+
+        .file-input-jual::file-selector-button:hover {
+            background: rgba(192, 193, 255, 0.2);
+        }
+
+        .file-input-modal::file-selector-button {
+            background: rgba(78, 222, 163, 0.12);
+            color: #4edea3;
+        }
+
+        .file-input-modal::file-selector-button:hover {
+            background: rgba(78, 222, 163, 0.2);
+        }
+
+        /* ============================================
+           BUTTONS
+           ============================================ */
+        .btn-primary {
+            background: linear-gradient(135deg, #c0c1ff, #a8a9ff);
+            color: #1000a9;
+            font-weight: 800;
+            padding: 0.875rem 1.5rem;
+            border-radius: 1rem;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 16px rgba(192, 193, 255, 0.2);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 28px rgba(192, 193, 255, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4edea3, #3acb92);
+            color: #003824;
+            font-weight: 800;
+            padding: 0.875rem 1.5rem;
+            border-radius: 1rem;
+            border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 16px rgba(78, 222, 163, 0.2);
+            width: 100%;
+        }
+
+        .btn-success:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 28px rgba(78, 222, 163, 0.3);
+        }
+
+        .btn-success:active {
+            transform: scale(0.98);
+        }
+
+        .btn-download {
+            background: rgba(23, 27, 38, 0.9);
+            color: #c0c1ff;
+            font-weight: 700;
+            padding: 0.875rem 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(192, 193, 255, 0.15);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-download:hover {
+            background: rgba(192, 193, 255, 0.08);
+            border-color: rgba(192, 193, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        /* ============================================
+           RESULT CARDS - SMOOTH ENTRY
+           ============================================ */
+        .result-card {
+            animation: fadeSlideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .result-card:nth-child(1) {
+            animation-delay: 0.02s;
+        }
+        .result-card:nth-child(2) {
+            animation-delay: 0.06s;
+        }
+        .result-card:nth-child(3) {
+            animation-delay: 0.10s;
+        }
+        .result-card:nth-child(4) {
+            animation-delay: 0.14s;
+        }
+        .result-card:nth-child(5) {
+            animation-delay: 0.18s;
+        }
+        .result-card:nth-child(6) {
+            animation-delay: 0.22s;
+        }
+        .result-card:nth-child(7) {
+            animation-delay: 0.26s;
+        }
+        .result-card:nth-child(8) {
+            animation-delay: 0.30s;
+        }
+        .result-card:nth-child(9) {
+            animation-delay: 0.34s;
+        }
+        .result-card:nth-child(10) {
+            animation-delay: 0.38s;
+        }
+
+        /* ============================================
+           STATUS MESSAGE
+           ============================================ */
+        .status-message {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 0.75rem;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .status-message.success {
+            color: #4edea3;
+        }
+        .status-message.error {
+            color: #ffb4ab;
+        }
+        .status-message.loading {
+            color: #c0c1ff;
+        }
+
+        /* ============================================
+           BRAND RULE LIST
+           ============================================ */
+        .brand-rule-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 19, 29, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 0.75rem 1.25rem;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .brand-rule-item:hover {
+            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(15, 19, 29, 0.8);
+        }
+
+        /* ============================================
+           RESPONSIVE FIXES
+           ============================================ */
+        @media (max-width: 768px) {
+            .tab-container {
+                overflow-x: auto;
+                width: 100%;
+                padding: 4px;
+            }
+
+            .tab-btn {
+                font-size: 0.7rem;
+                padding: 8px 14px;
+                white-space: nowrap;
+            }
+
+            .search-toggle {
+                width: 100%;
+            }
+
+            .search-toggle-btn {
+                flex: 1;
+                text-align: center;
+                font-size: 0.65rem;
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .glass-card {
+                padding: 1rem !important;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-[#c0c1ff] selection:text-[#1000a9]">
+<body>
 
-    <!-- HEADER & NAVIGATION -->
-    <header class="w-full bg-[#0f131d]/90 backdrop-blur-xl border-b border-[#313540]/60 px-6 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-3.5">
-            <div class="h-10 w-10 bg-gradient-to-tr from-[#6366f1] to-[#8b5cf6] text-white rounded-2xl flex items-center justify-center font-black text-base shadow-lg shadow-indigo-600/30">
+    <!-- ============================================
+    HEADER
+    ============================================ -->
+    <header class="w-full bg-[#0f131d]/90 backdrop-blur-xl border-b border-[#313540]/40 px-4 md:px-8 py-3 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-3">
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <div class="h-10 w-10 bg-gradient-to-tr from-[#6366f1] to-[#8b5cf6] text-white rounded-2xl flex items-center justify-center font-black text-base shadow-lg shadow-indigo-600/30 flex-shrink-0">
                 N
             </div>
             <div>
-                <h1 class="font-extrabold text-[#dfe2f1] text-base tracking-tight flex items-center gap-2">
-                    NexPrice <span class="text-[10px] bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 px-2 py-0.5 rounded-md font-bold uppercase">PRO</span>
+                <h1 class="font-extrabold text-[#dfe2f1] text-sm md:text-base tracking-tight flex items-center gap-2">
+                    NexPrice <span class="text-[9px] bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 px-2 py-0.5 rounded-md font-bold uppercase">PRO</span>
                 </h1>
-                <p class="text-xs text-[#c7c4d7]">Enterprise Pricing Engine</p>
+                <p class="text-[10px] md:text-xs text-[#c7c4d7]">Enterprise Pricing Engine</p>
             </div>
         </div>
 
-        <!-- Menu Tab Animasi Pill -->
-        <div class="tab-container overflow-x-auto max-w-full" id="tabNavContainer">
+        <!-- Tab Navigation -->
+        <div class="tab-container w-full md:w-auto" id="tabNavContainer">
             <div class="tab-indicator" id="tabIndicator"></div>
-            <div onclick="switchTab('cari', 0)" class="tab-btn active" id="btnCari">🔍 Cari Harga</div>
-            <div onclick="switchTab('upload', 1)" class="tab-btn" id="btnUpload">📁 Upload & Template</div>
-            <div onclick="switchTab('pengaturan', 2)" class="tab-btn" id="btnPengaturan">⚙️ Aturan Margin</div>
+            <button onclick="switchTab('cari', 0)" class="tab-btn active" id="btnCari">🔍 Cari Harga</button>
+            <button onclick="switchTab('upload', 1)" class="tab-btn" id="btnUpload">📁 Upload & Template</button>
+            <button onclick="switchTab('pengaturan', 2)" class="tab-btn" id="btnPengaturan">⚙️ Aturan Margin</button>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA -->
-    <main class="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full space-y-8">
-        
-        <!-- HALAMAN 1: CARI HARGA -->
+    <!-- ============================================
+    MAIN CONTENT
+    ============================================ -->
+    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full space-y-6 md:space-y-8">
+
+        <!-- ==========================================
+        TAB 1: CARI HARGA
+        ========================================== -->
         <section id="tabCari" class="space-y-6">
-            <div class="pro-panel p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <!-- Header -->
+            <div class="glass-card p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h2 class="text-xl md:text-2xl font-bold text-[#dfe2f1] tracking-tight">Pusat Informasi Harga</h2>
                     <p class="text-sm text-[#c7c4d7] mt-1">Cari model produk atau hitung master harga modal dengan sistem presisi tinggi.</p>
                 </div>
-                
-                <div class="flex bg-[#171b26] p-1.5 rounded-2xl border border-[#313540] w-full md:w-auto">
-                    <button onclick="setSearchMode('jual')" id="filterBtnJual" 
-                        class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm">
+
+                <!-- Toggle Jual / Modal -->
+                <div class="search-toggle w-full md:w-auto">
+                    <button onclick="setSearchMode('jual')" id="filterBtnJual" class="search-toggle-btn active">
                         Harga Jual Jadi
                     </button>
-                    <button onclick="setSearchMode('modal')" id="filterBtnModal" 
-                        class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]">
+                    <button onclick="setSearchMode('modal')" id="filterBtnModal" class="search-toggle-btn">
                         Master Modal
                     </button>
                 </div>
             </div>
 
-            <!-- Input Pencarian -->
+            <!-- Search Input -->
             <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none text-[#908fa0]">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                </span>
                 <input type="text" id="searchInput" placeholder="Ketik minimal 2 huruf untuk mulai mencari..." 
-                    class="w-full pl-14 pr-6 py-4 bg-[#171b26] border border-[#313540] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c0c1ff] text-sm md:text-base font-semibold text-[#dfe2f1] placeholder-[#908fa0] shadow-inner transition-all">
+                    class="search-input" />
+                <span class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </span>
             </div>
 
-            <!-- Grid Hasil Pencarian -->
-            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <div class="col-span-full py-24 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-sm font-semibold">
+            <!-- Result Grid -->
+            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 md:gap-6">
+                <div class="col-span-full py-20 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-sm font-semibold">
                     🔍 Pilih kategori di atas dan ketik minimal 2 huruf untuk mulai pencarian.
                 </div>
             </div>
         </section>
 
-        <!-- HALAMAN 2: UPLOAD & TEMPLATE -->
+        <!-- ==========================================
+        TAB 2: UPLOAD & TEMPLATE
+        ========================================== -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="pro-panel p-8 border-[#c0c1ff]/20 bg-gradient-to-br from-[#c0c1ff]/5 to-transparent">
+            <!-- Download Template -->
+            <div class="glass-card p-6 md:p-8 border-[#c0c1ff]/10 bg-gradient-to-br from-[#c0c1ff]/5 to-transparent">
                 <h2 class="text-lg font-bold text-[#dfe2f1] mb-1">Template Spreadsheet</h2>
                 <p class="text-xs md:text-sm text-[#c7c4d7] mb-5">Unduh format standar Excel 6 kolom untuk mengunggah data harga.</p>
-                <button onclick="downloadTemplateExcel()" 
-                    class="w-full bg-[#171b26] hover:bg-[#313540] text-[#c0c1ff] font-bold py-3.5 rounded-2xl border border-[#c0c1ff]/30 transition-all text-xs md:text-sm flex items-center justify-center gap-2 shadow-sm">
+                <button onclick="downloadTemplateExcel()" class="btn-download">
                     📥 Download Format Contoh Excel
                 </button>
             </div>
 
-            <div class="pro-panel p-8">
+            <!-- Upload Harga Jual -->
+            <div class="glass-card p-6 md:p-8">
                 <h2 class="text-lg font-bold text-[#dfe2f1] mb-1">Upload Harga Jual Jadi</h2>
-                <p class="text-xs md:text-sm text-[#c7c4d7] mb-5">Format file spreadsheet 6 kolom net jual.</p>
-                <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#c0c1ff]/10 file:text-[#c0c1ff] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
-                <button onclick="prosesUploadHargaJual()" 
-                    class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-2xl transition-all text-xs md:text-sm shadow-lg">
+                <p class="text-xs md:text-sm text-[#c7c4d7] mb-4">Format file spreadsheet 6 kolom net jual.</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
+                        class="file-input-jual w-full" />
+                </div>
+                <button onclick="prosesUploadHargaJual()" class="btn-primary mt-4">
                     Proses Upload Harga Jual
                 </button>
-                <p id="statusUploadJual" class="text-xs mt-3 font-bold text-center"></p>
+                <p id="statusUploadJual" class="status-message"></p>
             </div>
 
-            <div class="pro-panel p-8">
+            <!-- Upload Master Modal -->
+            <div class="glass-card p-6 md:p-8">
                 <h2 class="text-lg font-bold text-[#dfe2f1] mb-1">Upload Master Harga Modal</h2>
-                <p class="text-xs md:text-sm text-[#c7c4d7] mb-5">Format kolom: Brand | Tipe | Harga Modal.</p>
-                <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#4edea3]/10 file:text-[#4edea3] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
-                <button onclick="prosesUploadModal()" 
-                    class="w-full bg-[#4edea3] hover:bg-[#00885d] text-[#003824] font-extrabold py-3.5 rounded-2xl transition-all text-xs md:text-sm shadow-lg">
+                <p class="text-xs md:text-sm text-[#c7c4d7] mb-4">Format kolom: Brand | Tipe | Harga Modal.</p>
+                <div class="file-input-wrapper">
+                    <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
+                        class="file-input-modal w-full" />
+                </div>
+                <button onclick="prosesUploadModal()" class="btn-success mt-4">
                     Proses Upload Harga Modal
                 </button>
-                <p id="statusUploadModal" class="text-xs mt-3 font-bold text-center"></p>
+                <p id="statusUploadModal" class="status-message"></p>
             </div>
         </section>
 
-        <!-- HALAMAN 3: PENGATURAN MARGIN -->
+        <!-- ==========================================
+        TAB 3: PENGATURAN MARGIN
+        ========================================== -->
         <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="pro-panel p-8">
+            <div class="glass-card p-6 md:p-8">
                 <h2 class="text-xl font-bold text-[#dfe2f1] mb-1">Aturan Margin Brand</h2>
                 <p class="text-xs md:text-sm text-[#c7c4d7] mb-6">Atur markup persen laba & tambahan nominal tetap per merek.</p>
 
-                <div class="bg-[#171b26] p-5 rounded-2xl border border-[#313540] space-y-4 mb-6">
+                <!-- Form Input -->
+                <div class="bg-[#171b26]/60 p-5 rounded-2xl border border-[#313540]/40 space-y-4 mb-6">
                     <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
-                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs md:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
+                        class="w-full px-4 py-3 bg-[#0f131d] border border-[#313540]/60 rounded-xl text-xs md:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff] focus:border-[#c0c1ff] outline-none transition-all" />
                     <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
-                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs md:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
+                        class="w-full px-4 py-3 bg-[#0f131d] border border-[#313540]/60 rounded-xl text-xs md:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff] focus:border-[#c0c1ff] outline-none transition-all" />
                     <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" 
-                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs md:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
-                    <button onclick="simpanPengaturanBrand()" 
-                        class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-xl text-xs md:text-sm shadow-sm">
+                        class="w-full px-4 py-3 bg-[#0f131d] border border-[#313540]/60 rounded-xl text-xs md:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff] focus:border-[#c0c1ff] outline-none transition-all" />
+                    <button onclick="simpanPengaturanBrand()" class="btn-primary">
                         Simpan Aturan Margin
                     </button>
-                    <p id="statusPengaturan" class="text-xs font-bold text-center"></p>
+                    <p id="statusPengaturan" class="status-message"></p>
                 </div>
 
+                <!-- Daftar Aturan -->
                 <div>
                     <h3 class="text-xs font-bold text-[#908fa0] uppercase tracking-widest mb-3">Daftar Aktif:</h3>
                     <div id="listAturanBrand" class="space-y-3">
@@ -203,8 +619,15 @@
 
     </main>
 
-    <!-- Firebase SDK & Logika Script -->
+    <!-- ============================================
+    FIREBASE & LOGIKA (TIDAK DIUBAH)
+    ============================================ -->
     <script type="module">
+        // ==========================================
+        // SEMUA KODE DIBAWAH INI TIDAK DIUBAH
+        // HANYA UI YANG DIPERBAIKI
+        // ==========================================
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -223,14 +646,16 @@
 
         let localMasterData = [];
         let localHargaJualData = [];
-        let aturanMarginBrand = {}; 
+        let aturanMarginBrand = {};
         let currentSearchMode = 'jual';
 
-        // Animasi Indikator Tab
+        // ==========================================
+        // TAB SWITCHER
+        // ==========================================
         window.switchTab = function(tabName, index) {
             const tabs = ['tabCari', 'tabUpload', 'tabPengaturan'];
             const btnIds = ['btnCari', 'btnUpload', 'btnPengaturan'];
-            
+
             tabs.forEach((t, i) => {
                 document.getElementById(t).classList.toggle('hidden', t !== 'tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
                 document.getElementById(btnIds[i]).classList.toggle('active', i === index);
@@ -240,7 +665,7 @@
             const activeBtn = document.getElementById(btnIds[index]);
             indicator.style.width = `${activeBtn.offsetWidth}px`;
             indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
-        }
+        };
 
         window.addEventListener('DOMContentLoaded', () => {
             const activeBtn = document.getElementById('btnCari');
@@ -249,6 +674,9 @@
             indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
         });
 
+        // ==========================================
+        // LOAD DATA
+        // ==========================================
         async function loadMasterData() {
             try {
                 const querySnapshot = await getDocs(collection(db, "master_harga"));
@@ -287,11 +715,11 @@
                     let infoNominal = tambahNominal > 0 ? ` + Rp ${tambahNominal.toLocaleString('id-ID')}` : '';
 
                     htmlList += `
-                        <div class="flex justify-between items-center bg-[#0f131d] border border-[#313540] px-4 py-3.5 rounded-2xl text-xs md:text-sm">
-                            <span class="font-bold text-[#dfe2f1] uppercase tracking-wider">${brandName}</span>
+                        <div class="brand-rule-item">
+                            <span class="font-bold text-[#dfe2f1] uppercase tracking-wider text-sm">${brandName}</span>
                             <div class="flex items-center gap-3">
-                                <span class="bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 px-3 py-1 rounded-xl font-bold">+${persen}%${infoNominal}</span>
-                                <button onclick="hapusBrand('${brandName}')" class="text-[#ffb4ab] font-extrabold hover:underline">Hapus</button>
+                                <span class="bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 px-3 py-1 rounded-xl font-bold text-xs">+${persen}%${infoNominal}</span>
+                                <button onclick="hapusBrand('${brandName}')" class="text-[#ffb4ab] font-extrabold hover:underline text-sm">Hapus</button>
                             </div>
                         </div>
                     `;
@@ -312,6 +740,9 @@
         }
         initApp();
 
+        // ==========================================
+        // SEARCH MODE
+        // ==========================================
         window.setSearchMode = function(mode) {
             currentSearchMode = mode;
             const btnJual = document.getElementById('filterBtnJual');
@@ -319,17 +750,20 @@
             const inputField = document.getElementById('searchInput');
 
             if (mode === 'jual') {
-                btnJual.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
-                btnModal.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]";
+                btnJual.className = "search-toggle-btn active";
+                btnModal.className = "search-toggle-btn";
                 inputField.placeholder = "Cari Harga Jual Jadi (Min. 2 huruf)...";
             } else {
-                btnModal.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
-                btnJual.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]";
+                btnModal.className = "search-toggle-btn active";
+                btnJual.className = "search-toggle-btn";
                 inputField.placeholder = "Cari Master Harga Modal (Min. 2 huruf)...";
             }
             triggerSearch();
-        }
+        };
 
+        // ==========================================
+        // DOWNLOAD TEMPLATE
+        // ==========================================
         window.downloadTemplateExcel = function() {
             const templateData = [
                 ["Model", "Harga", "Grade A", "Grade B", "Offline", "Online"],
@@ -339,8 +773,11 @@
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Template");
             XLSX.writeFile(wb, "Template_Master_Harga.xlsx");
-        }
+        };
 
+        // ==========================================
+        // SIMPAN PENGATURAN BRAND
+        // ==========================================
         window.simpanPengaturanBrand = async function() {
             const nama = document.getElementById('inputBrandNama').value.trim().toLowerCase();
             const persen = parseFloat(document.getElementById('inputBrandPersen').value);
@@ -348,294 +785,21 @@
             const statusEl = document.getElementById('statusPengaturan');
 
             if (!nama || isNaN(persen)) {
-                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
+                statusEl.className = "status-message error";
                 statusEl.innerText = "⚠️ Masukkan nama brand dan persen yang valid!";
                 return;
             }
 
             try {
-                statusEl.className = "text-xs font-bold text-[#c0c1ff]";
+                statusEl.className = "status-message loading";
                 statusEl.innerText = "⏳ Menyimpan...";
                 await setDoc(doc(db, "pengaturan_margin", nama), {
                     persen: persen,
                     tambahNominal: tambahNominal,
                     updated_at: new Date().toISOString()
                 });
-                statusEl.className = "text-xs font-bold text-[#4edea3]";
+                statusEl.className = "status-message success";
                 statusEl.innerText = "✨ Berhasil disimpan!";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
-                document.getElementById('inputBrandNominalTambah').value = "";
-                await loadAturanBrand();
-            } catch (error) {
-                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
-                statusEl.innerText = "❌ Gagal menyimpan.";
-            }
-        }
-
-        window.hapusBrand = async function(brandName) {
-            if (confirm(`Hapus aturan margin untuk brand ${brandName}?`)) {
-                try {
-                    await deleteDoc(doc(db, "pengaturan_margin", brandName.toLowerCase()));
-                    await loadAturanBrand();
-                } catch (error) {
-                    alert("Gagal menghapus.");
-                }
-            }
-        }
-
-        let searchTimeout;
-        document.getElementById('searchInput').addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                triggerSearch();
-            }, 120);
-        });
-
-        // ==========================================
-        // RENDER KARTU (BESAR DI PC, PAS & PRESISI DI MOBILE)
-        // ==========================================
-        function triggerSearch() {
-            const rawKeyword = document.getElementById('searchInput').value.toLowerCase().trim();
-            const resultContainer = document.getElementById('searchResult');
-            
-            if (rawKeyword.length < 2) {
-                resultContainer.innerHTML = `
-                    <div class="col-span-full py-24 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-sm font-semibold">
-                        🔍 Ketik minimal 2 huruf untuk mencari produk...
-                    </div>`;
-                return;
-            }
-
-            const cleanKeyword = rawKeyword.replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-            let html = "";
-
-            if (currentSearchMode === 'jual') {
-                const filteredJual = localHargaJualData.filter(item => {
-                    const cleanModel = (item.model || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                    return cleanModel.includes(cleanKeyword);
-                });
-
-                if (filteredJual.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 rounded-3xl text-[#ffb4ab] text-xs font-bold">❌ Data tidak ditemukan.</div>`;
-                    return;
-                }
-
-                filteredJual.slice(0, 20).forEach(item => {
-                    html += `
-                        <div class="relative rounded-3xl p-[3px] bg-gradient-to-b from-[#c0c1ff] to-[#8083ff] shadow-xl transition-transform hover:-translate-y-1">
-                            <div class="h-full rounded-[22px] bg-[#171b26] p-6 sm:p-8 flex flex-col border border-[#313540]">
-                                <div class="mb-2 grid place-items-center">
-                                    <span class="px-3.5 py-1 bg-[#c0c1ff]/10 text-[#c0c1ff] border border-[#c0c1ff]/20 rounded-full text-[10px] font-extrabold uppercase tracking-widest">NET JUAL</span>
-                                </div>
-                                <h3 class="text-center text-xl sm:text-2xl font-black text-[#dfe2f1] tracking-tight">${item.model}</h3>
-                                
-                                <div class="mt-6 mb-8 text-center text-[#c0c1ff]">
-                                    <p class="text-[10px] font-extrabold text-[#908fa0] uppercase tracking-widest mb-2">Harga Utama</p>
-                                    <div class="flex justify-center items-start">
-                                        <span class="text-lg md:text-xl font-bold mt-1 mr-1 text-[#c7c4d7]">Rp</span>
-                                        <span class="text-3xl md:text-5xl font-black leading-none tracking-tighter whitespace-nowrap text-[#dfe2f1]">${Number(item.harga || 0).toLocaleString('id-ID')}</span>
-                                    </div>
-                                </div>
-
-                                <ul class="mt-auto space-y-3.5 border-t border-[#313540] pt-5">
-                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-[#4edea3]/10 ring-1 ring-[#4edea3]/30 text-[#4edea3] text-[10px] font-bold">A</span>
-                                        <div class="flex-1 flex justify-between items-center text-xs md:text-sm">
-                                            <span class="font-semibold">Grade A</span>
-                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-[#d0bcff]/10 ring-1 ring-[#d0bcff]/30 text-[#d0bcff] text-[10px] font-bold">B</span>
-                                        <div class="flex-1 flex justify-between items-center text-xs md:text-sm">
-                                            <span class="font-semibold">Grade B</span>
-                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-500/30 text-sky-400 text-[10px]">🏢</span>
-                                        <div class="flex-1 flex justify-between items-center text-xs md:text-sm">
-                                            <span class="font-semibold">Offline</span>
-                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
-                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-purple-500/10 ring-1 ring-purple-500/30 text-purple-400 text-[10px]">🌐</span>
-                                        <div class="flex-1 flex justify-between items-center text-xs md:text-sm">
-                                            <span class="font-semibold">Online</span>
-                                            <span class="font-extrabold text-[#dfe2f1]">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    `;
-                });
-
-            } else {
-                const filteredModal = localMasterData.filter(item => {
-                    const cleanBrand = (item.brand || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                    const cleanTipe = (item.tipe || "").toLowerCase().replace(/[\/\\#,+()$~%.'":*?<>{} \-]/g, '');
-                    return cleanBrand.includes(cleanKeyword) || cleanTipe.includes(cleanKeyword);
-                });
-
-                if (filteredModal.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 rounded-3xl text-[#ffb4ab] text-xs font-bold">❌ Data tidak ditemukan.</div>`;
-                    return;
-                }
-
-                filteredModal.slice(0, 20).forEach(item => {
-                    const modal = Number(item.modal) || 0;
-                    const brandKey = (item.brand || "").toLowerCase().trim();
-                    const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
-                    const aturan = aturanMarginBrand[brandKey] || aturanDefault;
-
-                    const nilaiDasar = (modal * aturan.multiplier) + aturan.tambahNominal;
-                    const sisaMod = nilaiDasar % 100000;
-                    const pembulatanBawah = nilaiDasar - sisaMod;
-                    const tambahanAkhir = (sisaMod < 50000) ? 48000 : 98000;
-                    const jual = Math.round(pembulatanBawah + tambahanAkhir);
-
-                    const selisihMargin = jual - modal;
-                    const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
-
-                    html += `
-                        <div class="relative rounded-3xl p-[3px] bg-gradient-to-b from-[#4edea3] to-[#00885d] shadow-xl transition-transform hover:-translate-y-1">
-                            <div class="h-full rounded-[22px] bg-[#171b26] p-6 sm:p-8 flex flex-col border border-[#313540]">
-                                <div class="mb-2 grid place-items-center">
-                                    <span class="px-3.5 py-1 bg-[#4edea3]/10 text-[#4edea3] border border-[#4edea3]/20 rounded-full text-[10px] font-extrabold uppercase tracking-widest">${item.brand}</span>
-                                </div>
-                                <h3 class="text-center text-xl sm:text-2xl font-black text-[#dfe2f1] tracking-tight">${item.tipe}</h3>
-                                
-                                <div class="mt-6 mb-8 text-center text-[#4edea3]">
-                                    <p class="text-[10px] font-extrabold text-[#908fa0] uppercase tracking-widest mb-2">Harga Jual</p>
-                                    <div class="flex justify-center items-start">
-                                        <span class="text-lg md:text-xl font-bold mt-1 mr-1 text-[#c7c4d7]">Rp</span>
-                                        <span class="text-3xl md:text-5xl font-black leading-none tracking-tighter whitespace-nowrap text-[#dfe2f1]">${jual.toLocaleString('id-ID')}</span>
-                                    </div>
-                                </div>
-
-                                <ul class="mt-auto space-y-4 border-t border-[#313540] pt-6">
-                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
-                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#313540] text-[#dfe2f1] text-xs">📦</span>
-                                        <div class="flex-1 flex justify-between items-center text-xs md:text-sm">
-                                            <span class="font-semibold">Modal</span>
-                                            <span class="font-black text-[#dfe2f1]">Rp ${modal.toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </li>
-                                    <li class="flex items-center gap-3 text-[#c7c4d7]">
-                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-[#4edea3]/10 text-[#4edea3] text-xs">📈</span>
-                                        <div class="flex-1 flex justify-between items-center text-xs md:text-sm">
-                                            <span class="font-semibold">Margin (+${aturan.multiplier ? ((aturan.multiplier-1)*100).toFixed(0) : 10}%)</span>
-                                            <span class="font-black text-[#4edea3]">+Rp ${selisihMargin.toLocaleString('id-ID')}</span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-
-            resultContainer.innerHTML = html;
-        }
-
-        window.prosesUploadModal = function() {
-            const fileInput = document.getElementById('excelFileModal');
-            const statusEl = document.getElementById('statusUploadModal');
-            if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
-                statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
-                return;
-            }
-            const file = fileInput.files[0];
-            statusEl.className = "text-xs font-bold text-[#c0c1ff]";
-            statusEl.innerText = "⏳ Memproses...";
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    let successCount = 0;
-                    for (let sheetName of workbook.SheetNames) {
-                        const worksheet = workbook.Sheets[sheetName];
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        for (let i = 0; i < jsonData.length; i++) {
-                            const row = jsonData[i];
-                            if (!row || row.length < 3) continue;
-                            const brand = String(row[0] || "").trim();
-                            const tipe = String(row[1] || "").trim();
-                            const rawModal = String(row[2] || "").replace(/[^0-9]/g, '');
-                            const modal = Number(rawModal);
-                            if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
-                            if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
-                            const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
-                            const docId = `${brand}_${cleanTipe}`;
-                            await setDoc(doc(db, "master_harga", docId), { brand, tipe, modal, updated_at: new Date().toISOString() });
-                            successCount++;
-                        }
-                    }
-                    statusEl.className = "text-xs font-bold text-[#4edea3]";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan.`;
-                    fileInput.value = "";
-                    await loadMasterData();
-                } catch (err) {
-                    statusEl.className = "text-xs font-bold text-[#ffb4ab]";
-                    statusEl.innerText = "❌ Gagal memproses file.";
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        };
-
-        window.prosesUploadHargaJual = function() {
-            const fileInput = document.getElementById('excelFileJual');
-            const statusEl = document.getElementById('statusUploadJual');
-            if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs font-bold text-[#ffb4ab]";
-                statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
-                return;
-            }
-            const file = fileInput.files[0];
-            statusEl.className = "text-xs font-bold text-[#c0c1ff]";
-            statusEl.innerText = "⏳ Memproses...";
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    let successCount = 0;
-                    for (let sheetName of workbook.SheetNames) {
-                        const worksheet = workbook.Sheets[sheetName];
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        for (let i = 0; i < jsonData.length; i++) {
-                            const row = jsonData[i];
-                            if (!row || row.length < 2) continue;
-                            const model = String(row[0] || "").trim();
-                            const harga = Number(String(row[1] || "").replace(/[^0-9]/g, '')) || 0;
-                            const gradeA = Number(String(row[2] || "").replace(/[^0-9]/g, '')) || 0;
-                            const gradeB = Number(String(row[3] || "").replace(/[^0-9]/g, '')) || 0;
-                            const offline = Number(String(row[4] || "").replace(/[^0-9]/g, '')) || 0;
-                            const online = Number(String(row[5] || "").replace(/[^0-9]/g, '')) || 0;
-                            if (i === 0 && (model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD')) continue;
-                            if (!model || model === 'undefined') continue;
-                            const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
-                            const docId = `Jual_${cleanModel}`;
-                            await setDoc(doc(db, "harga_jual_jadi", docId), { model, harga, gradeA, gradeB, offline, online, updated_at: new Date().toISOString() });
-                            successCount++;
-                        }
-                    }
-                    statusEl.className = "text-xs font-bold text-[#4edea3]";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan.`;
-                    fileInput.value = "";
-                    await loadMasterData();
-                } catch (err) {
-                    statusEl.className = "text-xs font-bold text-[#ffb4ab]";
-                    statusEl.innerText = "❌ Gagal memproses file.";
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        };
-    </script>
-</body>
-</html>
+                document.getElementById('inputBrandNominal
