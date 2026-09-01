@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>NexPrice PRO · Dashboard</title>
+    <title>NexPrice PRO</title>
 
-    <!-- Font Plus Jakarta Sans -->
+    <!-- Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- Font Awesome Icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <style>
-        /* ========== RESET & VARIABLES ========== */
+        /* ============================================================
+           SEMUA VARIABEL DIAMBIL PERSIS DARI FILE ---.txt
+           ============================================================ */
+
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +25,7 @@
         }
 
         :root {
-            /* Surface */
+            /* ---- COLORS (dari file) ---- */
             --surface: #0f131d;
             --surface-dim: #0f131d;
             --surface-bright: #353944;
@@ -31,52 +34,58 @@
             --surface-container: #1c1f2a;
             --surface-container-high: #262a35;
             --surface-container-highest: #313540;
-
-            /* On-surface */
             --on-surface: #dfe2f1;
             --on-surface-variant: #c7c4d7;
             --inverse-surface: #dfe2f1;
             --inverse-on-surface: #2c303b;
-
-            /* Outline */
             --outline: #908fa0;
             --outline-variant: #464554;
-
-            /* Primary */
+            --surface-tint: #c0c1ff;
             --primary: #c0c1ff;
             --on-primary: #1000a9;
             --primary-container: #8083ff;
             --on-primary-container: #0d0096;
             --inverse-primary: #494bd6;
-
-            /* Secondary */
             --secondary: #d0bcff;
             --on-secondary: #3c0091;
             --secondary-container: #571bc1;
-
-            /* Tertiary (Emerald) */
+            --on-secondary-container: #c4abff;
             --tertiary: #4edea3;
             --on-tertiary: #003824;
             --tertiary-container: #00885d;
-
-            /* Error */
+            --on-tertiary-container: #000703;
             --error: #ffb4ab;
             --on-error: #690005;
             --error-container: #93000a;
+            --on-error-container: #ffdad6;
+            --primary-fixed: #e1e0ff;
+            --primary-fixed-dim: #c0c1ff;
+            --on-primary-fixed: #07006c;
+            --on-primary-fixed-variant: #2f2ebe;
+            --secondary-fixed: #e9ddff;
+            --secondary-fixed-dim: #d0bcff;
+            --on-secondary-fixed: #23005c;
+            --on-secondary-fixed-variant: #5516be;
+            --tertiary-fixed: #6ffbbe;
+            --tertiary-fixed-dim: #4edea3;
+            --on-tertiary-fixed: #002113;
+            --on-tertiary-fixed-variant: #005236;
+            --background: #0f131d;
+            --on-background: #dfe2f1;
+            --surface-variant: #313540;
 
-            /* Glass */
-            --glass-bg: rgba(15, 23, 42, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.05);
-            --glass-blur: blur(12px);
+            /* ---- TYPOGRAPHY (dari file) ---- */
+            --font-family: 'Plus Jakarta Sans', sans-serif;
 
-            /* Spacing */
-            --container-padding: 32px;
-            --gutter: 24px;
-            --card-gap: 20px;
-            --stack-sm: 8px;
-            --stack-md: 16px;
+            --display-lg: 800 48px/1.1 var(--font-family);
+            --headline-lg: 700 32px/1.2 var(--font-family);
+            --headline-lg-mobile: 700 24px/1.2 var(--font-family);
+            --headline-md: 600 24px/1.3 var(--font-family);
+            --body-lg: 400 16px/1.6 var(--font-family);
+            --body-sm: 400 14px/1.5 var(--font-family);
+            --label-md: 600 12px/1 var(--font-family);
 
-            /* Radius */
+            /* ---- ROUNDED (dari file) ---- */
             --radius-sm: 0.25rem;
             --radius-default: 0.5rem;
             --radius-md: 0.75rem;
@@ -84,43 +93,44 @@
             --radius-xl: 1.5rem;
             --radius-full: 9999px;
 
-            /* Sidebar */
+            /* ---- SPACING (dari file) ---- */
+            --unit: 4px;
+            --container-padding: 32px;
+            --gutter: 24px;
+            --card-gap: 20px;
+            --stack-sm: 8px;
+            --stack-md: 16px;
+
+            /* ---- SIDEBAR ---- */
             --sidebar-width: 280px;
 
-            /* Typography */
-            --font: 'Plus Jakarta Sans', sans-serif;
+            /* ---- GLASS (dari deskripsi) ---- */
+            --glass-bg: rgba(15, 23, 42, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glass-blur: blur(12px);
         }
 
         html,
         body {
             height: 100%;
-            font-family: var(--font);
-            background: var(--surface);
-            color: var(--on-surface);
+            font-family: var(--font-family);
+            background: var(--background);
+            color: var(--on-background);
         }
 
         body {
             display: flex;
             min-height: 100vh;
             background: var(--surface);
+            color: var(--on-surface);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* ========== SCROLLBAR ========== */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--surface-container-low);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--outline-variant);
-            border-radius: var(--radius-full);
-        }
+        /* ============================================================
+           SIDEBAR — 280px fixed
+           ============================================================ */
 
-        /* ========== SIDEBAR ========== */
         .sidebar {
             width: var(--sidebar-width);
             height: 100vh;
@@ -159,10 +169,11 @@
         }
 
         .sidebar-brand h1 {
+            font: var(--headline-lg);
             font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #c0c1ff, #d0bcff);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -175,9 +186,8 @@
         }
 
         .sidebar-nav .nav-label {
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
+            font: var(--label-md);
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             color: var(--outline);
             padding: 16px 12px 8px;
@@ -191,8 +201,8 @@
             border-radius: var(--radius-default);
             color: var(--on-surface-variant);
             text-decoration: none;
+            font: var(--body-sm);
             font-weight: 500;
-            font-size: 14px;
             transition: all 0.2s ease;
             position: relative;
         }
@@ -228,6 +238,7 @@
             margin-left: auto;
             background: var(--error-container);
             color: var(--error);
+            font: var(--label-md);
             font-size: 10px;
             font-weight: 700;
             padding: 2px 10px;
@@ -267,19 +278,20 @@
             color: #fff;
         }
 
-        .sidebar-footer .user-info {
-            flex: 1;
-        }
         .sidebar-footer .user-info .name {
-            font-size: 13px;
+            font: var(--body-sm);
             font-weight: 600;
         }
         .sidebar-footer .user-info .role {
+            font: var(--body-sm);
             font-size: 11px;
             color: var(--outline);
         }
 
-        /* ========== MAIN CONTENT ========== */
+        /* ============================================================
+           MAIN CONTENT — 12-column fluid grid
+           ============================================================ */
+
         .main {
             flex: 1;
             padding: var(--container-padding);
@@ -287,7 +299,10 @@
             min-width: 0;
         }
 
-        /* ========== HEADER ========== */
+        /* ============================================================
+           HEADER
+           ============================================================ */
+
         .header {
             display: flex;
             align-items: center;
@@ -298,13 +313,11 @@
         }
 
         .header-left h2 {
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: -0.01em;
+            font: var(--headline-lg);
         }
         .header-left p {
+            font: var(--body-sm);
             color: var(--on-surface-variant);
-            font-size: 14px;
             margin-top: 2px;
         }
 
@@ -332,8 +345,7 @@
             border: none;
             outline: none;
             color: var(--on-surface);
-            font-family: var(--font);
-            font-size: 14px;
+            font: var(--body-sm);
             padding: 6px 0;
             width: 160px;
         }
@@ -375,69 +387,10 @@
             border: 2px solid var(--surface);
         }
 
-        /* ========== KPI CARDS ========== */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--card-gap);
-            margin-bottom: var(--gutter);
-        }
+        /* ============================================================
+           GLASS CARD (Level 2 — Panel)
+           ============================================================ */
 
-        .kpi-card {
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius-xl);
-            padding: 20px 24px;
-            transition: all 0.25s ease;
-        }
-        .kpi-card:hover {
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .kpi-card .kpi-label {
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--outline);
-        }
-        .kpi-card .kpi-value {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-top: 4px;
-        }
-        .kpi-card .kpi-change {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 6px;
-            padding: 2px 10px;
-            border-radius: var(--radius-full);
-        }
-        .kpi-card .kpi-change.up {
-            color: var(--tertiary);
-            background: rgba(78, 222, 163, 0.1);
-        }
-        .kpi-card .kpi-change.down {
-            color: var(--error);
-            background: rgba(255, 180, 171, 0.1);
-        }
-
-        /* ========== CHART + TABLE GRID ========== */
-        .grid-2col {
-            display: grid;
-            grid-template-columns: 1.6fr 1fr;
-            gap: var(--card-gap);
-            margin-bottom: var(--gutter);
-        }
-
-        /* ========== GLASS CARD ========== */
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: var(--glass-blur);
@@ -460,13 +413,14 @@
             border-bottom: 1px solid var(--glass-border);
         }
         .glass-card .card-header h3 {
+            font: var(--headline-md);
             font-size: 16px;
             font-weight: 600;
         }
         .glass-card .card-header .card-action {
-            font-size: 13px;
-            color: var(--primary);
+            font: var(--body-sm);
             font-weight: 600;
+            color: var(--primary);
             cursor: pointer;
             transition: opacity 0.2s;
         }
@@ -474,25 +428,90 @@
             opacity: 0.7;
         }
 
-        /* ========== CHART PLACEHOLDER ========== */
-        .chart-placeholder {
-            width: 100%;
-            height: 180px;
+        /* ============================================================
+           KPI CARDS
+           ============================================================ */
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--card-gap);
+            margin-bottom: var(--gutter);
+        }
+
+        .kpi-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 20px 24px;
+            transition: all 0.25s ease;
+        }
+        .kpi-card:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .kpi-card .kpi-label {
+            font: var(--label-md);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--outline);
+        }
+        .kpi-card .kpi-value {
+            font: var(--display-lg);
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-top: 4px;
+        }
+        .kpi-card .kpi-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font: var(--label-md);
+            font-weight: 600;
+            margin-top: 6px;
+            padding: 2px 10px;
+            border-radius: var(--radius-full);
+        }
+        .kpi-card .kpi-change.up {
+            color: var(--tertiary);
+            background: rgba(78, 222, 163, 0.1);
+        }
+        .kpi-card .kpi-change.down {
+            color: var(--error);
+            background: rgba(255, 180, 171, 0.1);
+        }
+
+        /* ============================================================
+           CHART — dot-grid background (dari deskripsi)
+           ============================================================ */
+
+        .chart-wrapper {
+            background-image: radial-gradient(circle, var(--outline-variant) 1px, transparent 1px);
+            background-size: 16px 16px;
+            border-radius: var(--radius-md);
+            padding: 16px 8px 8px 8px;
+        }
+
+        .chart-bars {
             display: flex;
             align-items: flex-end;
-            gap: 8px;
-            padding: 8px 0;
+            gap: 6px;
+            height: 160px;
+            padding: 4px 0;
         }
 
         .chart-bar {
             flex: 1;
             border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-            background: linear-gradient(180deg, #6366f1, #8b5cf6);
-            min-height: 8px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            min-height: 6px;
             height: var(--h);
-            transition: height 0.3s;
-            opacity: 0.7;
-            position: relative;
+            transition: height 0.4s ease;
+            opacity: 0.75;
         }
         .chart-bar:hover {
             opacity: 1;
@@ -538,12 +557,17 @@
         .chart-labels {
             display: flex;
             justify-content: space-between;
+            font: var(--body-sm);
             font-size: 11px;
             color: var(--outline);
-            margin-top: 6px;
+            margin-top: 4px;
+            padding: 0 4px;
         }
 
-        /* ========== TABLE ========== */
+        /* ============================================================
+           TABLE
+           ============================================================ */
+
         .table-wrap {
             overflow-x: auto;
         }
@@ -551,17 +575,17 @@
         .table-wrap table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font: var(--body-sm);
         }
 
         .table-wrap thead th {
             text-align: left;
             padding: 8px 8px 12px 8px;
-            font-weight: 600;
-            color: var(--outline);
+            font: var(--label-md);
             font-size: 11px;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.05em;
+            color: var(--outline);
             border-bottom: 1px solid var(--glass-border);
         }
 
@@ -575,23 +599,25 @@
             border-bottom: none;
         }
 
+        /* ---- Status Pills (dari deskripsi) ---- */
         .status-pill {
             display: inline-block;
             padding: 2px 12px;
             border-radius: var(--radius-full);
+            font: var(--label-md);
             font-size: 11px;
             font-weight: 600;
         }
         .status-pill.active {
-            background: rgba(78, 222, 163, 0.12);
+            background: rgba(78, 222, 163, 0.10);
             color: var(--tertiary);
         }
         .status-pill.pending {
-            background: rgba(192, 193, 255, 0.12);
+            background: rgba(192, 193, 255, 0.10);
             color: var(--primary);
         }
         .status-pill.inactive {
-            background: rgba(255, 180, 171, 0.12);
+            background: rgba(255, 180, 171, 0.10);
             color: var(--error);
         }
 
@@ -602,7 +628,21 @@
             color: var(--error);
         }
 
-        /* ========== RESPONSIVE ========== */
+        /* ============================================================
+           GRID 2 KOLOM (12-column fluid)
+           ============================================================ */
+
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: var(--card-gap);
+            margin-bottom: var(--gutter);
+        }
+
+        /* ============================================================
+           RESPONSIVE (dari file: mobile 1-column, sidebar drawer)
+           ============================================================ */
+
         @media (max-width: 1024px) {
             .grid-2col {
                 grid-template-columns: 1fr;
@@ -668,7 +708,7 @@
             }
         }
 
-        /* ========== MOBILE HAMBURGER ========== */
+        /* ---- Hamburger & Overlay ---- */
         .hamburger {
             display: none;
             background: none;
@@ -694,14 +734,30 @@
                 display: block;
             }
         }
+
+        /* ============================================================
+           SCROLLBAR
+           ============================================================ */
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--surface-container-low);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--outline-variant);
+            border-radius: var(--radius-full);
+        }
     </style>
 </head>
 <body>
 
-    <!-- ====== OVERLAY (mobile) ====== -->
+    <!-- ===== OVERLAY (mobile) ===== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- ====== SIDEBAR ====== -->
+    <!-- ===== SIDEBAR ===== -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
             <div class="logo-icon">N</div>
@@ -737,10 +793,10 @@
         </div>
     </aside>
 
-    <!-- ====== MAIN ====== -->
+    <!-- ===== MAIN ===== -->
     <main class="main">
 
-        <!-- Header -->
+        <!-- HEADER -->
         <header class="header">
             <div class="header-left">
                 <button class="hamburger" id="hamburgerBtn">
@@ -759,7 +815,7 @@
             </div>
         </header>
 
-        <!-- KPI Grid -->
+        <!-- KPI GRID -->
         <section class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-label">Total Revenue</div>
@@ -783,37 +839,39 @@
             </div>
         </section>
 
-        <!-- 2 Kolom: Chart + Table -->
+        <!-- GRID 2 KOLOM: CHART + TABLE -->
         <div class="grid-2col">
 
-            <!-- Chart -->
+            <!-- CHART CARD -->
             <section class="glass-card">
                 <div class="card-header">
                     <h3><i class="fas fa-chart-area" style="color:var(--primary);margin-right:8px;"></i> Revenue Trend</h3>
                     <span class="card-action">Lihat semua →</span>
                 </div>
-                <div class="chart-placeholder">
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                    <div class="chart-bar"></div>
-                </div>
-                <div class="chart-labels">
-                    <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
-                    <span>Mei</span><span>Jun</span><span>Jul</span><span>Agu</span>
-                    <span>Sep</span><span>Okt</span><span>Nov</span><span>Des</span>
+                <div class="chart-wrapper">
+                    <div class="chart-bars">
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                        <div class="chart-bar"></div>
+                    </div>
+                    <div class="chart-labels">
+                        <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+                        <span>Mei</span><span>Jun</span><span>Jul</span><span>Agu</span>
+                        <span>Sep</span><span>Okt</span><span>Nov</span><span>Des</span>
+                    </div>
                 </div>
             </section>
 
-            <!-- Table -->
+            <!-- TABLE CARD -->
             <section class="glass-card">
                 <div class="card-header">
                     <h3><i class="fas fa-list-ul" style="color:var(--secondary);margin-right:8px;"></i> Recent Orders</h3>
@@ -860,7 +918,7 @@
             </section>
         </div>
 
-        <!-- Baris tambahan: card info -->
+        <!-- BONUS: 2 Card Info (Glassmorphism) -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--card-gap);">
             <div class="glass-card" style="background:linear-gradient(135deg,rgba(99,102,241,0.06),rgba(139,92,246,0.02));border-color:rgba(99,102,241,0.15);">
                 <div style="display:flex;align-items:center;gap:16px;">
@@ -888,7 +946,7 @@
 
     </main>
 
-    <!-- ====== JAVASCRIPT (mobile toggle) ====== -->
+    <!-- ===== JAVASCRIPT (mobile toggle) ===== -->
     <script>
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('sidebarOverlay');
@@ -902,7 +960,6 @@
         hamburger.addEventListener('click', toggleSidebar);
         overlay.addEventListener('click', toggleSidebar);
 
-        // Close sidebar on resize to desktop
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768) {
                 sidebar.classList.remove('open');
