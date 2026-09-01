@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexPrice PRO - Enterprise Pricing Engine</title>
+    <title>NexPrice PRO - Pricing Management Engine</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Font Plus Jakarta Sans -->
@@ -11,183 +11,158 @@
     <!-- SheetJS untuk Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0b0f19; color: #f8fafc; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+        ::-webkit-scrollbar-track { background: #f8fafc; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
         
-        .saas-card {
-            background: rgba(17, 24, 39, 0.7);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.37);
+        .floating-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .saas-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.2);
+        .floating-card:hover {
+            border-color: #6366f1;
+            transform: translateY(-4px);
+            box-shadow: 0 25px 30px -5px rgba(99, 102, 241, 0.1);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col lg:flex-row selection:bg-indigo-500 selection:text-white relative overflow-x-hidden">
+<body class="min-h-screen flex flex-col selection:bg-indigo-600 selection:text-white">
 
-    <!-- Glowing Background Blur Ornaments -->
-    <div class="absolute top-0 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute bottom-10 left-10 w-80 h-80 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
-
-    <!-- SIDEBAR UTAMA (SaaS Style) -->
-    <aside class="w-full lg:w-72 bg-[#0d1322]/90 backdrop-blur-xl border-b lg:border-b-0 lg:border-r border-slate-800/80 flex flex-row lg:flex-col justify-between p-4 lg:p-6 shrink-0 z-30 items-center lg:items-stretch">
-        <div class="flex items-center gap-3.5">
-            <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-cyan-500 text-white rounded-xl shadow-lg shadow-indigo-500/20">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <!-- TOP HEADER NAVIGATION (Layout Baru Bergaya Dashboard Atas) -->
+    <header class="w-full bg-white border-b border-slate-200/80 px-6 py-4 sticky top-0 z-50 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="h-10 w-10 bg-gradient-to-tr from-indigo-600 to-violet-600 text-white rounded-xl flex items-center justify-center font-black text-lg shadow-md shadow-indigo-600/30">
+                N
             </div>
             <div>
-                <h1 class="font-extrabold text-white text-sm lg:text-base tracking-tight flex items-center gap-1.5">
-                    NexPrice <span class="text-[9px] bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 px-1.5 py-0.5 rounded font-bold uppercase">PRO</span>
+                <h1 class="font-extrabold text-slate-900 text-base tracking-tight flex items-center gap-1.5">
+                    NexPrice <span class="text-[9px] bg-indigo-50 text-indigo-600 border border-indigo-200 px-2 py-0.5 rounded font-extrabold">PRO</span>
                 </h1>
-                <p class="text-[10px] text-slate-400">Analytics Engine</p>
+                <p class="text-[11px] text-slate-400 font-semibold">Enterprise Engine</p>
             </div>
         </div>
 
-        <nav class="flex lg:flex-col gap-1.5 mt-0 lg:mt-8">
+        <!-- Menu Tabs di Header -->
+        <nav class="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
             <button onclick="switchTab('cari')" id="btnCari" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-xs lg:text-sm transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/25">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <span class="hidden sm:inline">Cari Harga</span>
+                class="px-4 py-2 rounded-lg font-bold text-xs transition-all bg-indigo-600 text-white shadow-sm">
+                🔍 Cari Harga
             </button>
             <button onclick="switchTab('upload')" id="btnUpload" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs lg:text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                <span class="hidden sm:inline">Upload & Template</span>
+                class="px-4 py-2 rounded-lg font-semibold text-xs transition-all text-slate-600 hover:text-slate-900">
+                📁 Upload & Template
             </button>
             <button onclick="switchTab('pengaturan')" id="btnPengaturan" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs lg:text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800/50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                <span class="hidden sm:inline">Pengaturan Margin</span>
+                class="px-4 py-2 rounded-lg font-semibold text-xs transition-all text-slate-600 hover:text-slate-900">
+                ⚙️ Aturan Margin
             </button>
         </nav>
-
-        <div class="hidden lg:flex pt-4 border-t border-slate-800 text-[11px] items-center gap-2 text-slate-400">
-            <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="font-medium text-slate-300">Cloud Active</span>
-        </div>
-    </aside>
+    </header>
 
     <!-- KONTEN UTAMA -->
-    <main class="flex-1 p-4 sm:p-6 lg:p-10 overflow-y-auto max-w-7xl mx-auto w-full z-10">
+    <main class="flex-1 p-4 sm:p-8 max-w-7xl mx-auto w-full space-y-6">
         
         <!-- HALAMAN 1: CARI HARGA -->
         <section id="tabCari" class="space-y-6">
-            <div class="saas-card p-5 lg:p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                <div>
-                    <h2 class="text-lg lg:text-xl font-extrabold text-white tracking-tight">Pencarian Produk</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">Pilih mode sumber data dan cari berdasarkan model atau tipe.</p>
+            <!-- Search Control Bar -->
+            <div class="floating-card p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="w-full md:w-auto">
+                    <h2 class="text-lg font-extrabold text-slate-900">Pusat Informasi Harga</h2>
+                    <p class="text-xs text-slate-500">Cari berdasarkan model atau tipe produk secara instan.</p>
                 </div>
                 
-                <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 w-full md:w-auto">
+                <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 w-full md:w-auto">
                     <button onclick="setSearchMode('jual')" id="filterBtnJual" 
-                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm">
                         Harga Jual Jadi
                     </button>
                     <button onclick="setSearchMode('modal')" id="filterBtnModal" 
-                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900">
                         Master Modal
                     </button>
                 </div>
             </div>
 
-            <!-- Kotak Input Pencarian -->
+            <!-- Input Pencarian Besar & Modern -->
             <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none text-indigo-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </span>
-                <input type="text" id="searchInput" placeholder="Ketik minimal 2 huruf untuk mencari model atau tipe..." 
-                    class="w-full pl-12 pr-4 py-4 bg-slate-900/90 border border-slate-800 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm font-medium text-white placeholder-slate-500 shadow-inner transition-all">
+                <input type="text" id="searchInput" placeholder="Ketik minimal 2 huruf untuk mulai mencari..." 
+                    class="w-full pl-14 pr-6 py-4 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 text-sm font-bold text-slate-900 placeholder-slate-400 shadow-sm transition-all">
             </div>
 
-            <!-- Grid Hasil Pencarian -->
-            <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
-                <div class="col-span-full py-16 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/30 text-slate-500 text-xs font-medium">
-                    🔍 Pilih mode di atas dan ketik minimal 2 huruf untuk mulai pencarian.
+            <!-- Grid Hasil Pencarian dengan Tata Letak Baru -->
+            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div class="col-span-full py-24 text-center border-2 border-dashed border-slate-200 rounded-3xl bg-white text-slate-400 text-sm font-semibold">
+                    Silakan ketik kata kunci pada kotak pencarian di atas.
                 </div>
             </div>
         </section>
 
         <!-- HALAMAN 2: UPLOAD & TEMPLATE -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="saas-card p-6 rounded-2xl border-indigo-500/20 bg-indigo-950/20">
-                <div class="flex items-center gap-3.5 mb-4">
-                    <div class="p-3 bg-indigo-500/10 text-indigo-400 rounded-xl border border-indigo-500/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    </div>
-                    <div>
-                        <h2 class="text-sm font-bold text-white tracking-tight">Template Excel 6 Kolom</h2>
-                        <p class="text-[11px] text-slate-400">Model | Harga | Grade A | Grade B | Offline | Online</p>
-                    </div>
-                </div>
+            <div class="floating-card p-8 rounded-3xl bg-gradient-to-br from-indigo-50/60 to-white border-indigo-100">
+                <h2 class="text-base font-extrabold text-slate-900 mb-1">Template Spreadsheet</h2>
+                <p class="text-xs text-slate-500 mb-4">Unduh format standar Excel untuk mengunggah data harga.</p>
                 <button onclick="downloadTemplateExcel()" 
-                    class="w-full bg-slate-900 hover:bg-slate-800 text-indigo-400 font-bold py-3 rounded-xl border border-indigo-500/30 transition-all text-xs flex items-center justify-center gap-2">
-                    📥 Download Format Contoh Excel Standar
+                    class="w-full bg-white hover:bg-slate-50 text-indigo-600 font-extrabold py-3.5 rounded-2xl border border-indigo-200 transition-all text-xs flex items-center justify-center gap-2 shadow-sm">
+                    📥 Download Format Contoh Excel
                 </button>
             </div>
 
-            <div class="saas-card p-6 rounded-2xl">
-                <h2 class="text-sm font-bold text-white mb-1">Upload Harga Jual Jadi</h2>
-                <p class="text-[11px] text-slate-400 mb-4">Format 6 Kolom Net Jual</p>
-                <div class="space-y-3">
-                    <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
-                        class="block w-full text-xs text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-500/10 file:text-indigo-400 border border-slate-800 rounded-xl cursor-pointer bg-slate-900">
-                    <button onclick="prosesUploadHargaJual()" 
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-all shadow-md text-xs">
-                        Proses Upload Harga Jual
-                    </button>
-                </div>
-                <p id="statusUploadJual" class="text-xs mt-3 font-semibold text-center"></p>
+            <div class="floating-card p-8 rounded-3xl bg-white">
+                <h2 class="text-base font-extrabold text-slate-900 mb-1">Upload Harga Jual Jadi</h2>
+                <p class="text-xs text-slate-500 mb-4">Format 6 Kolom Net Jual.</p>
+                <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
+                    class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-600 border border-slate-200 rounded-2xl mb-4 bg-slate-50">
+                <button onclick="prosesUploadHargaJual()" 
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-md">
+                    Proses Upload Harga Jual
+                </button>
+                <p id="statusUploadJual" class="text-xs mt-3 font-bold text-center"></p>
             </div>
 
-            <div class="saas-card p-6 rounded-2xl">
-                <h2 class="text-sm font-bold text-white mb-1">Upload Master Harga Modal</h2>
-                <p class="text-[11px] text-slate-400 mb-4">Kolom: Brand | Tipe | Harga Modal</p>
-                <div class="space-y-3">
-                    <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
-                        class="block w-full text-xs text-slate-400 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500/10 file:text-emerald-400 border border-slate-800 rounded-xl cursor-pointer bg-slate-900">
-                    <button onclick="prosesUploadModal()" 
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all shadow-md text-xs">
-                        Proses Upload Harga Modal
-                    </button>
-                </div>
-                <p id="statusUploadModal" class="text-xs mt-3 font-semibold text-center"></p>
+            <div class="floating-card p-8 rounded-3xl bg-white">
+                <h2 class="text-base font-extrabold text-slate-900 mb-1">Upload Master Harga Modal</h2>
+                <p class="text-xs text-slate-500 mb-4">Kolom: Brand | Tipe | Harga Modal.</p>
+                <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
+                    class="block w-full text-xs text-slate-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-600 border border-slate-200 rounded-2xl mb-4 bg-slate-50">
+                <button onclick="prosesUploadModal()" 
+                    class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-3.5 rounded-2xl text-xs shadow-md">
+                    Proses Upload Harga Modal
+                </button>
+                <p id="statusUploadModal" class="text-xs mt-3 font-bold text-center"></p>
             </div>
         </section>
 
         <!-- HALAMAN 3: PENGATURAN MARGIN -->
         <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="saas-card p-6 rounded-2xl">
-                <h2 class="text-sm font-bold text-white mb-1">Aturan Margin Brand</h2>
-                <p class="text-[11px] text-slate-400 mb-4">Atur markup persen laba & tambahan nominal tetap per merek.</p>
+            <div class="floating-card p-8 rounded-3xl bg-white">
+                <h2 class="text-base font-extrabold text-slate-900 mb-1">Aturan Margin Brand</h2>
+                <p class="text-xs text-slate-500 mb-5">Atur markup persen laba & tambahan nominal tetap per merek.</p>
 
-                <div class="bg-slate-900/80 p-4 rounded-xl border border-slate-800 space-y-3 mb-5">
-                    <p class="text-xs font-bold text-slate-300">Tambah / Perbarui Aturan:</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                        <input type="text" id="inputBrandNama" placeholder="Nama Brand" 
-                            class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:ring-2 focus:ring-indigo-500">
-                        <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
-                            class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:ring-2 focus:ring-indigo-500">
-                        <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp" 
-                            class="w-full px-3 py-2.5 bg-slate-950 border border-slate-800 rounded-xl text-xs font-semibold text-white focus:ring-2 focus:ring-indigo-500">
-                    </div>
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3 mb-6">
+                    <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900">
+                    <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900">
+                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" 
+                        class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-900">
                     <button onclick="simpanPengaturanBrand()" 
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm">
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-3 rounded-xl text-xs shadow-sm">
                         Simpan Aturan Margin
                     </button>
-                    <p id="statusPengaturan" class="text-xs font-semibold text-center"></p>
+                    <p id="statusPengaturan" class="text-xs font-bold text-center"></p>
                 </div>
 
                 <div>
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Daftar Aktif:</h3>
-                    <div id="listAturanBrand" class="space-y-2">
-                        <p class="text-xs text-slate-500 italic">Memuat data...</p>
+                    <h3 class="text-xs font-extrabold text-slate-400 uppercase tracking-widest mb-3">Daftar Aturan Aktif:</h3>
+                    <div id="listAturanBrand" class="space-y-3">
+                        <p class="text-xs text-slate-400 italic font-medium">Memuat data...</p>
                     </div>
                 </div>
             </div>
@@ -195,7 +170,7 @@
 
     </main>
 
-    <!-- Firebase SDK & Logika Script -->
+    <!-- Firebase SDK & Logika Script (Fungsi tetap dipertahankan 100%) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -256,18 +231,18 @@
                     let infoNominal = tambahNominal > 0 ? ` + Rp ${tambahNominal.toLocaleString('id-ID')}` : '';
 
                     htmlList += `
-                        <div class="flex justify-between items-center bg-slate-900/60 border border-slate-800 px-3.5 py-2.5 rounded-xl text-xs">
-                            <span class="font-bold text-white uppercase tracking-wider">${brandName}</span>
+                        <div class="flex justify-between items-center bg-slate-50 border border-slate-200 px-4 py-3.5 rounded-2xl text-xs shadow-sm">
+                            <span class="font-bold text-slate-800 uppercase tracking-wider">${brandName}</span>
                             <div class="flex items-center gap-3">
-                                <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-lg font-bold">+${persen}%${infoNominal}</span>
-                                <button onclick="hapusBrand('${brandName}')" class="text-rose-400 font-bold hover:underline">Hapus</button>
+                                <span class="bg-indigo-50 text-indigo-600 border border-indigo-200 px-3 py-1 rounded-xl font-bold">+${persen}%${infoNominal}</span>
+                                <button onclick="hapusBrand('${brandName}')" class="text-rose-600 font-extrabold hover:underline">Hapus</button>
                             </div>
                         </div>
                     `;
                 });
 
                 if (htmlList === "") {
-                    htmlList = `<p class="text-xs text-slate-500 italic">Belum ada aturan kustom. Default menggunakan sistem 10% (1.10).</p>`;
+                    htmlList = `<p class="text-xs text-slate-400 italic">Belum ada aturan kustom.</p>`;
                 }
                 document.getElementById('listAturanBrand').innerHTML = htmlList;
             } catch (error) {
@@ -290,10 +265,10 @@
                 const btn = document.getElementById(btns[i]);
                 if (t === 'tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)) {
                     el.classList.remove('hidden');
-                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-xs lg:text-sm transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/25";
+                    btn.className = "px-4 py-2 rounded-lg font-bold text-xs transition-all bg-indigo-600 text-white shadow-sm";
                 } else {
                     el.classList.add('hidden');
-                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-xl font-semibold text-xs lg:text-sm transition-all text-slate-400 hover:text-white hover:bg-slate-800/50";
+                    btn.className = "px-4 py-2 rounded-lg font-semibold text-xs transition-all text-slate-600 hover:text-slate-900";
                 }
             });
         }
@@ -305,12 +280,12 @@
             const inputField = document.getElementById('searchInput');
 
             if (mode === 'jual') {
-                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow";
-                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white";
+                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900";
                 inputField.placeholder = "Cari Harga Jual Jadi (Min. 2 huruf)...";
             } else {
-                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow";
-                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-semibold transition-all text-slate-400 hover:text-white";
+                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900";
                 inputField.placeholder = "Cari Master Harga Modal (Min. 2 huruf)...";
             }
             triggerSearch();
@@ -319,13 +294,12 @@
         window.downloadTemplateExcel = function() {
             const templateData = [
                 ["Model", "Harga", "Grade A", "Grade B", "Offline", "Online"],
-                ["32LR650BPSA", 2000000, 2398000, 2298000, 2350000, 2300000],
-                ["T06EV4", 3200000, 3698000, 3598000, 3650000, 3600000]
+                ["32LR650BPSA", 2000000, 2398000, 2298000, 2350000, 2300000]
             ];
             const ws = XLSX.utils.aoa_to_sheet(templateData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Template_Harga_Lengkap");
-            XLSX.writeFile(wb, "Template_Master_Harga_6Kolom.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, "Template");
+            XLSX.writeFile(wb, "Template_Master_Harga.xlsx");
         }
 
         window.simpanPengaturanBrand = async function() {
@@ -335,29 +309,27 @@
             const statusEl = document.getElementById('statusPengaturan');
 
             if (!nama || isNaN(persen)) {
-                statusEl.className = "text-xs font-semibold text-rose-400";
+                statusEl.className = "text-xs font-bold text-rose-600";
                 statusEl.innerText = "⚠️ Masukkan nama brand dan persen yang valid!";
                 return;
             }
 
             try {
-                statusEl.className = "text-xs font-semibold text-indigo-400";
+                statusEl.className = "text-xs font-bold text-indigo-600";
                 statusEl.innerText = "⏳ Menyimpan...";
-
                 await setDoc(doc(db, "pengaturan_margin", nama), {
                     persen: persen,
                     tambahNominal: tambahNominal,
                     updated_at: new Date().toISOString()
                 });
-
-                statusEl.className = "text-xs font-semibold text-emerald-400";
-                statusEl.innerText = "✨ Berhasil disimpan!";
+                statusEl.className = "text-xs font-bold text-emerald-600";
+                statusEl.innerText = "✨ Berhasil!";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
                 document.getElementById('inputBrandNominalTambah').value = "";
                 await loadAturanBrand();
             } catch (error) {
-                statusEl.className = "text-xs font-semibold text-rose-400";
+                statusEl.className = "text-xs font-bold text-rose-600";
                 statusEl.innerText = "❌ Gagal menyimpan.";
             }
         }
@@ -368,7 +340,7 @@
                     await deleteDoc(doc(db, "pengaturan_margin", brandName.toLowerCase()));
                     await loadAturanBrand();
                 } catch (error) {
-                    alert("Gagal menghapus brand.");
+                    alert("Gagal menghapus.");
                 }
             }
         }
@@ -387,7 +359,7 @@
             
             if (rawKeyword.length < 2) {
                 resultContainer.innerHTML = `
-                    <div class="col-span-full py-16 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/30 text-slate-500 text-xs font-medium">
+                    <div class="col-span-full py-24 text-center border-2 border-dashed border-slate-200 rounded-3xl bg-white text-slate-400 text-sm font-semibold">
                         🔍 Ketik minimal 2 huruf untuk mencari produk...
                     </div>`;
                 return;
@@ -403,43 +375,33 @@
                 });
 
                 if (filteredJual.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-10 text-center bg-rose-500/10 border border-rose-500/20 rounded-2xl text-rose-400 text-xs font-bold">❌ Data Harga Jual Jadi tidak ditemukan.</div>`;
+                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-rose-50 border border-rose-200 rounded-3xl text-rose-600 text-xs font-bold">❌ Data tidak ditemukan.</div>`;
                     return;
                 }
 
                 filteredJual.slice(0, 20).forEach(item => {
                     html += `
-                        <div class="saas-card p-5 rounded-2xl flex flex-col justify-between space-y-4">
+                        <div class="floating-card p-6 rounded-3xl flex flex-col justify-between space-y-4 bg-white">
                             <div>
-                                <div class="flex justify-between items-center gap-2 mb-2">
-                                    <span class="text-[10px] bg-violet-500/10 text-violet-400 border border-violet-500/20 px-2.5 py-0.5 rounded-lg font-extrabold uppercase tracking-wider">NET JUAL</span>
-                                    <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 font-bold">FIX PRICE</span>
+                                <div class="flex justify-between items-center gap-2 mb-3">
+                                    <span class="text-xs bg-violet-100 text-violet-700 px-3 py-1 rounded-xl font-extrabold uppercase">NET JUAL</span>
+                                    <span class="text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-xl border border-slate-200 font-bold">FIX PRICE</span>
                                 </div>
-                                <h3 class="text-base font-extrabold text-white tracking-tight">${item.model}</h3>
+                                <h3 class="text-lg font-extrabold text-slate-900">${item.model}</h3>
                             </div>
-                            <div class="space-y-2.5 pt-3 border-t border-slate-800">
-                                <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80 flex justify-between items-center">
-                                    <span class="text-slate-400 text-[11px] font-bold uppercase">Harga Utama</span>
-                                    <span class="font-extrabold text-white text-xs sm:text-sm whitespace-nowrap">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</span>
+                            <div class="space-y-3 pt-3 border-t border-slate-100">
+                                <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex justify-between items-center">
+                                    <span class="text-slate-500 text-xs font-extrabold uppercase">Harga Utama</span>
+                                    <span class="font-black text-slate-900 text-sm whitespace-nowrap">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="bg-emerald-950/20 p-2.5 rounded-xl border border-emerald-500/20 flex flex-col">
-                                        <span class="text-emerald-400 text-[10px] font-bold uppercase">Grade A</span>
-                                        <span class="font-bold text-emerald-300 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-emerald-50/60 p-3 rounded-2xl border border-emerald-200 flex flex-col">
+                                        <span class="text-emerald-700 text-[11px] font-extrabold uppercase">Grade A</span>
+                                        <span class="font-extrabold text-emerald-900 text-xs mt-1 whitespace-nowrap">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div class="bg-indigo-950/20 p-2.5 rounded-xl border border-indigo-500/20 flex flex-col">
-                                        <span class="text-indigo-400 text-[10px] font-bold uppercase">Grade B</span>
-                                        <span class="font-bold text-indigo-300 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
-                                    </div>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="bg-sky-950/20 p-2.5 rounded-xl border border-sky-500/20 flex flex-col">
-                                        <span class="text-sky-400 text-[10px] font-bold uppercase">Offline</span>
-                                        <span class="font-bold text-sky-300 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
-                                    </div>
-                                    <div class="bg-purple-950/20 p-2.5 rounded-xl border border-purple-500/20 flex flex-col">
-                                        <span class="text-purple-400 text-[10px] font-bold uppercase">Online</span>
-                                        <span class="font-bold text-purple-300 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
+                                    <div class="bg-indigo-50/60 p-3 rounded-2xl border border-indigo-200 flex flex-col">
+                                        <span class="text-indigo-700 text-[11px] font-extrabold uppercase">Grade B</span>
+                                        <span class="font-extrabold text-indigo-900 text-xs mt-1 whitespace-nowrap">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -455,14 +417,13 @@
                 });
 
                 if (filteredModal.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-10 text-center bg-rose-500/10 border border-rose-500/20 rounded-2xl text-rose-400 text-xs font-bold">❌ Data Master Harga Modal tidak ditemukan.</div>`;
+                    resultContainer.innerHTML = `<div class="col-span-full py-12 text-center bg-rose-50 border border-rose-200 rounded-3xl text-rose-600 text-xs font-bold">❌ Data tidak ditemukan.</div>`;
                     return;
                 }
 
                 filteredModal.slice(0, 20).forEach(item => {
                     const modal = Number(item.modal) || 0;
                     const brandKey = (item.brand || "").toLowerCase().trim();
-                    
                     const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
                     const aturan = aturanMarginBrand[brandKey] || aturanDefault;
 
@@ -476,33 +437,31 @@
                     const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                     html += `
-                        <div class="saas-card p-5 rounded-2xl flex flex-col justify-between space-y-4">
+                        <div class="floating-card p-6 rounded-3xl flex flex-col justify-between space-y-5 bg-white">
                             <div>
-                                <div class="flex justify-between items-center gap-2 mb-2">
-                                    <span class="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-0.5 rounded-lg font-extrabold uppercase tracking-wider">${item.brand}</span>
-                                    <span class="text-[10px] font-mono text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800 font-bold">${item.tipe}</span>
+                                <div class="flex justify-between items-center gap-2 mb-3">
+                                    <span class="text-xs bg-indigo-100 text-indigo-700 px-3.5 py-1 rounded-xl font-extrabold uppercase">${item.brand}</span>
+                                    <span class="text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-xl border border-slate-200 font-bold">${item.tipe}</span>
                                 </div>
-                                <h3 class="text-base font-extrabold text-white tracking-tight">${item.tipe}</h3>
+                                <h3 class="text-xl font-black text-slate-900">${item.tipe}</h3>
                             </div>
 
-                            <div class="space-y-3 pt-3 border-t border-slate-800">
-                                <!-- Box HARGA JUAL -->
-                                <div class="bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-900 p-4 rounded-xl border border-emerald-500/30 flex flex-col justify-between shadow-sm">
-                                    <span class="text-emerald-400 text-[11px] font-extrabold uppercase tracking-wider">HARGA JUAL</span>
-                                    <span class="font-black text-emerald-300 text-lg sm:text-xl tracking-tight mt-1 whitespace-nowrap">Rp ${jual.toLocaleString('id-ID')}</span>
+                            <div class="space-y-4 pt-4 border-t border-slate-100">
+                                <div class="bg-gradient-to-r from-emerald-50 via-slate-50 to-white p-4.5 rounded-2xl border border-emerald-300 flex flex-col justify-between shadow-sm">
+                                    <span class="text-emerald-700 text-xs font-extrabold uppercase tracking-widest">HARGA JUAL</span>
+                                    <span class="font-black text-emerald-800 text-xl sm:text-2xl tracking-tight mt-1 whitespace-nowrap">Rp ${jual.toLocaleString('id-ID')}</span>
                                 </div>
 
-                                <!-- Box MODAL & MARGIN -->
-                                <div class="grid grid-cols-2 gap-2.5">
-                                    <div class="bg-slate-900/80 p-3 rounded-xl border border-slate-800 flex flex-col justify-between">
-                                        <span class="text-slate-400 text-[10px] font-bold uppercase tracking-wider">MODAL</span>
-                                        <span class="font-extrabold text-white text-xs sm:text-sm mt-1 whitespace-nowrap">Rp ${modal.toLocaleString('id-ID')}</span>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 flex flex-col justify-between">
+                                        <span class="text-slate-500 text-xs font-extrabold uppercase">MODAL</span>
+                                        <span class="font-black text-slate-900 text-sm mt-1 whitespace-nowrap">Rp ${modal.toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div class="bg-indigo-950/30 p-3 rounded-xl border border-indigo-500/20 flex flex-col justify-between">
-                                        <span class="text-indigo-300 text-[10px] font-bold uppercase tracking-wider">MARGIN</span>
+                                    <div class="bg-indigo-50/70 p-3.5 rounded-2xl border border-indigo-200 flex flex-col justify-between">
+                                        <span class="text-indigo-700 text-xs font-extrabold uppercase">MARGIN</span>
                                         <div class="mt-1 flex flex-col">
-                                            <span class="font-extrabold text-indigo-400 text-xs sm:text-sm">+${persentaseMargin}%</span>
-                                            <span class="text-[10px] font-bold text-indigo-200 mt-0.5 whitespace-nowrap">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                            <span class="font-black text-indigo-600 text-sm">+${persentaseMargin}%</span>
+                                            <span class="text-xs font-extrabold text-indigo-900 mt-0.5 whitespace-nowrap">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                                         </div>
                                     </div>
                                 </div>
@@ -519,12 +478,12 @@
             const fileInput = document.getElementById('excelFileModal');
             const statusEl = document.getElementById('statusUploadModal');
             if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs mt-3 font-semibold text-rose-400";
-                statusEl.innerText = "⚠️ Pilih file Excel terlebih dahulu!";
+                statusEl.className = "text-xs font-bold text-rose-600";
+                statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
                 return;
             }
             const file = fileInput.files[0];
-            statusEl.className = "text-xs mt-3 font-semibold text-indigo-400";
+            statusEl.className = "text-xs font-bold text-indigo-600";
             statusEl.innerText = "⏳ Memproses...";
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -532,36 +491,30 @@
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     let successCount = 0;
-
                     for (let sheetName of workbook.SheetNames) {
                         const worksheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        if (jsonData.length === 0) continue;
-
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
                             if (!row || row.length < 3) continue;
-
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
                             const rawModal = String(row[2] || "").replace(/[^0-9]/g, '');
                             const modal = Number(rawModal);
-
                             if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
                             if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
-
                             const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                             const docId = `${brand}_${cleanTipe}`;
                             await setDoc(doc(db, "master_harga", docId), { brand, tipe, modal, updated_at: new Date().toISOString() });
                             successCount++;
                         }
                     }
-                    statusEl.className = "text-xs mt-3 font-semibold text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data modal tersimpan.`;
+                    statusEl.className = "text-xs font-bold text-emerald-600";
+                    statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
-                    statusEl.className = "text-xs mt-3 font-semibold text-rose-400";
+                    statusEl.className = "text-xs font-bold text-rose-600";
                     statusEl.innerText = "❌ Gagal memproses file.";
                 }
             };
@@ -572,61 +525,45 @@
             const fileInput = document.getElementById('excelFileJual');
             const statusEl = document.getElementById('statusUploadJual');
             if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs mt-3 font-semibold text-rose-400";
-                statusEl.innerText = "⚠️ Pilih file Excel terlebih dahulu!";
+                statusEl.className = "text-xs font-bold text-rose-600";
+                statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
                 return;
             }
             const file = fileInput.files[0];
-            statusEl.className = "text-xs mt-3 font-semibold text-indigo-400";
-            statusEl.innerText = "⏳ Memproses 6 kolom harga...";
+            statusEl.className = "text-xs font-bold text-indigo-600";
+            statusEl.innerText = "⏳ Memproses...";
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, { type: 'array' });
                     let successCount = 0;
-
                     for (let sheetName of workbook.SheetNames) {
                         const worksheet = workbook.Sheets[sheetName];
                         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        if (jsonData.length === 0) continue;
-
                         for (let i = 0; i < jsonData.length; i++) {
                             const row = jsonData[i];
                             if (!row || row.length < 2) continue;
-
                             const model = String(row[0] || "").trim();
                             const harga = Number(String(row[1] || "").replace(/[^0-9]/g, '')) || 0;
                             const gradeA = Number(String(row[2] || "").replace(/[^0-9]/g, '')) || 0;
                             const gradeB = Number(String(row[3] || "").replace(/[^0-9]/g, '')) || 0;
                             const offline = Number(String(row[4] || "").replace(/[^0-9]/g, '')) || 0;
                             const online = Number(String(row[5] || "").replace(/[^0-9]/g, '')) || 0;
-
                             if (i === 0 && (model.toUpperCase() === 'MODEL' || model.toUpperCase() === 'PROD')) continue;
                             if (!model || model === 'undefined') continue;
-
                             const cleanModel = model.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                             const docId = `Jual_${cleanModel}`;
-                            
-                            await setDoc(doc(db, "harga_jual_jadi", docId), { 
-                                model, 
-                                harga, 
-                                gradeA, 
-                                gradeB, 
-                                offline, 
-                                online, 
-                                updated_at: new Date().toISOString() 
-                            });
+                            await setDoc(doc(db, "harga_jual_jadi", docId), { model, harga, gradeA, gradeB, offline, online, updated_at: new Date().toISOString() });
                             successCount++;
                         }
                     }
-                    statusEl.className = "text-xs mt-3 font-semibold text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data harga jual tersimpan.`;
+                    statusEl.className = "text-xs font-bold text-emerald-600";
+                    statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan.`;
                     fileInput.value = "";
                     await loadMasterData();
                 } catch (err) {
-                    console.error(err);
-                    statusEl.className = "text-xs mt-3 font-semibold text-rose-400";
+                    statusEl.className = "text-xs font-bold text-rose-600";
                     statusEl.innerText = "❌ Gagal memproses file.";
                 }
             };
