@@ -15,82 +15,77 @@
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f8fafc; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .smooth-card {
+        .clean-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04);
+            transition: all 0.25s ease;
         }
-        .smooth-card:hover {
-            border-color: #6366f1;
-            transform: translateY(-4px);
-            box-shadow: 0 20px 30px -10px rgba(99, 102, 241, 0.12), 0 10px 15px -5px rgba(99, 102, 241, 0.04);
+        .clean-card:hover {
+            border-color: #4f46e5;
+            box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.1);
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col lg:flex-row selection:bg-indigo-600 selection:text-white relative overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col lg:flex-row selection:bg-indigo-600 selection:text-white relative">
 
     <!-- SIDEBAR UTAMA -->
-    <aside class="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-slate-200/80 flex flex-row lg:flex-col justify-between p-5 lg:p-7 shrink-0 z-30 items-center lg:items-stretch shadow-sm">
-        <div class="flex items-center gap-3.5">
-            <div class="p-3 bg-gradient-to-tr from-indigo-600 to-violet-600 text-white rounded-2xl shadow-lg shadow-indigo-600/25">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+    <aside class="w-full lg:w-64 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 flex flex-row lg:flex-col justify-between p-4 lg:p-6 shrink-0 z-30 items-center lg:items-stretch shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="p-2.5 bg-indigo-600 text-white rounded-xl shadow-md shadow-indigo-600/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             </div>
             <div>
-                <h1 class="font-black text-slate-900 text-base tracking-tight flex items-center gap-1.5">
-                    NexPrice <span class="text-[10px] bg-indigo-600 text-white px-2 py-0.5 rounded-md font-bold uppercase tracking-wider">PRO</span>
+                <h1 class="font-extrabold text-slate-900 text-sm lg:text-base tracking-tight flex items-center gap-1.5">
+                    NexPrice <span class="text-[9px] bg-indigo-600 text-white px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">PRO</span>
                 </h1>
-                <p class="text-xs text-slate-400 font-medium">Enterprise Engine</p>
+                <p class="text-[10px] text-slate-400 font-medium">Enterprise Engine</p>
             </div>
         </div>
 
-        <nav class="flex lg:flex-col gap-2 mt-0 lg:mt-8">
+        <nav class="flex lg:flex-col gap-1.5 mt-0 lg:mt-6">
             <button onclick="switchTab('cari')" id="btnCari" 
-                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-xs lg:text-sm transition-all duration-300 bg-indigo-600 text-white shadow-lg shadow-indigo-600/25">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-90" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                class="flex items-center gap-2.5 px-3.5 lg:px-4 py-2.5 rounded-xl font-bold text-xs lg:text-sm transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <span class="hidden sm:inline">Cari Harga</span>
             </button>
             <button onclick="switchTab('upload')" id="btnUpload" 
-                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs lg:text-sm transition-all duration-300 text-slate-500 hover:text-slate-900 hover:bg-slate-50">
+                class="flex items-center gap-2.5 px-3.5 lg:px-4 py-2.5 rounded-xl font-semibold text-xs lg:text-sm transition-all text-slate-500 hover:text-slate-900 hover:bg-slate-100">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
                 <span class="hidden sm:inline">Upload & Template</span>
             </button>
             <button onclick="switchTab('pengaturan')" id="btnPengaturan" 
-                class="flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs lg:text-sm transition-all duration-300 text-slate-500 hover:text-slate-900 hover:bg-slate-50">
+                class="flex items-center gap-2.5 px-3.5 lg:px-4 py-2.5 rounded-xl font-semibold text-xs lg:text-sm transition-all text-slate-500 hover:text-slate-900 hover:bg-slate-100">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                 <span class="hidden sm:inline">Pengaturan Margin</span>
             </button>
         </nav>
 
-        <div class="hidden lg:flex pt-5 border-t border-slate-100 text-xs items-center gap-3 text-slate-400">
-            <span class="relative flex h-2.5 w-2.5">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-            </span>
-            <span class="font-bold text-slate-600">Cloud Connected</span>
+        <div class="hidden lg:flex pt-4 border-t border-slate-100 text-[11px] items-center gap-2 text-slate-400">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span class="font-semibold text-slate-600">Cloud Connected</span>
         </div>
     </aside>
 
     <!-- KONTEN UTAMA -->
-    <main class="flex-1 p-5 sm:p-8 lg:p-10 overflow-y-auto z-10 max-w-7xl mx-auto w-full">
+    <main class="flex-1 p-4 sm:p-6 lg:p-10 overflow-y-auto max-w-7xl mx-auto w-full">
         
         <!-- HALAMAN 1: CARI HARGA -->
         <section id="tabCari" class="space-y-6">
-            <div class="smooth-card p-6 lg:p-8 rounded-3xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
+            <div class="clean-card p-5 lg:p-6 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white">
                 <div>
-                    <h2 class="text-xl lg:text-2xl font-black text-slate-900 tracking-tight">Pencarian Produk</h2>
-                    <p class="text-xs lg:text-sm text-slate-500 mt-1">Pilih kategori sumber dan cari berdasarkan model atau tipe (Min. 2 huruf).</p>
+                    <h2 class="text-base lg:text-lg font-black text-slate-900 tracking-tight">Pencarian Produk</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">Pilih kategori sumber dan cari berdasarkan model atau tipe (Min. 2 huruf).</p>
                 </div>
                 
-                <div class="flex bg-slate-100 p-1.5 rounded-2xl border border-slate-200 w-full md:w-auto shadow-inner">
+                <div class="flex bg-slate-100 p-1 rounded-xl border border-slate-200 w-full md:w-auto">
                     <button onclick="setSearchMode('jual')" id="filterBtnJual" 
-                        class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm">
                         Harga Jual Jadi
                     </button>
                     <button onclick="setSearchMode('modal')" id="filterBtnModal" 
-                        class="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-500 hover:text-slate-900">
+                        class="flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900">
                         Master Modal
                     </button>
                 </div>
@@ -98,16 +93,16 @@
 
             <!-- Kotak Input Pencarian -->
             <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none text-slate-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </span>
                 <input type="text" id="searchInput" placeholder="Ketik minimal 2 huruf untuk mencari model atau tipe..." 
-                    class="w-full pl-14 pr-5 py-4 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-600 text-sm font-semibold text-slate-900 placeholder-slate-400 shadow-sm transition-all">
+                    class="w-full pl-12 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm font-semibold text-slate-900 placeholder-slate-400 shadow-sm transition-all">
             </div>
 
             <!-- Grid Hasil Pencarian -->
-            <div id="searchResult" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                <div class="col-span-full py-24 text-center border-2 border-dashed border-slate-200 rounded-3xl bg-white text-slate-400 text-sm font-semibold shadow-sm">
+            <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                <div class="col-span-full py-16 text-center border border-dashed border-slate-300 rounded-2xl bg-white text-slate-400 text-xs font-medium">
                     🔍 Pilih mode di atas dan ketik minimal 2 huruf untuk mulai pencarian.
                 </div>
             </div>
@@ -115,58 +110,44 @@
 
         <!-- HALAMAN 2: UPLOAD & TEMPLATE -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="smooth-card p-8 rounded-3xl border-indigo-100 bg-gradient-to-br from-indigo-50/60 to-white">
-                <div class="flex items-center gap-4 mb-5">
-                    <div class="p-3.5 bg-indigo-100 text-indigo-600 rounded-2xl border border-indigo-200 shadow-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <div class="clean-card p-6 rounded-2xl border-indigo-100 bg-indigo-50/30">
+                <div class="flex items-center gap-3.5 mb-4">
+                    <div class="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                     </div>
                     <div>
-                        <h2 class="text-lg font-black text-slate-900 tracking-tight">Template Excel 6 Kolom</h2>
-                        <p class="text-xs text-slate-500 font-medium">Model | Harga | Grade A | Grade B | Offline | Online</p>
+                        <h2 class="text-sm font-bold text-slate-900 tracking-tight">Template Excel 6 Kolom</h2>
+                        <p class="text-[11px] text-slate-500">Model | Harga | Grade A | Grade B | Offline | Online</p>
                     </div>
                 </div>
                 <button onclick="downloadTemplateExcel()" 
-                    class="w-full bg-white hover:bg-slate-50 text-indigo-600 font-bold py-3.5 rounded-2xl border border-indigo-200 transition-all text-xs flex items-center justify-center gap-2 shadow-sm">
+                    class="w-full bg-white hover:bg-slate-50 text-indigo-600 font-bold py-2.5 rounded-xl border border-indigo-200 transition-all text-xs flex items-center justify-center gap-2 shadow-sm">
                     📥 Download Format Contoh Excel Standar
                 </button>
             </div>
 
-            <div class="smooth-card p-8 rounded-3xl bg-white">
-                <div class="flex items-center gap-4 mb-5">
-                    <div class="p-3.5 bg-indigo-50 text-indigo-600 rounded-2xl border border-indigo-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-black text-slate-900 tracking-tight">Upload Harga Jual Jadi</h2>
-                        <p class="text-xs text-slate-500 font-medium">Format 6 Kolom Net Jual</p>
-                    </div>
-                </div>
-                <div class="space-y-4">
+            <div class="clean-card p-6 rounded-2xl bg-white">
+                <h2 class="text-sm font-bold text-slate-900 mb-1">Upload Harga Jual Jadi</h2>
+                <p class="text-[11px] text-slate-500 mb-4">Format 6 Kolom Net Jual</p>
+                <div class="space-y-3">
                     <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
-                        class="block w-full text-xs text-slate-500 file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 transition-all">
+                        class="block w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-indigo-50 file:text-indigo-600 border border-slate-200 rounded-xl cursor-pointer bg-slate-50">
                     <button onclick="prosesUploadHargaJual()" 
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-indigo-600/25 text-xs">
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl transition-all shadow-md text-xs">
                         Proses Upload Harga Jual
                     </button>
                 </div>
                 <p id="statusUploadJual" class="text-xs mt-3 font-semibold text-center"></p>
             </div>
 
-            <div class="smooth-card p-8 rounded-3xl bg-white">
-                <div class="flex items-center gap-4 mb-5">
-                    <div class="p-3.5 bg-emerald-50 text-emerald-600 rounded-2xl border border-emerald-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-black text-slate-900 tracking-tight">Upload Master Harga Modal</h2>
-                        <p class="text-xs text-slate-500 font-medium">Kolom: Brand | Tipe | Harga Modal</p>
-                    </div>
-                </div>
-                <div class="space-y-4">
+            <div class="clean-card p-6 rounded-2xl bg-white">
+                <h2 class="text-sm font-bold text-slate-900 mb-1">Upload Master Harga Modal</h2>
+                <p class="text-[11px] text-slate-500 mb-4">Kolom: Brand | Tipe | Harga Modal</p>
+                <div class="space-y-3">
                     <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
-                        class="block w-full text-xs text-slate-500 file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-600 hover:file:bg-emerald-100 border border-slate-200 rounded-2xl cursor-pointer bg-slate-50 transition-all">
+                        class="block w-full text-xs text-slate-500 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-emerald-600 border border-slate-200 rounded-xl cursor-pointer bg-slate-50">
                     <button onclick="prosesUploadModal()" 
-                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-emerald-600/25 text-xs">
+                        class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all shadow-md text-xs">
                         Proses Upload Harga Modal
                     </button>
                 </div>
@@ -176,38 +157,31 @@
 
         <!-- HALAMAN 3: PENGATURAN MARGIN -->
         <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="smooth-card p-8 rounded-3xl bg-white">
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3.5 bg-indigo-50 text-indigo-600 rounded-2xl border border-indigo-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-                    </div>
-                    <div>
-                        <h2 class="text-lg font-black text-slate-900 tracking-tight">Aturan Margin Brand</h2>
-                        <p class="text-xs text-slate-500 font-medium">Atur markup persen laba & tambahan nominal tetap per merek.</p>
-                    </div>
-                </div>
+            <div class="clean-card p-6 rounded-2xl bg-white">
+                <h2 class="text-sm font-bold text-slate-900 mb-1">Aturan Margin Brand</h2>
+                <p class="text-[11px] text-slate-500 mb-4">Atur markup persen laba & tambahan nominal tetap per merek.</p>
 
-                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-4 mb-6 shadow-inner">
-                    <p class="text-xs font-bold text-slate-700 uppercase tracking-wide">Tambah / Perbarui Aturan Margin:</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
-                            class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3 mb-5">
+                    <p class="text-xs font-bold text-slate-700">Tambah / Perbarui Aturan:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <input type="text" id="inputBrandNama" placeholder="Nama Brand" 
+                            class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500">
                         <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
-                            class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
-                        <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" 
-                            class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm">
+                            class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500">
+                        <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp" 
+                            class="w-full px-3 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-indigo-500">
                     </div>
                     <button onclick="simpanPengaturanBrand()" 
-                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/20">
+                        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs shadow-sm">
                         Simpan Aturan Margin
                     </button>
                     <p id="statusPengaturan" class="text-xs font-semibold text-center"></p>
                 </div>
 
                 <div>
-                    <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Daftar Aturan Aktif:</h3>
-                    <div id="listAturanBrand" class="space-y-3">
-                        <p class="text-xs text-slate-400 italic">Memuat data dari cloud...</p>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Daftar Aktif:</h3>
+                    <div id="listAturanBrand" class="space-y-2">
+                        <p class="text-xs text-slate-400 italic">Memuat data...</p>
                     </div>
                 </div>
             </div>
@@ -276,11 +250,11 @@
                     let infoNominal = tambahNominal > 0 ? ` + Rp ${tambahNominal.toLocaleString('id-ID')}` : '';
 
                     htmlList += `
-                        <div class="flex justify-between items-center bg-slate-50 border border-slate-200 px-4 py-3.5 rounded-2xl text-xs shadow-sm">
+                        <div class="flex justify-between items-center bg-slate-50 border border-slate-200 px-3.5 py-2.5 rounded-xl text-xs">
                             <span class="font-bold text-slate-800 uppercase tracking-wider">${brandName}</span>
                             <div class="flex items-center gap-3">
-                                <span class="bg-indigo-50 text-indigo-600 border border-indigo-200 px-3 py-1 rounded-xl font-bold">+${persen}%${infoNominal}</span>
-                                <button onclick="hapusBrand('${brandName}')" class="text-rose-600 hover:text-rose-700 font-bold transition-colors">Hapus</button>
+                                <span class="bg-indigo-50 text-indigo-600 border border-indigo-200 px-2.5 py-0.5 rounded-lg font-bold">+${persen}%${infoNominal}</span>
+                                <button onclick="hapusBrand('${brandName}')" class="text-rose-600 font-bold hover:underline">Hapus</button>
                             </div>
                         </div>
                     `;
@@ -310,10 +284,10 @@
                 const btn = document.getElementById(btns[i]);
                 if (t === 'tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)) {
                     el.classList.remove('hidden');
-                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-xs lg:text-sm transition-all duration-300 bg-indigo-600 text-white shadow-lg shadow-indigo-600/25";
+                    btn.className = "flex items-center gap-2.5 px-3.5 lg:px-4 py-2.5 rounded-xl font-bold text-xs lg:text-sm transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
                 } else {
                     el.classList.add('hidden');
-                    btn.className = "flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold text-xs lg:text-sm transition-all duration-300 text-slate-500 hover:text-slate-900 hover:bg-slate-50";
+                    btn.className = "flex items-center gap-2.5 px-3.5 lg:px-4 py-2.5 rounded-xl font-semibold text-xs lg:text-sm transition-all text-slate-500 hover:text-slate-900 hover:bg-slate-100";
                 }
             });
         }
@@ -325,12 +299,12 @@
             const inputField = document.getElementById('searchInput');
 
             if (mode === 'jual') {
-                btnJual.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
-                btnModal.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-500 hover:text-slate-900";
+                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900";
                 inputField.placeholder = "Cari Harga Jual Jadi (Min. 2 huruf)...";
             } else {
-                btnModal.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white shadow-md shadow-indigo-600/20";
-                btnJual.className = "flex-1 md:flex-none px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-slate-500 hover:text-slate-900";
+                btnModal.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all bg-indigo-600 text-white shadow-sm";
+                btnJual.className = "flex-1 md:flex-none px-4 py-2 rounded-lg text-xs font-bold transition-all text-slate-500 hover:text-slate-900";
                 inputField.placeholder = "Cari Master Harga Modal (Min. 2 huruf)...";
             }
             triggerSearch();
@@ -356,13 +330,13 @@
 
             if (!nama || isNaN(persen)) {
                 statusEl.className = "text-xs font-semibold text-rose-600";
-                statusEl.innerText = "⚠️ Masukkan nama brand dan angka persen yang valid!";
+                statusEl.innerText = "⚠️ Masukkan nama brand dan persen yang valid!";
                 return;
             }
 
             try {
                 statusEl.className = "text-xs font-semibold text-indigo-600";
-                statusEl.innerText = "⏳ Menyimpan aturan margin...";
+                statusEl.innerText = "⏳ Menyimpan...";
 
                 await setDoc(doc(db, "pengaturan_margin", nama), {
                     persen: persen,
@@ -371,14 +345,14 @@
                 });
 
                 statusEl.className = "text-xs font-semibold text-emerald-600";
-                statusEl.innerText = "✨ Berhasil! Aturan margin diperbarui.";
+                statusEl.innerText = "✨ Berhasil disimpan!";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
                 document.getElementById('inputBrandNominalTambah').value = "";
                 await loadAturanBrand();
             } catch (error) {
                 statusEl.className = "text-xs font-semibold text-rose-600";
-                statusEl.innerText = "❌ Gagal menyimpan pengaturan.";
+                statusEl.innerText = "❌ Gagal menyimpan.";
             }
         }
 
@@ -407,7 +381,7 @@
             
             if (rawKeyword.length < 2) {
                 resultContainer.innerHTML = `
-                    <div class="col-span-full py-24 text-center border-2 border-dashed border-slate-200 rounded-3xl bg-white text-slate-400 text-sm font-semibold shadow-sm">
+                    <div class="col-span-full py-16 text-center border border-dashed border-slate-300 rounded-2xl bg-white text-slate-400 text-xs font-medium">
                         🔍 Ketik minimal 2 huruf untuk mencari produk...
                     </div>`;
                 return;
@@ -423,43 +397,43 @@
                 });
 
                 if (filteredJual.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-16 text-center bg-rose-50 border border-rose-200 rounded-3xl text-rose-600 text-xs font-bold">❌ Data Harga Jual Jadi tidak ditemukan.</div>`;
+                    resultContainer.innerHTML = `<div class="col-span-full py-10 text-center bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-xs font-bold">❌ Data Harga Jual Jadi tidak ditemukan.</div>`;
                     return;
                 }
 
                 filteredJual.slice(0, 20).forEach(item => {
                     html += `
-                        <div class="smooth-card p-7 rounded-3xl flex flex-col justify-between space-y-5 bg-white">
+                        <div class="clean-card p-5 rounded-2xl flex flex-col justify-between space-y-4 bg-white">
                             <div>
-                                <div class="flex justify-between items-center gap-2 mb-3">
-                                    <span class="text-xs bg-violet-100 text-violet-700 px-3 py-1 rounded-xl font-black uppercase tracking-wider">NET JUAL</span>
-                                    <span class="text-xs font-mono text-slate-500 bg-slate-100 px-3 py-1 rounded-xl border border-slate-200 font-bold">FIX PRICE</span>
+                                <div class="flex justify-between items-center gap-2 mb-2">
+                                    <span class="text-[10px] bg-violet-100 text-violet-700 px-2.5 py-0.5 rounded-lg font-extrabold uppercase tracking-wider">NET JUAL</span>
+                                    <span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded font-bold">FIX PRICE</span>
                                 </div>
-                                <h3 class="text-lg font-black text-slate-900 tracking-tight">${item.model}</h3>
+                                <h3 class="text-base font-extrabold text-slate-900 tracking-tight">${item.model}</h3>
                             </div>
-                            <div class="space-y-3.5 pt-4 border-t border-slate-100">
-                                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex justify-between items-center">
-                                    <span class="text-slate-500 text-xs font-bold uppercase tracking-wide">Harga Utama</span>
-                                    <span class="font-black text-slate-900 text-base">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</span>
+                            <div class="space-y-2.5 pt-3 border-t border-slate-100">
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center">
+                                    <span class="text-slate-500 text-[11px] font-bold uppercase">Harga Utama</span>
+                                    <span class="font-extrabold text-slate-900 text-xs sm:text-sm whitespace-nowrap">Rp ${Number(item.harga || 0).toLocaleString('id-ID')}</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="bg-emerald-50/60 p-3.5 rounded-2xl border border-emerald-200 flex flex-col">
-                                        <span class="text-emerald-700 text-[11px] font-bold uppercase tracking-wide">Grade A</span>
-                                        <span class="font-black text-emerald-900 text-sm mt-1">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-emerald-50/60 p-2.5 rounded-xl border border-emerald-200 flex flex-col">
+                                        <span class="text-emerald-700 text-[10px] font-bold uppercase">Grade A</span>
+                                        <span class="font-bold text-emerald-900 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div class="bg-indigo-50/60 p-3.5 rounded-2xl border border-indigo-200 flex flex-col">
-                                        <span class="text-indigo-700 text-[11px] font-bold uppercase tracking-wide">Grade B</span>
-                                        <span class="font-black text-indigo-900 text-sm mt-1">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
+                                    <div class="bg-indigo-50/60 p-2.5 rounded-xl border border-indigo-200 flex flex-col">
+                                        <span class="text-indigo-700 text-[10px] font-bold uppercase">Grade B</span>
+                                        <span class="font-bold text-indigo-900 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="bg-sky-50/60 p-3.5 rounded-2xl border border-sky-200 flex flex-col">
-                                        <span class="text-sky-700 text-[11px] font-bold uppercase tracking-wide">Offline</span>
-                                        <span class="font-black text-sky-900 text-sm mt-1">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="bg-sky-50/60 p-2.5 rounded-xl border border-sky-200 flex flex-col">
+                                        <span class="text-sky-700 text-[10px] font-bold uppercase">Offline</span>
+                                        <span class="font-bold text-sky-900 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div class="bg-purple-50/60 p-3.5 rounded-2xl border border-purple-200 flex flex-col">
-                                        <span class="text-purple-700 text-[11px] font-bold uppercase tracking-wide">Online</span>
-                                        <span class="font-black text-purple-900 text-sm mt-1">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
+                                    <div class="bg-purple-50/60 p-2.5 rounded-xl border border-purple-200 flex flex-col">
+                                        <span class="text-purple-700 text-[10px] font-bold uppercase">Online</span>
+                                        <span class="font-bold text-purple-900 text-xs mt-0.5 whitespace-nowrap">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -475,7 +449,7 @@
                 });
 
                 if (filteredModal.length === 0) {
-                    resultContainer.innerHTML = `<div class="col-span-full py-16 text-center bg-rose-50 border border-rose-200 rounded-3xl text-rose-600 text-xs font-bold">❌ Data Master Harga Modal tidak ditemukan.</div>`;
+                    resultContainer.innerHTML = `<div class="col-span-full py-10 text-center bg-rose-50 border border-rose-200 rounded-2xl text-rose-600 text-xs font-bold">❌ Data Master Harga Modal tidak ditemukan.</div>`;
                     return;
                 }
 
@@ -496,33 +470,33 @@
                     const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                     html += `
-                        <div class="smooth-card p-7 rounded-3xl flex flex-col justify-between space-y-6 bg-white">
+                        <div class="clean-card p-5 rounded-2xl flex flex-col justify-between space-y-4 bg-white">
                             <div>
-                                <div class="flex justify-between items-center gap-2 mb-3">
-                                    <span class="text-xs bg-indigo-100 text-indigo-700 px-3.5 py-1 rounded-xl font-black uppercase tracking-wider">${item.brand}</span>
-                                    <span class="text-xs font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-xl border border-slate-200 font-bold">${item.tipe}</span>
+                                <div class="flex justify-between items-center gap-2 mb-2">
+                                    <span class="text-[10px] bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-lg font-extrabold uppercase tracking-wider">${item.brand}</span>
+                                    <span class="text-[10px] font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded font-bold">${item.tipe}</span>
                                 </div>
-                                <h3 class="text-xl font-black text-slate-900 tracking-tight">${item.tipe}</h3>
+                                <h3 class="text-base font-extrabold text-slate-900 tracking-tight">${item.tipe}</h3>
                             </div>
 
-                            <div class="space-y-4 pt-4 border-t border-slate-100">
-                                <!-- Box Harga Jual Hitung dengan Ukuran Besar & Font Tebal -->
-                                <div class="bg-gradient-to-r from-emerald-50 via-slate-50 to-white p-5 rounded-2xl border border-emerald-300 flex flex-col justify-between shadow-sm">
-                                    <span class="text-emerald-700 text-xs font-black uppercase tracking-widest">Harga Jual Hitung</span>
-                                    <span class="font-black text-emerald-800 text-2xl tracking-tight mt-1.5">Rp ${jual.toLocaleString('id-ID')}</span>
+                            <div class="space-y-3 pt-3 border-t border-slate-100">
+                                <!-- Box Harga Jual (Teks diubah dari Harga Jual Hitung menjadi HARGA JUAL) -->
+                                <div class="bg-gradient-to-r from-emerald-50 via-slate-50 to-white p-4 rounded-xl border border-emerald-200 flex flex-col justify-between shadow-sm">
+                                    <span class="text-emerald-700 text-[11px] font-extrabold uppercase tracking-wider">HARGA JUAL</span>
+                                    <span class="font-black text-emerald-800 text-lg sm:text-xl tracking-tight mt-1 whitespace-nowrap">Rp ${jual.toLocaleString('id-ID')}</span>
                                 </div>
 
-                                <!-- Box Modal & Margin Proporsional -->
-                                <div class="grid grid-cols-2 gap-3.5">
-                                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-col justify-between">
-                                        <span class="text-slate-500 text-xs font-bold uppercase tracking-wider">Modal</span>
-                                        <span class="font-black text-slate-900 text-base mt-1.5">Rp ${modal.toLocaleString('id-ID')}</span>
+                                <!-- Box Modal & Margin Sejajar -->
+                                <div class="grid grid-cols-2 gap-2.5">
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col justify-between">
+                                        <span class="text-slate-500 text-[10px] font-bold uppercase tracking-wider">MODAL</span>
+                                        <span class="font-extrabold text-slate-900 text-xs sm:text-sm mt-1 whitespace-nowrap">Rp ${modal.toLocaleString('id-ID')}</span>
                                     </div>
-                                    <div class="bg-indigo-50/70 p-4 rounded-2xl border border-indigo-200 flex flex-col justify-between">
-                                        <span class="text-indigo-700 text-xs font-bold uppercase tracking-wider">Margin</span>
-                                        <div class="mt-1.5 flex flex-col">
-                                            <span class="font-black text-indigo-600 text-base">+${persentaseMargin}%</span>
-                                            <span class="text-xs font-bold text-indigo-900 mt-0.5">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
+                                    <div class="bg-indigo-50/60 p-3 rounded-xl border border-indigo-200 flex flex-col justify-between">
+                                        <span class="text-indigo-700 text-[10px] font-bold uppercase tracking-wider">MARGIN</span>
+                                        <div class="mt-1 flex flex-col">
+                                            <span class="font-extrabold text-indigo-600 text-xs sm:text-sm">+${persentaseMargin}%</span>
+                                            <span class="text-[10px] font-bold text-indigo-900 mt-0.5 whitespace-nowrap">(${selisihMargin >= 0 ? '+' : ''}Rp ${selisihMargin.toLocaleString('id-ID')})</span>
                                         </div>
                                     </div>
                                 </div>
