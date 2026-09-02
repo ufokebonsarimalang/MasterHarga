@@ -20,7 +20,6 @@
         ::-webkit-scrollbar-track { background: #0b0f19; }
         ::-webkit-scrollbar-thumb { background: #313540; border-radius: 9999px; }
 
-        /* Styling Tab Animasi Geser */
         .tab-container {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(12px);
@@ -47,20 +46,15 @@
             align-items: center;
             gap: 8px;
         }
-        .tab-btn.active {
-            color: #1000a9;
-        }
+        .tab-btn.active { color: #1000a9; }
         .tab-indicator {
             position: absolute;
-            top: 6px;
-            bottom: 6px;
-            left: 6px;
+            top: 6px; bottom: 6px; left: 6px;
             background: #c0c1ff;
             border-radius: 1rem;
             transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 15px rgba(192, 193, 255, 0.3);
         }
-
         .pro-panel {
             background: rgba(23, 27, 38, 0.7);
             backdrop-filter: blur(12px);
@@ -69,8 +63,6 @@
             border-radius: 1.5rem;
             transition: all 0.3s ease;
         }
-
-        /* Animasi Custom Modal */
         .modal-backdrop {
             background: rgba(11, 15, 25, 0.8);
             backdrop-filter: blur(8px);
@@ -83,18 +75,12 @@
     <!-- CUSTOM MODERN MODAL POPUP -->
     <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity">
         <div class="pro-panel bg-[#171b26] border border-[#313540] p-6 sm:p-8 max-w-md w-full rounded-3xl shadow-2xl transform scale-95 transition-transform" id="modalBox">
-            <div id="modalIconContainer" class="w-12 h-12 rounded-2xl bg-[#c0c1ff]/10 text-[#c0c1ff] flex items-center justify-center mb-4 text-xl">
-                ⚠️
-            </div>
+            <div id="modalIconContainer" class="w-12 h-12 rounded-2xl bg-[#c0c1ff]/10 text-[#c0c1ff] flex items-center justify-center mb-4 text-xl">⚠️</div>
             <h3 id="modalTitle" class="text-lg sm:text-xl font-black text-[#dfe2f1] mb-2">Konfirmasi Aksi</h3>
             <p id="modalMessage" class="text-xs sm:text-sm text-[#c7c4d7] mb-6 leading-relaxed">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
             <div class="flex gap-3">
-                <button id="modalBtnCancel" class="flex-1 bg-[#0f131d] hover:bg-[#313540] text-[#c7c4d7] font-bold py-3 rounded-xl text-xs sm:text-sm transition-all border border-[#313540]">
-                    Batal
-                </button>
-                <button id="modalBtnConfirm" class="flex-1 bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3 rounded-xl text-xs sm:text-sm transition-all shadow-lg">
-                    Ya, Lanjutkan
-                </button>
+                <button id="modalBtnCancel" class="flex-1 bg-[#0f131d] hover:bg-[#313540] text-[#c7c4d7] font-bold py-3 rounded-xl text-xs sm:text-sm transition-all border border-[#313540]">Batal</button>
+                <button id="modalBtnConfirm" class="flex-1 bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3 rounded-xl text-xs sm:text-sm transition-all shadow-lg">Ya, Lanjutkan</button>
             </div>
         </div>
     </div>
@@ -110,7 +96,6 @@
             </div>
         </div>
 
-        <!-- Menu Tab Animasi Pill dengan Ikon SVG Modern -->
         <div class="tab-container overflow-x-auto max-w-full" id="tabNavContainer">
             <div class="tab-indicator" id="tabIndicator"></div>
             <div onclick="switchTab('cari', 0)" class="tab-btn active" id="btnCari">
@@ -135,33 +120,22 @@
         <section id="tabCari" class="space-y-5 sm:space-y-6">
             <div class="pro-panel p-4 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <button onclick="refreshDataCache()" class="text-xs bg-[#313540] hover:bg-[#484d5f] text-[#c0c1ff] px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm">
-                    <svg class="w-4 h-4 text-[#c0c1ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                    </svg>
+                    <svg class="w-4 h-4 text-[#c0c1ff]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                     Sync Data Cloud
                 </button>
                 <div class="flex bg-[#171b26] p-1.5 rounded-2xl border border-[#313540] w-full md:w-auto">
-                    <button onclick="setSearchMode('jual')" id="filterBtnJual" 
-                        class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm">
-                        Harga Pricetag
-                    </button>
-                    <button onclick="setSearchMode('modal')" id="filterBtnModal" 
-                        class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]">
-                        Master Modal
-                    </button>
+                    <button onclick="setSearchMode('jual')" id="filterBtnJual" class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm">Harga Pricetag</button>
+                    <button onclick="setSearchMode('modal')" id="filterBtnModal" class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]">Master Modal</button>
                 </div>
             </div>
 
-            <!-- Input Pencarian -->
             <div class="relative w-full">
                 <span class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-5 pointer-events-none text-[#908fa0]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 </span>
-                <input type="text" id="searchInput" placeholder="Cari tipe produk..." 
-                    class="w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3.5 sm:py-4 bg-[#171b26] border border-[#313540] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c0c1ff] text-xs sm:text-sm md:text-base font-semibold text-[#dfe2f1] placeholder-[#908fa0] shadow-inner transition-all">
+                <input type="text" id="searchInput" placeholder="Cari tipe produk..." class="w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3.5 sm:py-4 bg-[#171b26] border border-[#313540] rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c0c1ff] text-xs sm:text-sm md:text-base font-semibold text-[#dfe2f1] placeholder-[#908fa0] shadow-inner transition-all">
             </div>
 
-            <!-- Grid Hasil Pencarian -->
             <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
                 <div class="col-span-full py-20 sm:py-24 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-xs sm:text-sm font-semibold">
                     🔍 Hasil akan ditampilkan disini
@@ -174,33 +148,23 @@
             <div class="pro-panel p-6 sm:p-8 border-[#c0c1ff]/20 bg-gradient-to-br from-[#c0c1ff]/5 to-transparent">
                 <h2 class="text-base sm:text-lg font-bold text-[#dfe2f1] mb-1">Template Spreadsheet</h2>
                 <p class="text-xs sm:text-sm text-[#c7c4d7] mb-3">Format kolom Pricetag: Brand | Tipe | Grade A | Grade B | Online | Offline</p>
-                <button onclick="downloadTemplateExcel()" 
-                    class="w-full bg-[#171b26] hover:bg-[#313540] text-[#c0c1ff] font-bold py-3.5 rounded-2xl border border-[#c0c1ff]/30 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm">
+                <button onclick="downloadTemplateExcel()" class="w-full bg-[#171b26] hover:bg-[#313540] text-[#c0c1ff] font-bold py-3.5 rounded-2xl border border-[#c0c1ff]/30 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm">
                     📥 Download Format Contoh Excel (Pricetag)
                 </button>
             </div>
 
             <div class="pro-panel p-6 sm:p-8">
                 <h2 class="text-base sm:text-lg font-bold text-[#dfe2f1] mb-1">Upload Harga Pricetag</h2>
-                <p class="text-xs sm:text-sm text-[#c7c4d7] mb-5">Format file: Brand | Tipe | Grade A | Grade B | Online | Offline.</p>
-                <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3 file:px-4 sm:file:py-3.5 sm:file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#c0c1ff]/10 file:text-[#c0c1ff] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
-                <button onclick="prosesUploadHargaJual()" 
-                    class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-2xl transition-all text-xs sm:text-sm shadow-lg">
-                    Proses Upload Harga Pricetag
-                </button>
+                <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3 file:px-4 sm:file:py-3.5 sm:file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#c0c1ff]/10 file:text-[#c0c1ff] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
+                <button onclick="prosesUploadHargaJual()" class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-2xl transition-all text-xs sm:text-sm shadow-lg">Proses Upload Harga Pricetag</button>
                 <p id="statusUploadJual" class="text-xs mt-3 font-bold text-center"></p>
             </div>
 
             <div class="pro-panel p-6 sm:p-8">
                 <h2 class="text-base sm:text-lg font-bold text-[#dfe2f1] mb-1">Upload Master Harga Modal</h2>
                 <p class="text-xs sm:text-sm text-[#c7c4d7] mb-5">Format kolom: Brand | Tipe | Harga Modal.</p>
-                <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" 
-                    class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3 file:px-4 sm:file:py-3.5 sm:file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#4edea3]/10 file:text-[#4edea3] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
-                <button onclick="prosesUploadModal()" 
-                    class="w-full bg-[#4edea3] hover:bg-[#00885d] text-[#003824] font-extrabold py-3.5 rounded-2xl transition-all text-xs sm:text-sm shadow-lg">
-                    Proses Upload Harga Modal
-                </button>
+                <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" class="block w-full text-xs text-[#c7c4d7] file:mr-4 file:py-3 file:px-4 sm:file:py-3.5 sm:file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#4edea3]/10 file:text-[#4edea3] border border-[#313540] rounded-2xl mb-4 bg-[#171b26] cursor-pointer">
+                <button onclick="prosesUploadModal()" class="w-full bg-[#4edea3] hover:bg-[#00885d] text-[#003824] font-extrabold py-3.5 rounded-2xl transition-all text-xs sm:text-sm shadow-lg">Proses Upload Harga Modal</button>
                 <p id="statusUploadModal" class="text-xs mt-3 font-bold text-center"></p>
             </div>
         </section>
@@ -212,16 +176,10 @@
                 <p class="text-xs sm:text-sm text-[#c7c4d7] mb-6">Atur markup persen laba & tambahan nominal tetap per merek.</p>
 
                 <div class="bg-[#171b26] p-4 sm:p-5 rounded-2xl border border-[#313540] space-y-4 mb-6">
-                    <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" 
-                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs sm:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
-                    <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" 
-                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs sm:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
-                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" 
-                        class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs sm:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
-                    <button onclick="simpanPengaturanBrand()" 
-                        class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-xl text-xs sm:text-sm shadow-sm">
-                        Simpan Aturan Margin
-                    </button>
+                    <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs sm:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
+                    <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs sm:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
+                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" class="w-full px-4 py-3.5 bg-[#0f131d] border border-[#313540] rounded-xl text-xs sm:text-sm font-bold text-[#dfe2f1] focus:ring-2 focus:ring-[#c0c1ff]">
+                    <button onclick="simpanPengaturanBrand()" class="w-full bg-[#c0c1ff] hover:bg-[#8083ff] text-[#1000a9] font-extrabold py-3.5 rounded-xl text-xs sm:text-sm shadow-sm">Simpan Aturan Margin</button>
                     <p id="statusPengaturan" class="text-xs font-bold text-center"></p>
                 </div>
 
@@ -277,9 +235,7 @@
             const closeModal = () => {
                 modal.classList.add('opacity-0');
                 modalBox.classList.add('scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
+                setTimeout(() => { modal.classList.add('hidden'); }, 300);
             };
 
             const newConfirmBtn = btnConfirm.cloneNode(true);
@@ -287,13 +243,8 @@
             btnConfirm.parentNode.replaceChild(newConfirmBtn, btnConfirm);
             btnCancel.parentNode.replaceChild(newCancelBtn, btnCancel);
 
-            newConfirmBtn.onclick = () => {
-                closeModal();
-                if (onConfirm) onConfirm();
-            };
-            newCancelBtn.onclick = () => {
-                closeModal();
-            };
+            newConfirmBtn.onclick = () => { closeModal(); if (onConfirm) onConfirm(); };
+            newCancelBtn.onclick = () => { closeModal(); };
         }
 
         window.switchTab = function(tabName, index) {
@@ -337,7 +288,13 @@
                 const querySnapshot = await getDocs(collection(db, "master_harga"));
                 localMasterData = [];
                 querySnapshot.forEach((docSnap) => {
-                    localMasterData.push({ id: docSnap.id, ...docSnap.data() });
+                    const rawData = docSnap.data();
+                    // Sanitasi angka modal agar aman dari korup database lama
+                    let cleanModal = Number(rawData.modal);
+                    if (isNaN(cleanModal) || cleanModal > 1000000000) {
+                        cleanModal = parseInt(String(rawData.modal).replace(/[^0-9]/g, '').slice(0, 8)) || 0;
+                    }
+                    localMasterData.push({ id: docSnap.id, ...rawData, modal: cleanModal });
                 });
                 localStorage.setItem('ufo_master_data', JSON.stringify(localMasterData));
 
@@ -359,6 +316,7 @@
                 localStorage.clear();
                 await loadDataFromCacheOrCloud(true);
                 showCustomModal("Berhasil", "Data berhasil disinkronkan ulang!", null);
+                triggerSearch();
             });
         }
 
@@ -395,9 +353,7 @@
                     </div>
                 `;
             }
-            if (htmlList === "") {
-                htmlList = `<p class="text-xs text-[#908fa0] italic">Belum ada aturan kustom.</p>`;
-            }
+            if (htmlList === "") htmlList = `<p class="text-xs text-[#908fa0] italic">Belum ada aturan kustom.</p>`;
             document.getElementById('listAturanBrand').innerHTML = htmlList;
         }
 
@@ -410,11 +366,9 @@
             if (mode === 'jual') {
                 btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
                 btnModal.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]";
-                inputField.placeholder = "Cari tipe produk...";
             } else {
                 btnModal.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
                 btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all text-[#c7c4d7] hover:text-[#dfe2f1]";
-                inputField.placeholder = "Cari tipe produk...";
             }
             triggerSearch();
         }
@@ -445,22 +399,15 @@
             try {
                 statusEl.className = "text-xs font-bold text-[#c0c1ff]";
                 statusEl.innerText = "⏳ Menyimpan...";
-                await setDoc(doc(db, "pengaturan_margin", nama), {
-                    persen: persen,
-                    tambahNominal: tambahNominal,
-                    updated_at: new Date().toISOString()
-                });
+                await setDoc(doc(db, "pengaturan_margin", nama), { persen, tambahNominal, updated_at: new Date().toISOString() });
                 statusEl.className = "text-xs font-bold text-[#4edea3]";
                 statusEl.innerText = "✨ Berhasil disimpan!";
                 document.getElementById('inputBrandNama').value = "";
                 document.getElementById('inputBrandPersen').value = "";
                 document.getElementById('inputBrandNominalTambah').value = "";
-                
                 localStorage.removeItem('ufo_margin_data');
                 await loadAturanBrandFromCloud();
-                if (currentSearchMode === 'modal') {
-                    triggerSearch();
-                }
+                if (currentSearchMode === 'modal') triggerSearch();
             } catch (error) {
                 statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                 statusEl.innerText = "❌ Gagal menyimpan.";
@@ -473,9 +420,7 @@
                     await deleteDoc(doc(db, "pengaturan_margin", brandName.toLowerCase()));
                     localStorage.removeItem('ufo_margin_data');
                     await loadAturanBrandFromCloud();
-                    if (currentSearchMode === 'modal') {
-                        triggerSearch();
-                    }
+                    if (currentSearchMode === 'modal') triggerSearch();
                 } catch (error) {
                     showCustomModal("Gagal", "Gagal menghapus data.", null);
                 }
@@ -485,9 +430,7 @@
         let searchTimeout;
         document.getElementById('searchInput').addEventListener('input', function() {
             clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                triggerSearch();
-            }, 120);
+            searchTimeout = setTimeout(() => { triggerSearch(); }, 120);
         });
 
         function triggerSearch() {
@@ -495,10 +438,7 @@
             const resultContainer = document.getElementById('searchResult');
             
             if (rawKeyword.length < 2) {
-                resultContainer.innerHTML = `
-                    <div class="col-span-full py-20 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-xs sm:text-sm font-semibold">
-                        🔍 Hasil akan ditampilkan disini
-                    </div>`;
+                resultContainer.innerHTML = `<div class="col-span-full py-20 text-center border-2 border-dashed border-[#313540] rounded-3xl bg-[#171b26]/40 text-[#908fa0] text-xs sm:text-sm font-semibold">🔍 Hasil akan ditampilkan disini</div>`;
                 return;
             }
 
@@ -574,7 +514,9 @@
                 }
 
                 filteredModal.slice(0, 30).forEach(item => {
-                    const modal = Number(item.modal) || 0;
+                    let modal = Number(item.modal) || 0;
+                    if (modal > 100000000) modal = Math.round(modal / 1000000); // Pengaman jika ada sisa data lama
+
                     const brandKey = (item.brand || "").toLowerCase().trim();
                     const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
                     const aturan = aturanMarginBrand[brandKey] || aturanDefault;
@@ -655,9 +597,12 @@
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
                             
-                            // PERBAIKAN: Parsing angka modal murni tanpa penggabungan teks
-                            const rawModal = String(row[2] || "").replace(/[^0-9]/g, '');
-                            const modal = Number(rawModal);
+                            // Ambil hanya angka murni dari kolom harga modal
+                            let rawVal = String(row[2] || "").replace(/[^0-9]/g, '');
+                            if (rawVal.length > 8) {
+                                rawVal = rawVal.substring(0, 7); // Mencegah digit ganda/menumpuk
+                            }
+                            const modal = Number(rawVal);
 
                             if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
                             if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
@@ -673,6 +618,7 @@
                     fileInput.value = "";
                     localStorage.removeItem('ufo_master_data');
                     await loadDataFromCacheOrCloud(true);
+                    triggerSearch();
                 } catch (err) {
                     statusEl.className = "text-xs font-bold text-[#ffb4ab]";
                     statusEl.innerText = "❌ Gagal memproses file.";
