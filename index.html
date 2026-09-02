@@ -369,9 +369,9 @@
                 querySnapshot.forEach((docSnap) => {
                     const data = docSnap.data();
                     aturanMarginBrand[docSnap.id.toLowerCase()] = {
-                        multiplier: 1 + (data.persen / 100),
+                        multiplier: 1 + (Number(data.persen) / 100),
                         tambahNominal: Number(data.tambahNominal) || 0,
-                        rawPersen: data.persen
+                        rawPersen: Number(data.persen) || 0
                     };
                 });
                 localStorage.setItem('ufo_margin_data', JSON.stringify(aturanMarginBrand));
@@ -654,10 +654,14 @@
                             if (!row || row.length < 3) continue;
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
+                            
+                            // PERBAIKAN: Parsing angka modal murni tanpa penggabungan teks
                             const rawModal = String(row[2] || "").replace(/[^0-9]/g, '');
                             const modal = Number(rawModal);
+
                             if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
                             if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
+                            
                             const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
                             const docId = `${brand}_${cleanTipe}`;
                             await setDoc(doc(db, "master_harga", docId), { brand, tipe, modal, updated_at: new Date().toISOString() });
