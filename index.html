@@ -289,11 +289,7 @@
                 localMasterData = [];
                 querySnapshot.forEach((docSnap) => {
                     const rawData = docSnap.data();
-                    // Sanitasi angka modal agar aman dari korup database lama
-                    let cleanModal = Number(rawData.modal);
-                    if (isNaN(cleanModal) || cleanModal > 1000000000) {
-                        cleanModal = parseInt(String(rawData.modal).replace(/[^0-9]/g, '').slice(0, 8)) || 0;
-                    }
+                    let cleanModal = Number(rawData.modal) || 0;
                     localMasterData.push({ id: docSnap.id, ...rawData, modal: cleanModal });
                 });
                 localStorage.setItem('ufo_master_data', JSON.stringify(localMasterData));
@@ -361,7 +357,6 @@
             currentSearchMode = mode;
             const btnJual = document.getElementById('filterBtnJual');
             const btnModal = document.getElementById('filterBtnModal');
-            const inputField = document.getElementById('searchInput');
 
             if (mode === 'jual') {
                 btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all bg-[#c0c1ff] text-[#1000a9] shadow-sm";
@@ -514,9 +509,7 @@
                 }
 
                 filteredModal.slice(0, 30).forEach(item => {
-                    let modal = Number(item.modal) || 0;
-                    if (modal > 100000000) modal = Math.round(modal / 1000000); // Pengaman jika ada sisa data lama
-
+                    const modal = Number(item.modal) || 0;
                     const brandKey = (item.brand || "").toLowerCase().trim();
                     const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
                     const aturan = aturanMarginBrand[brandKey] || aturanDefault;
@@ -597,11 +590,8 @@
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
                             
-                            // Ambil hanya angka murni dari kolom harga modal
-                            let rawVal = String(row[2] || "").replace(/[^0-9]/g, '');
-                            if (rawVal.length > 8) {
-                                rawVal = rawVal.substring(0, 7); // Mencegah digit ganda/menumpuk
-                            }
+                            // Ambil angka murni tanpa batasan panjang digit (agar 14.456.000 terbaca utuh)
+                            const rawVal = String(row[2] || "").replace(/[^0-9]/g, '');
                             const modal = Number(rawVal);
 
                             if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
