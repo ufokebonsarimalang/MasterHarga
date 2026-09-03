@@ -268,20 +268,19 @@
             indicator.style.width = `${activeBtn.offsetWidth}px`;
             indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
             
-            loadDataFromCacheOrCloud(false);
+            // OTOMATIS TARIK DATA DARI CLOUD SETIAP HALAMAN DIBUKA
+            loadDataFromCacheOrCloud(true);
         });
 
-        // FUNGSI PEMBERSIH ANGKA EKSTREM OTOMATIS (Mencegah triliunan/angka ngawur)
+        // FUNGSI PEMBERSIH ANGKA MODAL EKSTREM
         function sanitizeModal(val) {
             let num = Number(val) || 0;
-            // Jika angka melebihi 100 juta (misal korup jadi triliunan/milyaran), ambil digit utamanya secara paksa
             if (num > 100000000) {
                 let str = String(num).replace(/[^0-9]/g, '');
-                // Harga elektronik normal biasanya 6-8 digit (puluhan ribu s/d puluhan juta)
                 if (str.length >= 7) {
-                    num = Number(str.substring(0, 8)); // Ambil maksimal 8 digit awal
+                    num = Number(str.substring(0, 8));
                     if (num > 100000000) {
-                        num = Number(str.substring(0, 7)); // Jika masih di atas 100jt, ambil 7 digit (misal belasan juta)
+                        num = Number(str.substring(0, 7));
                     }
                 }
             }
@@ -289,18 +288,6 @@
         }
 
         async function loadDataFromCacheOrCloud(forceCloud = false) {
-            const cachedMaster = localStorage.getItem('ufo_master_data');
-            const cachedJual = localStorage.getItem('ufo_jual_data');
-            const cachedMargin = localStorage.getItem('ufo_margin_data');
-
-            if (!forceCloud && cachedMaster && cachedJual && cachedMargin) {
-                localMasterData = JSON.parse(cachedMaster);
-                localHargaJualData = JSON.parse(cachedJual);
-                aturanMarginBrand = JSON.parse(cachedMargin);
-                renderAturanBrandList();
-                return;
-            }
-
             try {
                 const querySnapshot = await getDocs(collection(db, "master_harga"));
                 localMasterData = [];
@@ -320,13 +307,22 @@
 
                 await loadAturanBrandFromCloud();
             } catch (error) {
-                console.error("Gagal sinkronisasi cloud:", error);
+                console.error("Gagal sinkronisasi cloud, memuat cache lokal:", error);
+                const cachedMaster = localStorage.getItem('ufo_master_data');
+                const cachedJual = localStorage.getItem('ufo_jual_data');
+                const cachedMargin = localStorage.getItem('ufo_margin_data');
+
+                if (cachedMaster && cachedJual && cachedMargin) {
+                    localMasterData = JSON.parse(cachedMaster);
+                    localHargaJualData = JSON.parse(cachedJual);
+                    aturanMarginBrand = JSON.parse(cachedMargin);
+                    renderAturanBrandList();
+                }
             }
         }
 
         window.refreshDataCache = function() {
             showCustomModal("Sinkronisasi Cloud", "Apakah Anda ingin menarik ulang seluruh data terbaru dari Cloud Firebase?", async () => {
-                localStorage.clear();
                 await loadDataFromCacheOrCloud(true);
                 showCustomModal("Berhasil", "Data berhasil disinkronkan ulang!", null);
                 triggerSearch();
@@ -607,7 +603,6 @@
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
                             
-                            // Bersihkan angka modal dari file Excel
                             let modal = sanitizeModal(row[2]);
 
                             if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
@@ -622,7 +617,6 @@
                     statusEl.className = "text-xs font-bold text-[#4edea3]";
                     statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan ke Cloud.`;
                     fileInput.value = "";
-                    localStorage.removeItem('ufo_master_data');
                     await loadDataFromCacheOrCloud(true);
                     triggerSearch();
                 } catch (err) {
@@ -675,7 +669,6 @@
                     statusEl.className = "text-xs font-bold text-[#4edea3]";
                     statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan ke Cloud.`;
                     fileInput.value = "";
-                    localStorage.removeItem('ufo_jual_data');
                     await loadDataFromCacheOrCloud(true);
                 } catch (err) {
                     statusEl.className = "text-xs font-bold text-[#ffb4ab]";
