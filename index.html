@@ -271,6 +271,23 @@
             loadDataFromCacheOrCloud(false);
         });
 
+        // FUNGSI PEMBERSIH ANGKA EKSTREM OTOMATIS (Mencegah triliunan/angka ngawur)
+        function sanitizeModal(val) {
+            let num = Number(val) || 0;
+            // Jika angka melebihi 100 juta (misal korup jadi triliunan/milyaran), ambil digit utamanya secara paksa
+            if (num > 100000000) {
+                let str = String(num).replace(/[^0-9]/g, '');
+                // Harga elektronik normal biasanya 6-8 digit (puluhan ribu s/d puluhan juta)
+                if (str.length >= 7) {
+                    num = Number(str.substring(0, 8)); // Ambil maksimal 8 digit awal
+                    if (num > 100000000) {
+                        num = Number(str.substring(0, 7)); // Jika masih di atas 100jt, ambil 7 digit (misal belasan juta)
+                    }
+                }
+            }
+            return num;
+        }
+
         async function loadDataFromCacheOrCloud(forceCloud = false) {
             const cachedMaster = localStorage.getItem('ufo_master_data');
             const cachedJual = localStorage.getItem('ufo_jual_data');
@@ -289,7 +306,7 @@
                 localMasterData = [];
                 querySnapshot.forEach((docSnap) => {
                     const rawData = docSnap.data();
-                    let cleanModal = Number(rawData.modal) || 0;
+                    let cleanModal = sanitizeModal(rawData.modal);
                     localMasterData.push({ id: docSnap.id, ...rawData, modal: cleanModal });
                 });
                 localStorage.setItem('ufo_master_data', JSON.stringify(localMasterData));
@@ -509,7 +526,7 @@
                 }
 
                 filteredModal.slice(0, 30).forEach(item => {
-                    const modal = Number(item.modal) || 0;
+                    const modal = sanitizeModal(item.modal);
                     const brandKey = (item.brand || "").toLowerCase().trim();
                     const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
                     const aturan = aturanMarginBrand[brandKey] || aturanDefault;
@@ -590,9 +607,8 @@
                             const brand = String(row[0] || "").trim();
                             const tipe = String(row[1] || "").trim();
                             
-                            // Ambil angka murni tanpa batasan panjang digit (agar 14.456.000 terbaca utuh)
-                            const rawVal = String(row[2] || "").replace(/[^0-9]/g, '');
-                            const modal = Number(rawVal);
+                            // Bersihkan angka modal dari file Excel
+                            let modal = sanitizeModal(row[2]);
 
                             if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
                             if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
