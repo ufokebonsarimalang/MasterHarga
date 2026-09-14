@@ -379,16 +379,9 @@
 
       function sanitizeModal(val) {
             if (val === undefined || val === null) return 0;
-            
-            // Ambil nilai apa adanya dari Excel tanpa manipulasi perkalian digit
-            let num = Number(val);
-            if (!isNaN(num)) {
-                return Math.round(num);
-            }
-            
-            // Jika terbaca teks, bersihkan karakter non-angka
-            let cleanStr = String(val).replace(/[^0-9]/g, '');
-            return Number(cleanStr) || 0;
+            // Ambil murni angka mentahnya saja tanpa ada manipulasi matematika tambahan
+            let num = parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
+            return Math.round(num);
         }
         async function loadDataFromCacheOrCloud(forceCloud = false) {
             try {
