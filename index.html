@@ -377,20 +377,19 @@
             indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
         }
 
-        function sanitizeModal(val) {
-            let num = Number(val) || 0;
-            if (num > 100000000) {
-                let str = String(num).replace(/[^0-9]/g, '');
-                if (str.length >= 7) {
-                    num = Number(str.substring(0, 8));
-                    if (num > 100000000) {
-                        num = Number(str.substring(0, 7));
-                    }
-                }
+      function sanitizeModal(val) {
+            if (val === undefined || val === null) return 0;
+            
+            // Ambil nilai apa adanya dari Excel tanpa manipulasi perkalian digit
+            let num = Number(val);
+            if (!isNaN(num)) {
+                return Math.round(num);
             }
-            return num;
+            
+            // Jika terbaca teks, bersihkan karakter non-angka
+            let cleanStr = String(val).replace(/[^0-9]/g, '');
+            return Number(cleanStr) || 0;
         }
-
         async function loadDataFromCacheOrCloud(forceCloud = false) {
             try {
                 const querySnapshot = await getDocs(collection(db, "master_harga"));
