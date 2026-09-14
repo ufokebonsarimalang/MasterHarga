@@ -377,11 +377,19 @@
             indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
         }
 
-      function sanitizeModal(val) {
+     function sanitizeModal(val) {
             if (val === undefined || val === null) return 0;
-            // Ambil murni angka mentahnya saja tanpa ada manipulasi matematika tambahan
-            let num = parseFloat(String(val).replace(/[^0-9.]/g, '')) || 0;
-            return Math.round(num);
+            
+            // Ubah ke string, hapus semua karakter kecuali angka
+            let str = String(val).replace(/[^0-9]/g, '');
+            
+            // Jika karena suatu hal angkanya jadi "kegemukan" / ribuan digit (triliunan),
+            // kita potong ke digit wajar harga barang (maksimal 9 digit / ratusan juta)
+            if (str.length > 9) {
+                str = str.substring(0, 8);
+            }
+            
+            return Number(str) || 0;
         }
         async function loadDataFromCacheOrCloud(forceCloud = false) {
             try {
