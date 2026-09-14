@@ -588,55 +588,61 @@
             resultContainer.innerHTML = html;
         }
 
-        window.prosesUploadModal = function() {
-            const fileInput = document.getElementById('excelFileModal');
-            const statusEl = document.getElementById('statusUploadModal');
-            if (fileInput.files.length === 0) {
-                statusEl.className = "text-xs font-bold text-red-400";
-                statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
-                return;
-            }
-            const file = fileInput.files[0];
-            statusEl.className = "text-xs font-bold text-[#c084fc]";
-            statusEl.innerText = "⏳ Memproses & Mengunggah...";
-            const reader = new FileReader();
-            reader.onload = async function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    let successCount = 0;
-                    for (let sheetName of workbook.SheetNames) {
-                        const worksheet = workbook.Sheets[sheetName];
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        for (let i = 0; i < jsonData.length; i++) {
-                            const row = jsonData[i];
-                            if (!row || row.length < 3) continue;
-                            const brand = String(row[0] || "").trim();
-                            const tipe = String(row[1] || "").trim();
-                            
-                            let modal = sanitizeModal(row[2]);
+       window.prosesUploadModal = function() {
+    const fileInput = document.getElementById('excelFileModal');
+    const statusEl = document.getElementById('statusUploadModal');
+    if (fileInput.files.length === 0) {
+        statusEl.className = "text-xs font-bold text-red-400";
+        statusEl.innerText = "⚠️ Pilih file terlebih dahulu!";
+        return;
+    }
+    const file = fileInput.files[0];
+    statusEl.className = "text-xs font-bold text-[#c084fc]";
+    statusEl.innerText = "⏳ Memproses & Mengunggah...";
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            let successCount = 0;
+            for (let sheetName of workbook.SheetNames) {
+                const worksheet = workbook.Sheets[sheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                for (let i = 0; i < jsonData.length; i++) {
+                    const row = jsonData[i];
+                    if (!row || row.length < 3) continue;
+                    const brand = String(row[0] || "").trim();
+                    const tipe = String(row[1] || "").trim();
+                    
+                    // --- PERBAIKAN DI BAGIAN INI ---
+                    // Membersihkan string harga dari karakter selain angka (misal titik, koma, spasi, atau format desimal)
+                    let rawVal = String(row[2] || "").trim();
+                    // Jika Excel mendeteksi koma/titik desimal, kita ubah atau bulatkan dengan aman
+                    let cleanedStr = rawVal.replace(/[^0-9]/g, ''); 
+                    let modal = Math.round(Number(cleanedStr) || 0);
+                    // -----------------------------
 
-                            if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
-                            if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
-                            
-                            const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
-                            const docId = `${brand}_${cleanTipe}`;
-                            await setDoc(doc(db, "master_harga", docId), { brand, tipe, modal, updated_at: new Date().toISOString() });
-                            successCount++;
-                        }
-                    }
-                    statusEl.className = "text-xs font-bold text-emerald-400";
-                    statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan ke Cloud.`;
-                    fileInput.value = "";
-                    await loadDataFromCacheOrCloud(true);
-                    triggerSearch();
-                } catch (err) {
-                    statusEl.className = "text-xs font-bold text-red-400";
-                    statusEl.innerText = "❌ Gagal memproses file.";
+                    if (i === 0 && (brand.toLowerCase() === 'brand' || brand.toLowerCase() === 'merk')) continue;
+                    if (!brand || !tipe || isNaN(modal) || modal <= 0) continue;
+                    
+                    const cleanTipe = tipe.replace(/[\/\\#,+()$~%.'":*?<>{} ]/g, '_');
+                    const docId = `${brand}_${cleanTipe}`;
+                    await setDoc(doc(db, "master_harga", docId), { brand, tipe, modal, updated_at: new Date().toISOString() });
+                    successCount++;
                 }
-            };
-            reader.readAsArrayBuffer(file);
-        };
+            }
+            statusEl.className = "text-xs font-bold text-emerald-400";
+            statusEl.innerText = `✨ Sukses! ${successCount} data tersimpan ke Cloud.`;
+            fileInput.value = "";
+            await loadDataFromCacheOrCloud(true);
+            triggerSearch();
+        } catch (err) {
+            statusEl.className = "text-xs font-bold text-red-400";
+            statusEl.innerText = "❌ Gagal memproses file.";
+        }
+    };
+    reader.readAsArrayBuffer(file);
+};
     </script>
 </body>
 </html>
