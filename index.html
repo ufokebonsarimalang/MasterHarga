@@ -301,6 +301,70 @@
             border-color: rgba(5, 150, 105, 0.4);
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
         }
+
+        /* Badge persen di Daftar Aktif Aturan Margin - NETRAL & JELAS */
+        .persen-badge-clean {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 0.03em;
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        body.light .persen-badge-clean {
+            background: #f1f5f9;
+            color: #0f172a;
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Icon wrapper di hasil pencarian */
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        .stat-icon-modal {
+            background: linear-gradient(135deg, rgba(148, 163, 184, 0.15), rgba(100, 116, 139, 0.1));
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            color: #cbd5e1;
+        }
+        body.light .stat-icon-modal {
+            background: linear-gradient(135deg, rgba(100, 116, 139, 0.1), rgba(71, 85, 105, 0.08));
+            border-color: rgba(100, 116, 139, 0.2);
+            color: #334155;
+        }
+        .stat-icon-margin {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+        body.light .stat-icon-margin {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(6, 182, 212, 0.08));
+            border-color: rgba(5, 150, 105, 0.25);
+            color: #059669;
+        }
+
+        /* Label MODAL dipertegas */
+        .label-modal-bold {
+            font-weight: 900 !important;
+            color: #ffffff !important;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        body.light .label-modal-bold {
+            color: #0f172a !important;
+        }
     </style>
 </head>
 <body class="dark min-h-screen flex flex-col selection:bg-[#8b5cf6] selection:text-white">
@@ -352,18 +416,25 @@
                 Cari Harga Modal
             </div>
 
-            <!-- TAB UPLOAD MODAL (ICON CLOUD UPLOAD) -->
+            <!-- TAB UPLOAD MODAL -->
             <div onclick="switchTab('upload', 1)" class="tab-btn" id="btnUpload">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z" />
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                    <path d="M15 18h6"/>
+                    <path d="M18 15v6"/>
                 </svg>
                 Upload Modal
             </div>
 
-            <!-- TAB ATURAN MARGIN (ICON PERCENT / DISCOUNT) -->
+            <!-- TAB ATURAN MARGIN -->
             <div onclick="switchTab('pengaturan', 2)" class="tab-btn" id="btnPengaturan">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 14.25l6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V4.757c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0c1.1.128 1.907 1.077 1.907 2.185zM9.75 9h.008v.008H9.75V9zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm4.125 4.5h.008v.008h-.008V13.5zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M9 9h.01"/>
+                    <path d="M15 15h.01"/>
+                    <path d="M15 9l-6 6"/>
                 </svg>
                 Aturan Margin
             </div>
@@ -624,7 +695,7 @@
                     <div class="flex justify-between items-center border px-4 py-3.5 rounded-2xl text-xs sm:text-sm sub-box hover:border-purple-500/30 transition-all">
                         <span class="font-bold uppercase tracking-wider">${brandName}</span>
                         <div class="flex items-center gap-3">
-                            <span class="text-[10px] font-extrabold tracking-wider px-2.5 py-1 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30">+${data.rawPersen}%${infoNominal}</span>
+                            <span class="persen-badge-clean">+${data.rawPersen}%${infoNominal}</span>
                             <button onclick="hapusBrand('${brandName}')" class="text-red-400 font-extrabold hover:text-red-300 transition-colors text-xs">Hapus</button>
                         </div>
                     </div>
@@ -792,14 +863,22 @@
 
                             <ul class="mt-auto space-y-3.5 sm:space-y-4 border-t border-gray-500/10 pt-5 sm:pt-6">
                                 <li class="flex items-center gap-2.5 sm:gap-3 text-muted">
-                                    <span class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-500/10 text-xs">📦</span>
+                                    <span class="stat-icon stat-icon-modal">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                                        </svg>
+                                    </span>
                                     <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                        <span class="font-semibold opacity-70">Modal</span>
+                                        <span class="label-modal-bold">Modal</span>
                                         <span class="font-black whitespace-nowrap">Rp ${modal.toLocaleString('id-ID')}</span>
                                     </div>
                                 </li>
                                 <li class="flex items-center gap-2.5 sm:gap-3 text-muted">
-                                    <span class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 text-xs">📈</span>
+                                    <span class="stat-icon stat-icon-margin">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/>
+                                        </svg>
+                                    </span>
                                     <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
                                         <span class="font-semibold opacity-70">Margin (${persentaseMargin}%)</span>
                                         <span class="font-black text-emerald-400 whitespace-nowrap">+Rp ${selisihMargin.toLocaleString('id-ID')}</span>
