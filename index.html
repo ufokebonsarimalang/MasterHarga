@@ -14,45 +14,44 @@
             transition: background-color 0.4s ease, color 0.4s ease;
             -webkit-font-smoothing: antialiased;
         }
-        /* Mode Gelap (Default) */
+        /* Mode Gelap (Default) - HITAM MURNI */
         body.dark {
-            background-color: #070b14;
+            background-color: #000000;
             background-image: 
-                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
             color: #e2e8f0;
         }
         body.dark .pro-panel {
-            background: rgba(17, 24, 39, 0.55);
+            background: rgba(15, 15, 15, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.07);
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.4), 
+                0 8px 32px rgba(0, 0, 0, 0.6), 
                 inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
         body.dark header {
-            background: rgba(7, 11, 20, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
         }
         body.dark .tab-container {
-            background: rgba(17, 24, 39, 0.7);
+            background: rgba(15, 15, 15, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         body.dark input, body.dark select {
-            background: rgba(17, 24, 39, 0.8) !important;
+            background: rgba(15, 15, 15, 0.9) !important;
             border-color: rgba(255, 255, 255, 0.1) !important;
             color: #e2e8f0 !important;
         }
         body.dark .sub-box {
-            background: rgba(15, 23, 42, 0.45) !important;
+            background: rgba(10, 10, 10, 0.6) !important;
             border-color: rgba(255, 255, 255, 0.06) !important;
         }
         body.dark .tab-btn.active {
             color: #ffffff !important;
         }
         body.dark .card-inner {
-            background: rgba(17, 24, 39, 0.85) !important;
+            background: rgba(12, 12, 12, 0.95) !important;
             border-color: rgba(255, 255, 255, 0.08) !important;
         }
 
@@ -60,9 +59,8 @@
         body.light {
             background-color: #f8fafc;
             background-image: 
-                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
+                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
             color: #1e293b;
         }
         body.light .pro-panel {
@@ -188,7 +186,7 @@
         }
 
         .modal-backdrop {
-            background: rgba(7, 11, 20, 0.85);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             transition: opacity 0.3s ease;
@@ -229,22 +227,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .badge-modern {
-            font-size: 9px;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            padding: 3px 8px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.15));
-            color: #c4b5fd;
-            border: 1px solid rgba(139, 92, 246, 0.35);
-            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
-        }
-        body.light .badge-modern {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.08));
-            color: #7c3aed;
         }
 
         /* Judul gradient */
@@ -295,10 +277,28 @@
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Divider gradient */
-        .divider-gradient {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+        /* Badge brand di hasil pencarian - DIPERBESAR & DIPERTEGAS */
+        .brand-badge-result {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.15));
+            color: #34d399;
+            border: 2px solid rgba(52, 211, 153, 0.4);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+            transition: all 0.3s;
+        }
+        body.light .brand-badge-result {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.1));
+            color: #059669;
+            border-color: rgba(5, 150, 105, 0.4);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
         }
     </style>
 </head>
@@ -329,11 +329,9 @@
                     <img src="logo.png" alt="Logo Toko" onerror="this.style.display='none'">
                 </div>
                 <div>
-                    <h1 class="font-black text-sm sm:text-base tracking-tight flex items-center gap-2">
-                        <span class="gradient-title">MASTER HARGA</span>
-                        <span class="badge-modern">UFO</span>
+                    <h1 class="font-black text-sm sm:text-base tracking-tight gradient-title">
+                        MASTER HARGA
                     </h1>
-                    <p class="text-[10px] opacity-50 font-medium tracking-wide">Sistem Manajemen Harga Modern</p>
                 </div>
             </div>
             <button onclick="toggleTheme()" class="md:hidden p-2.5 rounded-xl border border-gray-500/20 text-xs font-bold flex items-center gap-1.5 transition-all hover:bg-gray-500/10">
@@ -352,14 +350,14 @@
             </div>
             <div onclick="switchTab('upload', 1)" class="tab-btn" id="btnUpload">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15m0-3l-3-3m0 0l-3 3m3-3V15" />
                 </svg>
                 Upload Modal
             </div>
             <div onclick="switchTab('pengaturan', 2)" class="tab-btn" id="btnPengaturan">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6z" />
                 </svg>
                 Aturan Margin
             </div>
@@ -386,7 +384,7 @@
                     Sync Data Cloud
                 </button>
                 <div class="text-xs font-bold opacity-60 text-center md:text-right">
-                    Sistem Kalkulasi Otomatis Harga Jual Berdasarkan Master Modal
+                    Kalkulasi Otomatis Harga Jual Berdasarkan Master Modal
                 </div>
             </div>
 
@@ -623,7 +621,7 @@
                     <div class="flex justify-between items-center border px-4 py-3.5 rounded-2xl text-xs sm:text-sm sub-box hover:border-purple-500/30 transition-all">
                         <span class="font-bold uppercase tracking-wider">${brandName}</span>
                         <div class="flex items-center gap-3">
-                            <span class="badge-modern">+${data.rawPersen}%${infoNominal}</span>
+                            <span class="text-[10px] font-extrabold tracking-wider px-2.5 py-1 rounded-md bg-purple-500/15 text-purple-300 border border-purple-500/30">+${data.rawPersen}%${infoNominal}</span>
                             <button onclick="hapusBrand('${brandName}')" class="text-red-400 font-extrabold hover:text-red-300 transition-colors text-xs">Hapus</button>
                         </div>
                     </div>
@@ -776,8 +774,8 @@
                 html += `
                     <div class="price-card relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-b from-emerald-400 via-teal-400 to-cyan-500 shadow-xl fade-in-up" style="animation-delay: ${idx * 0.05}s">
                         <div class="card-inner h-full rounded-[14px] sm:rounded-[22px] p-5 sm:p-8 flex flex-col border border-gray-500/10 sub-box">
-                            <div class="mb-2 grid place-items-center">
-                                <span class="px-3.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest">${item.brand}</span>
+                            <div class="mb-3 grid place-items-center">
+                                <span class="brand-badge-result">${item.brand}</span>
                             </div>
                             <h3 class="text-center text-lg sm:text-2xl font-black tracking-tight break-words">${item.tipe}</h3>
                             
