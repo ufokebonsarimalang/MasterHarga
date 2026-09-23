@@ -244,12 +244,22 @@
             background-clip: text;
         }
 
-        /* Harga jual gradient */
-        .harga-jual-gradient {
-            background: linear-gradient(135deg, #34d399 0%, #06b6d4 100%);
+        /* =====================================================
+           HARGA JUAL - SEKARANG MERAH CERAH
+           ===================================================== */
+        .harga-jual-merah {
+            background: linear-gradient(135deg, #ff2d2d 0%, #ff5f3d 60%, #ff8a3d 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            filter: drop-shadow(0 2px 8px rgba(255, 45, 45, 0.35));
+        }
+        body.light .harga-jual-merah {
+            background: linear-gradient(135deg, #e11d1d 0%, #f43f1d 60%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 6px rgba(220, 38, 38, 0.25));
         }
 
         .price-card {
@@ -278,7 +288,7 @@
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* Badge brand di hasil pencarian - DIPERBESAR & DIPERTEGAS */
+        /* Badge brand di hasil pencarian */
         .brand-badge-result {
             display: inline-flex;
             align-items: center;
@@ -302,7 +312,7 @@
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
         }
 
-        /* Badge persen di Daftar Aktif Aturan Margin - NETRAL & JELAS */
+        /* Badge persen di Daftar Aktif Aturan Margin */
         .persen-badge-clean {
             display: inline-flex;
             align-items: center;
@@ -354,9 +364,7 @@
             color: #059669;
         }
 
-        /* ========== PERUBAHAN UTAMA: SEMUA LABEL & NILAI DIPERTEBAL ========== */
-
-        /* Label MODAL - sangat tebal & kontras */
+        /* Label & nilai dipertebal */
         .label-modal-bold {
             font-weight: 900 !important;
             color: #ffffff !important;
@@ -367,8 +375,6 @@
         body.light .label-modal-bold {
             color: #0f172a !important;
         }
-
-        /* Label MARGIN - sangat tebal & kontras */
         .label-margin-bold {
             font-weight: 900 !important;
             color: #ffffff !important;
@@ -378,8 +384,6 @@
         body.light .label-margin-bold {
             color: #0f172a !important;
         }
-
-        /* Nilai MODAL (Rp 3.022.530) - sangat tebal & kontras */
         .value-modal-bold {
             font-weight: 900 !important;
             color: #ffffff !important;
@@ -389,8 +393,6 @@
         body.light .value-modal-bold {
             color: #0f172a !important;
         }
-
-        /* Nilai MARGIN (+Rp 325.470) - sangat tebal & tetap emerald */
         .value-margin-bold {
             font-weight: 900 !important;
             color: #34d399 !important;
@@ -881,7 +883,7 @@
                 const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                 html += `
-                    <div class="price-card relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-b from-emerald-400 via-teal-400 to-cyan-500 shadow-xl fade-in-up" style="animation-delay: ${idx * 0.05}s">
+                    <div class="price-card relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-b from-red-500 via-rose-500 to-orange-500 shadow-xl fade-in-up" style="animation-delay: ${idx * 0.05}s">
                         <div class="card-inner h-full rounded-[14px] sm:rounded-[22px] p-5 sm:p-8 flex flex-col border border-gray-500/10 sub-box">
                             <div class="mb-3 grid place-items-center">
                                 <span class="brand-badge-result">${item.brand}</span>
@@ -891,8 +893,8 @@
                             <div class="mt-4 sm:mt-6 mb-6 sm:mb-8 text-center">
                                 <p class="text-[9px] sm:text-[10px] font-extrabold text-muted uppercase tracking-widest mb-1.5 sm:mb-2 opacity-60">Harga Jual</p>
                                 <div class="flex justify-center items-start">
-                                    <span class="text-sm sm:text-xl font-bold mt-0.5 sm:mt-1 mr-1 opacity-60 harga-jual-gradient">Rp</span>
-                                    <span class="text-2xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap harga-jual-gradient">${jual.toLocaleString('id-ID')}</span>
+                                    <span class="text-sm sm:text-xl font-bold mt-0.5 sm:mt-1 mr-1 opacity-70 harga-jual-merah">Rp</span>
+                                    <span class="text-2xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap harga-jual-merah">${jual.toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
 
