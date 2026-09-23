@@ -18,18 +18,22 @@
         body.dark {
             background-color: #070b14;
             background-image: 
-                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.18) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
             color: #e2e8f0;
         }
         body.dark .pro-panel {
-            background: rgba(17, 24, 39, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            background: rgba(17, 24, 39, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
         body.dark header {
-            background: rgba(7, 11, 20, 0.8);
+            background: rgba(7, 11, 20, 0.75);
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
         }
         body.dark .tab-container {
             background: rgba(17, 24, 39, 0.7);
@@ -41,14 +45,14 @@
             color: #e2e8f0 !important;
         }
         body.dark .sub-box {
-            background: rgba(15, 23, 42, 0.5) !important;
+            background: rgba(15, 23, 42, 0.45) !important;
             border-color: rgba(255, 255, 255, 0.06) !important;
         }
         body.dark .tab-btn.active {
             color: #ffffff !important;
         }
         body.dark .card-inner {
-            background: rgba(17, 24, 39, 0.8) !important;
+            background: rgba(17, 24, 39, 0.85) !important;
             border-color: rgba(255, 255, 255, 0.08) !important;
         }
 
@@ -56,18 +60,22 @@
         body.light {
             background-color: #f8fafc;
             background-image: 
-                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
             color: #1e293b;
         }
         body.light .pro-panel {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.06), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
         body.light header {
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
         }
         body.light .tab-container {
             background: rgba(241, 245, 249, 0.9);
@@ -99,12 +107,30 @@
             background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
             color: #ffffff;
             box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        body.dark .btn-main-action::after, body.light .btn-main-action::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        body.dark .btn-main-action:hover::after, body.light .btn-main-action:hover::after {
+            opacity: 1;
         }
 
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+        ::-webkit-scrollbar-thumb { 
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.4), rgba(99, 102, 241, 0.4)); 
+            border-radius: 9999px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { 
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.7), rgba(99, 102, 241, 0.7)); 
+        }
 
         /* Tab Animasi */
         .tab-container {
@@ -131,6 +157,12 @@
             align-items: center;
             gap: 7px;
         }
+        .tab-btn svg {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .tab-btn:hover svg {
+            transform: scale(1.15) rotate(-5deg);
+        }
         body.dark .tab-btn { color: #94a3b8; }
         body.light .tab-btn { color: #64748b; }
         .tab-btn:hover { opacity: 0.9; }
@@ -142,8 +174,10 @@
             left: 5px;
             background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
             border-radius: 0.9rem;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.5);
+            transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 4px 20px rgba(139, 92, 246, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
 
         .pro-panel {
@@ -165,21 +199,31 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .fade-in-up {
-            animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: fadeInUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
+        /* Logo Modern */
         .logo-modern {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             border-radius: 14px;
             background: rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.2);
+            box-shadow: 
+                0 8px 24px rgba(139, 92, 246, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            transition: all 0.3s;
+        }
+        .logo-modern:hover {
+            box-shadow: 
+                0 12px 32px rgba(139, 92, 246, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            transform: scale(1.05);
         }
         .logo-modern img {
             width: 100%;
@@ -193,21 +237,44 @@
             letter-spacing: 0.05em;
             padding: 3px 8px;
             border-radius: 6px;
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.1));
-            color: #a78bfa;
-            border: 1px solid rgba(139, 92, 246, 0.25);
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.15));
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.35);
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
         }
         body.light .badge-modern {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.08));
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(99, 102, 241, 0.08));
             color: #7c3aed;
         }
 
+        /* Judul gradient */
+        .gradient-title {
+            background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        body.light .gradient-title {
+            background: linear-gradient(135deg, #0f172a 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Harga jual gradient */
+        .harga-jual-gradient {
+            background: linear-gradient(135deg, #34d399 0%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .price-card {
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .price-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 24px 48px rgba(139, 92, 246, 0.25);
         }
 
         input:focus, select:focus {
@@ -218,6 +285,20 @@
 
         button:active {
             transform: scale(0.97);
+        }
+
+        /* Sync button rotate on hover */
+        .sync-btn:hover svg {
+            transform: rotate(180deg);
+        }
+        .sync-btn svg {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Divider gradient */
+        .divider-gradient {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
         }
     </style>
 </head>
@@ -249,7 +330,7 @@
                 </div>
                 <div>
                     <h1 class="font-black text-sm sm:text-base tracking-tight flex items-center gap-2">
-                        MASTER HARGA
+                        <span class="gradient-title">MASTER HARGA</span>
                         <span class="badge-modern">UFO</span>
                     </h1>
                     <p class="text-[10px] opacity-50 font-medium tracking-wide">Sistem Manajemen Harga Modern</p>
@@ -298,19 +379,19 @@
         <!-- HALAMAN 1: CARI HARGA MODAL -->
         <section id="tabCari" class="space-y-5 sm:space-y-6">
             <div class="pro-panel p-4 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <button onclick="refreshDataCache()" class="text-xs border border-gray-500/20 px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 hover:bg-gray-500/10 hover:scale-105">
+                <button onclick="refreshDataCache()" class="sync-btn text-xs border border-gray-500/20 px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 hover:bg-gray-500/10 hover:scale-105 hover:border-purple-500/40">
                     <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
                     </svg>
                     Sync Data Cloud
                 </button>
-                <div class="text-xs font-bold opacity-60">
+                <div class="text-xs font-bold opacity-60 text-center md:text-right">
                     Sistem Kalkulasi Otomatis Harga Jual Berdasarkan Master Modal
                 </div>
             </div>
 
-            <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none opacity-40">
+            <div class="relative w-full group">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none opacity-40 transition-opacity group-focus-within:opacity-100 group-focus-within:text-purple-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
                     </svg>
@@ -334,7 +415,7 @@
                 <h2 class="text-base sm:text-lg font-bold mb-1">Upload Master Harga Modal</h2>
                 <p class="text-xs sm:text-sm opacity-60 mb-5">Format kolom Excel: Brand | Tipe | Harga Modal.</p>
                 <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" class="block w-full text-xs file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500/10 file:text-emerald-400 border rounded-2xl mb-4 cursor-pointer sub-box hover:border-emerald-500/30 transition-all">
-                <button onclick="prosesUploadModal()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 text-white font-extrabold py-4 rounded-2xl transition-all text-xs sm:text-sm shadow-lg shadow-emerald-500/25">Proses Upload Harga Modal</button>
+                <button onclick="prosesUploadModal()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 text-white font-extrabold py-4 rounded-2xl transition-all text-xs sm:text-sm shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 hover:-translate-y-0.5">Proses Upload Harga Modal</button>
                 <p id="statusUploadModal" class="text-xs mt-3 font-bold text-center"></p>
             </div>
         </section>
@@ -700,11 +781,11 @@
                             </div>
                             <h3 class="text-center text-lg sm:text-2xl font-black tracking-tight break-words">${item.tipe}</h3>
                             
-                            <div class="mt-4 sm:mt-6 mb-6 sm:mb-8 text-center text-emerald-400">
+                            <div class="mt-4 sm:mt-6 mb-6 sm:mb-8 text-center">
                                 <p class="text-[9px] sm:text-[10px] font-extrabold text-muted uppercase tracking-widest mb-1.5 sm:mb-2 opacity-60">Harga Jual</p>
                                 <div class="flex justify-center items-start">
-                                    <span class="text-sm sm:text-xl font-bold mt-0.5 sm:mt-1 mr-1 opacity-60">Rp</span>
-                                    <span class="text-2xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap">${jual.toLocaleString('id-ID')}</span>
+                                    <span class="text-sm sm:text-xl font-bold mt-0.5 sm:mt-1 mr-1 opacity-60 harga-jual-gradient">Rp</span>
+                                    <span class="text-2xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap harga-jual-gradient">${jual.toLocaleString('id-ID')}</span>
                                 </div>
                             </div>
 
