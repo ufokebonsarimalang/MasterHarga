@@ -3,75 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Harga UJL</title>
-    <!-- Tailwind CSS -->
+    <title>Master Harga UJL</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- SheetJS untuk Excel -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
+        * { -webkit-tap-highlight-color: transparent; }
         body { 
             font-family: 'Inter', sans-serif; 
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.4s ease, color 0.4s ease;
+            -webkit-font-smoothing: antialiased;
         }
         /* Mode Gelap (Default) */
         body.dark {
-            background-color: #0b0f19; 
-            color: #dfe2f1; 
+            background-color: #070b14;
+            background-image: 
+                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            color: #e2e8f0;
         }
         body.dark .pro-panel {
-            background: rgba(23, 27, 38, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(17, 24, 39, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
         }
         body.dark header {
-            background: rgba(15, 19, 29, 0.9);
-            border-bottom: 1px solid rgba(49, 53, 64, 0.6);
+            background: rgba(7, 11, 20, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
         body.dark .tab-container {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(17, 24, 39, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         body.dark input, body.dark select {
-            background: #171b26 !important;
-            border-color: #313540 !important;
-            color: #dfe2f1 !important;
+            background: rgba(17, 24, 39, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #e2e8f0 !important;
         }
         body.dark .sub-box {
-            background: #0f131d !important;
-            border-color: #313540 !important;
+            background: rgba(15, 23, 42, 0.5) !important;
+            border-color: rgba(255, 255, 255, 0.06) !important;
         }
         body.dark .tab-btn.active {
-            color: #ffffff !important; /* Putih bersih di mode gelap */
+            color: #ffffff !important;
+        }
+        body.dark .card-inner {
+            background: rgba(17, 24, 39, 0.8) !important;
+            border-color: rgba(255, 255, 255, 0.08) !important;
         }
 
-        /* Mode Terang (Light Mode) */
+        /* Mode Terang */
         body.light {
-            background-color: #f1f5f9; 
-            color: #1e293b; 
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(ellipse at 20% 0%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(59, 130, 246, 0.06) 0%, transparent 50%);
+            color: #1e293b;
         }
         body.light .pro-panel {
-            background: rgba(255, 255, 255, 0.85);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
         body.light header {
-            background: rgba(255, 255, 255, 0.9);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
         }
         body.light .tab-container {
-            background: rgba(226, 232, 240, 0.8);
+            background: rgba(241, 245, 249, 0.9);
             border: 1px solid rgba(0, 0, 0, 0.06);
         }
         body.light input, body.light select {
             background: #ffffff !important;
-            border-color: #cbd5e1 !important;
+            border-color: #e2e8f0 !important;
             color: #1e293b !important;
         }
         body.light .sub-box {
-            background: #f8fafc !important;
+            background: rgba(248, 250, 252, 0.8) !important;
             border-color: #e2e8f0 !important;
-            color: #334155 !important;
         }
         body.light .card-inner {
             background: #ffffff !important;
@@ -81,108 +90,195 @@
             color: #64748b !important;
         }
         body.light .tab-btn.active {
-            color: #0f172a !important; /* Hitam pekat agar jelas di mode terang */
-            font-weight: 800;
-        }
-        body.light .btn-primary-text {
-            color: #0f172a !important; /* Hitam pekat untuk tombol aksi utama di mode terang */
-        }
-
-        /* Tombol aksi utama (Mode Gelap: Putih, Mode Terang: Hitam/Gelap kontras) */
-        body.dark .btn-main-action {
-            background-color: #c084fc;
-            color: #ffffff;
-        }
-        body.light .btn-main-action {
-            background-color: #c084fc;
             color: #0f172a !important;
             font-weight: 800;
         }
 
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        /* Tombol Aksi Utama */
+        body.dark .btn-main-action {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+        }
+        body.light .btn-main-action {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
 
-        /* Styling Tab Animasi Geser */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+
+        /* Tab Animasi */
         .tab-container {
-            backdrop-filter: blur(12px);
-            border-radius: 1.5rem;
-            padding: 6px;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 1.25rem;
+            padding: 5px;
             display: inline-flex;
             position: relative;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
         }
         .tab-btn {
             position: relative;
             z-index: 10;
-            padding: 10px 20px;
-            font-size: 0.85rem;
+            padding: 10px 18px;
+            font-size: 0.8rem;
             font-weight: 600;
-            transition: color 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             cursor: pointer;
-            border-radius: 1rem;
+            border-radius: 0.9rem;
             white-space: nowrap;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 7px;
         }
         body.dark .tab-btn { color: #94a3b8; }
         body.light .tab-btn { color: #64748b; }
+        .tab-btn:hover { opacity: 0.9; }
 
-      .tab-indicator {
+        .tab-indicator {
             position: absolute;
-            top: 6px;
-            bottom: 6px;
-            left: 6px;
-            background: #ef4444; /* Merah Cerah */
-            border-radius: 1rem;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+            top: 5px;
+            bottom: 5px;
+            left: 5px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+            border-radius: 0.9rem;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.5);
         }
 
         .pro-panel {
-            backdrop-filter: blur(12px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-radius: 1.5rem;
             transition: all 0.3s ease;
         }
 
         .modal-backdrop {
-            background: rgba(11, 15, 25, 0.8);
-            backdrop-filter: blur(8px);
+            background: rgba(7, 11, 20, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             transition: opacity 0.3s ease;
+        }
+
+        /* Animasi masuk */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Logo modern */
+        .logo-modern {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #3b82f6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-modern::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 100%);
+            border-radius: inherit;
+        }
+        .logo-modern svg {
+            width: 22px;
+            height: 22px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Badge modern */
+        .badge-modern {
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.1));
+            color: #a78bfa;
+            border: 1px solid rgba(139, 92, 246, 0.25);
+        }
+        body.light .badge-modern {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.08));
+            color: #7c3aed;
+        }
+
+        /* Card hover effect */
+        .price-card {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .price-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        }
+
+        /* Input focus */
+        input:focus, select:focus {
+            outline: none;
+            border-color: #8b5cf6 !important;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Button press */
+        button:active {
+            transform: scale(0.97);
         }
     </style>
 </head>
-<body class="dark min-h-screen flex flex-col selection:bg-[#c084fc] selection:text-white">
+<body class="dark min-h-screen flex flex-col selection:bg-[#8b5cf6] selection:text-white">
 
     <!-- CUSTOM MODERN MODAL POPUP -->
     <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop hidden opacity-0 transition-opacity">
-        <div class="pro-panel p-6 sm:p-8 max-w-md w-full rounded-3xl shadow-2xl transform scale-95 transition-transform" id="modalBox">
-            <div id="modalIconContainer" class="w-12 h-12 rounded-2xl bg-[#c084fc]/10 text-[#c084fc] flex items-center justify-center mb-4 text-xl">⚠️</div>
-            <h3 id="modalTitle" class="text-lg sm:text-xl font-black mb-2">Konfirmasi Aksi</h3>
-            <p id="modalMessage" class="text-xs sm:text-sm mb-6 leading-relaxed opacity-80">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
+        <div class="pro-panel p-6 sm:p-8 max-w-md w-full rounded-3xl shadow-2xl transform scale-95 transition-all duration-300" id="modalBox">
+            <div id="modalIconContainer" class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20 text-purple-400 flex items-center justify-center mb-5 text-2xl border border-purple-500/20">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+            </div>
+            <h3 id="modalTitle" class="text-lg sm:text-xl font-black mb-2 tracking-tight">Konfirmasi Aksi</h3>
+            <p id="modalMessage" class="text-xs sm:text-sm mb-6 leading-relaxed opacity-70">Apakah Anda yakin ingin melanjutkan tindakan ini?</p>
             <div class="flex gap-3">
-                <button id="modalBtnCancel" class="flex-1 font-bold py-3 rounded-xl text-xs sm:text-sm transition-all border border-gray-600/30">Batal</button>
-                <button id="modalBtnConfirm" class="flex-1 btn-main-action hover:opacity-90 font-extrabold py-3 rounded-xl text-xs sm:text-sm transition-all shadow-lg">Ya, Lanjutkan</button>
+                <button id="modalBtnCancel" class="flex-1 font-bold py-3.5 rounded-xl text-xs sm:text-sm transition-all border border-gray-500/20 hover:bg-gray-500/10">Batal</button>
+                <button id="modalBtnConfirm" class="flex-1 btn-main-action hover:opacity-90 font-extrabold py-3.5 rounded-xl text-xs sm:text-sm transition-all">Ya, Lanjutkan</button>
             </div>
         </div>
     </div>
 
     <!-- HEADER & NAVIGATION -->
-    <header class="w-full backdrop-blur-xl px-4 sm:px-6 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
+    <header class="w-full backdrop-blur-2xl px-4 sm:px-6 py-4 sticky top-0 z-50 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center justify-between w-full md:w-auto">
             <div class="flex items-center gap-3">
-                <img src="logo.png" alt="Logo UFO" class="h-10 w-10 rounded-2xl object-cover shadow-lg shadow-purple-600/30" onerror="this.onerror=null; this.src='https://via.placeholder.com/40'">
+                <!-- Logo Modern SVG -->
+                <div class="logo-modern">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
                 <div>
-                    <h1 class="font-extrabold text-sm sm:text-base tracking-tight flex items-center gap-2">
-                        MASTER HARGA <span class="text-[9px] sm:text-[10px] bg-[#c084fc]/10 text-[#c084fc] border border-[#c084fc]/20 px-2 py-0.5 rounded-md font-bold uppercase">UFO</span>
+                    <h1 class="font-black text-sm sm:text-base tracking-tight flex items-center gap-2">
+                        MASTER HARGA
+                        <span class="badge-modern">UFO</span>
                     </h1>
+                    <p class="text-[10px] opacity-50 font-medium tracking-wide">Sistem Manajemen Harga Modern</p>
                 </div>
             </div>
-            <!-- Tombol Toggle Mode Terang/Gelap (Mobile View) -->
-            <button onclick="toggleTheme()" class="md:hidden p-2.5 rounded-xl border border-gray-500/30 text-xs font-bold flex items-center gap-1.5 transition-all">
+            <!-- Tombol Toggle Mode (Mobile) -->
+            <button onclick="toggleTheme()" class="md:hidden p-2.5 rounded-xl border border-gray-500/20 text-xs font-bold flex items-center gap-1.5 transition-all hover:bg-gray-500/10">
                 <span id="themeIconMobile">☀️</span>
             </button>
         </div>
@@ -191,23 +287,31 @@
         <div class="tab-container overflow-x-auto max-w-full" id="tabNavContainer">
             <div class="tab-indicator" id="tabIndicator"></div>
             <div onclick="switchTab('cari', 0)" class="tab-btn active" id="btnCari">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
                 Cari Harga
             </div>
             <div onclick="switchTab('upload', 1)" class="tab-btn" id="btnUpload">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
                 Upload
             </div>
             <div onclick="switchTab('pengaturan', 2)" class="tab-btn" id="btnPengaturan">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                </svg>
                 Margin
             </div>
         </div>
 
-        <!-- Tombol Toggle Mode Terang/Gelap (Desktop View) -->
+        <!-- Tombol Toggle Mode (Desktop) -->
         <div class="hidden md:flex items-center gap-2">
-            <button onclick="toggleTheme()" id="themeToggleBtn" class="px-4 py-2.5 rounded-xl border border-gray-500/30 text-xs font-bold flex items-center gap-2 transition-all hover:scale-105 shadow-sm">
-                <span id="themeIcon">☀️</span> <span id="themeText">Mode Terang</span>
+            <button onclick="toggleTheme()" id="themeToggleBtn" class="px-4 py-2.5 rounded-xl border border-gray-500/20 text-xs font-bold flex items-center gap-2 transition-all hover:bg-gray-500/10 hover:scale-105">
+                <span id="themeIcon">☀️</span>
+                <span id="themeText">Mode Terang</span>
             </button>
         </div>
     </header>
@@ -218,52 +322,63 @@
         <!-- HALAMAN 1: CARI HARGA -->
         <section id="tabCari" class="space-y-5 sm:space-y-6">
             <div class="pro-panel p-4 sm:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
-                <button onclick="refreshDataCache()" class="text-xs border border-gray-500/30 px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 shadow-sm hover:opacity-80">
-                    <svg class="w-4 h-4 text-[#c084fc]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                <button onclick="refreshDataCache()" class="text-xs border border-gray-500/20 px-4 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 hover:bg-gray-500/10 hover:scale-105">
+                    <svg class="w-4 h-4 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                    </svg>
                     Sync Data Cloud
                 </button>
-                <div class="p-1.5 rounded-2xl border border-gray-500/30 flex w-full md:w-auto sub-box">
-                    <button onclick="setSearchMode('jual')" id="filterBtnJual" class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-main-action shadow-sm">Harga Pricetag</button>
-                    <button onclick="setSearchMode('modal')" id="filterBtnModal" class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-70 hover:opacity-100">Master Modal</button>
+                <div class="p-1.5 rounded-2xl border border-gray-500/20 flex w-full md:w-auto sub-box">
+                    <button onclick="setSearchMode('jual')" id="filterBtnJual" class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-main-action">Harga Pricetag</button>
+                    <button onclick="setSearchMode('modal')" id="filterBtnModal" class="flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-60 hover:opacity-100">Master Modal</button>
                 </div>
             </div>
 
             <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-4 sm:pl-5 pointer-events-none opacity-60">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none opacity-40">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
                 </span>
-                <input type="text" id="searchInput" placeholder="Cari tipe produk..." class="w-full pl-12 sm:pl-14 pr-4 sm:pr-6 py-3.5 sm:py-4 border rounded-2xl focus:outline-none focus:ring-2 focus:ring-[#c084fc] text-xs sm:text-sm md:text-base font-semibold shadow-inner transition-all">
+                <input type="text" id="searchInput" placeholder="Cari tipe produk..." class="w-full pl-14 pr-5 py-4 border rounded-2xl focus:outline-none text-sm md:text-base font-semibold shadow-inner transition-all">
             </div>
 
             <div id="searchResult" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
-                <div class="col-span-full py-20 sm:py-24 text-center border-2 border-dashed border-gray-500/30 rounded-3xl opacity-60 text-xs sm:text-sm font-semibold">
-                    🔍 Hasil akan ditampilkan disini
+                <div class="col-span-full py-24 text-center border-2 border-dashed border-gray-500/20 rounded-3xl opacity-50 text-sm font-semibold">
+                    <svg class="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                    Hasil akan ditampilkan disini
                 </div>
             </div>
         </section>
 
         <!-- HALAMAN 2: UPLOAD & TEMPLATE -->
         <section id="tabUpload" class="hidden space-y-6 max-w-2xl mx-auto">
-            <div class="pro-panel p-6 sm:p-8 border-[#c084fc]/20 bg-gradient-to-br from-[#c084fc]/5 to-transparent">
+            <div class="pro-panel p-6 sm:p-8 border-purple-500/20 bg-gradient-to-br from-purple-500/5 to-transparent">
                 <h2 class="text-base sm:text-lg font-bold mb-1">Template Spreadsheet</h2>
-                <p class="text-xs sm:text-sm opacity-80 mb-3">Format kolom Pricetag: Brand | Tipe | Grade A | Grade B | Online | Offline</p>
-                <button onclick="downloadTemplateExcel()" class="w-full font-bold py-3.5 rounded-2xl border border-[#c084fc]/30 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 shadow-sm sub-box">
-                    📥 Download Format Contoh Excel (Pricetag)
+                <p class="text-xs sm:text-sm opacity-60 mb-4">Format kolom Pricetag: Brand | Tipe | Grade A | Grade B | Online | Offline</p>
+                <button onclick="downloadTemplateExcel()" class="w-full font-bold py-4 rounded-2xl border border-purple-500/30 transition-all text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-purple-500/10 sub-box">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    Download Format Contoh Excel (Pricetag)
                 </button>
             </div>
 
             <div class="pro-panel p-6 sm:p-8">
                 <h2 class="text-base sm:text-lg font-bold mb-1">Upload Harga Pricetag</h2>
-                <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" class="block w-full text-xs file:mr-4 file:py-3 file:px-4 sm:file:py-3.5 sm:file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#c084fc]/10 file:text-[#c084fc] border rounded-2xl mb-4 cursor-pointer sub-box">
-                <button onclick="prosesUploadHargaJual()" class="w-full btn-main-action hover:opacity-90 font-extrabold py-3.5 rounded-2xl transition-all text-xs sm:text-sm shadow-lg">Proses Upload Harga Pricetag</button>
+                <p class="text-xs sm:text-sm opacity-60 mb-4">Upload file Excel dengan format yang sesuai</p>
+                <input type="file" id="excelFileJual" accept=".xlsx, .xls, .csv" class="block w-full text-xs file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-purple-500/10 file:text-purple-400 border rounded-2xl mb-4 cursor-pointer sub-box hover:border-purple-500/30 transition-all">
+                <button onclick="prosesUploadHargaJual()" class="w-full btn-main-action hover:opacity-90 font-extrabold py-4 rounded-2xl transition-all text-xs sm:text-sm">Proses Upload Harga Pricetag</button>
                 <p id="statusUploadJual" class="text-xs mt-3 font-bold text-center"></p>
             </div>
 
             <div class="pro-panel p-6 sm:p-8">
                 <h2 class="text-base sm:text-lg font-bold mb-1">Upload Master Harga Modal</h2>
-                <p class="text-xs sm:text-sm opacity-80 mb-5">Format kolom: Brand | Tipe | Harga Modal.</p>
-                <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" class="block w-full text-xs file:mr-4 file:py-3 file:px-4 sm:file:py-3.5 sm:file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-[#4edea3]/10 file:text-[#4edea3] border rounded-2xl mb-4 cursor-pointer sub-box">
-                <button onclick="prosesUploadModal()" class="w-full bg-[#4edea3] hover:bg-[#00885d] text-[#003824] font-extrabold py-3.5 rounded-2xl transition-all text-xs sm:text-sm shadow-lg">Proses Upload Harga Modal</button>
+                <p class="text-xs sm:text-sm opacity-60 mb-5">Format kolom: Brand | Tipe | Harga Modal.</p>
+                <input type="file" id="excelFileModal" accept=".xlsx, .xls, .csv" class="block w-full text-xs file:mr-4 file:py-3.5 file:px-5 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500/10 file:text-emerald-400 border rounded-2xl mb-4 cursor-pointer sub-box hover:border-emerald-500/30 transition-all">
+                <button onclick="prosesUploadModal()" class="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:opacity-90 text-white font-extrabold py-4 rounded-2xl transition-all text-xs sm:text-sm shadow-lg shadow-emerald-500/25">Proses Upload Harga Modal</button>
                 <p id="statusUploadModal" class="text-xs mt-3 font-bold text-center"></p>
             </div>
         </section>
@@ -272,20 +387,20 @@
         <section id="tabPengaturan" class="hidden space-y-6 max-w-2xl mx-auto">
             <div class="pro-panel p-6 sm:p-8">
                 <h2 class="text-lg sm:text-xl font-bold mb-1">Aturan Margin Brand</h2>
-                <p class="text-xs sm:text-sm opacity-80 mb-6">Atur markup persen laba & tambahan nominal tetap per merek.</p>
+                <p class="text-xs sm:text-sm opacity-60 mb-6">Atur markup persen laba & tambahan nominal tetap per merek.</p>
 
                 <div class="p-4 sm:p-5 rounded-2xl border space-y-4 mb-6 sub-box">
-                    <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" class="w-full px-4 py-3.5 border rounded-xl text-xs sm:text-sm font-bold focus:ring-2 focus:ring-[#c084fc]">
-                    <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" class="w-full px-4 py-3.5 border rounded-xl text-xs sm:text-sm font-bold focus:ring-2 focus:ring-[#c084fc]">
-                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" class="w-full px-4 py-3.5 border rounded-xl text-xs sm:text-sm font-bold focus:ring-2 focus:ring-[#c084fc]">
-                    <button onclick="simpanPengaturanBrand()" class="w-full btn-main-action hover:opacity-90 font-extrabold py-3.5 rounded-xl text-xs sm:text-sm shadow-sm">Simpan Aturan Margin</button>
+                    <input type="text" id="inputBrandNama" placeholder="Nama Brand (cth: Samsung)" class="w-full px-4 py-3.5 border rounded-xl text-xs sm:text-sm font-bold transition-all">
+                    <input type="number" step="0.1" id="inputBrandPersen" placeholder="Persen (cth: 12)" class="w-full px-4 py-3.5 border rounded-xl text-xs sm:text-sm font-bold transition-all">
+                    <input type="number" step="1000" id="inputBrandNominalTambah" placeholder="Tambah Rp (Opsional)" class="w-full px-4 py-3.5 border rounded-xl text-xs sm:text-sm font-bold transition-all">
+                    <button onclick="simpanPengaturanBrand()" class="w-full btn-main-action hover:opacity-90 font-extrabold py-3.5 rounded-xl text-xs sm:text-sm">Simpan Aturan Margin</button>
                     <p id="statusPengaturan" class="text-xs font-bold text-center"></p>
                 </div>
 
                 <div>
-                    <h3 class="text-xs font-bold uppercase tracking-widest mb-3 opacity-70">Daftar Aktif:</h3>
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-3 opacity-50">Daftar Aktif:</h3>
                     <div id="listAturanBrand" class="space-y-3">
-                        <p class="text-xs opacity-60 italic">Memuat data...</p>
+                        <p class="text-xs opacity-50 italic">Memuat data...</p>
                     </div>
                 </div>
             </div>
@@ -350,7 +465,7 @@
             const activeBtn = document.getElementById('btnCari');
             const indicator = document.getElementById('tabIndicator');
             indicator.style.width = `${activeBtn.offsetWidth}px`;
-            indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
+            indicator.style.transform = `translateX(${activeBtn.offsetLeft - 5}px)`;
             
             loadDataFromCacheOrCloud(true);
         });
@@ -397,7 +512,7 @@
             const indicator = document.getElementById('tabIndicator');
             const activeBtn = document.getElementById(btnIds[index]);
             indicator.style.width = `${activeBtn.offsetWidth}px`;
-            indicator.style.transform = `translateX(${activeBtn.offsetLeft - 6}px)`;
+            indicator.style.transform = `translateX(${activeBtn.offsetLeft - 5}px)`;
         }
 
         function sanitizeModal(val) {
@@ -480,16 +595,16 @@
             for (const [brandName, data] of Object.entries(aturanMarginBrand)) {
                 let infoNominal = data.tambahNominal > 0 ? ` + Rp ${data.tambahNominal.toLocaleString('id-ID')}` : '';
                 htmlList += `
-                    <div class="flex justify-between items-center border px-4 py-3.5 rounded-2xl text-xs sm:text-sm sub-box">
+                    <div class="flex justify-between items-center border px-4 py-3.5 rounded-2xl text-xs sm:text-sm sub-box hover:border-purple-500/30 transition-all">
                         <span class="font-bold uppercase tracking-wider">${brandName}</span>
                         <div class="flex items-center gap-3">
-                            <span class="bg-[#c084fc]/10 text-[#c084fc] border border-[#c084fc]/20 px-3 py-1 rounded-xl font-bold">+${data.rawPersen}%${infoNominal}</span>
-                            <button onclick="hapusBrand('${brandName}')" class="text-red-400 font-extrabold hover:underline">Hapus</button>
+                            <span class="badge-modern">+${data.rawPersen}%${infoNominal}</span>
+                            <button onclick="hapusBrand('${brandName}')" class="text-red-400 font-extrabold hover:text-red-300 transition-colors text-xs">Hapus</button>
                         </div>
                     </div>
                 `;
             }
-            if (htmlList === "") htmlList = `<p class="text-xs opacity-60 italic">Belum ada aturan kustom.</p>`;
+            if (htmlList === "") htmlList = `<p class="text-xs opacity-50 italic">Belum ada aturan kustom.</p>`;
             document.getElementById('listAturanBrand').innerHTML = htmlList;
         }
 
@@ -499,11 +614,11 @@
             const btnModal = document.getElementById('filterBtnModal');
 
             if (mode === 'jual') {
-                btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-main-action shadow-sm";
-                btnModal.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-70 hover:opacity-100";
+                btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-main-action";
+                btnModal.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-60 hover:opacity-100";
             } else {
-                btnModal.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-main-action shadow-sm";
-                btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-70 hover:opacity-100";
+                btnModal.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all btn-main-action";
+                btnJual.className = "flex-1 md:flex-none px-4 sm:px-5 py-2.5 rounded-xl text-xs font-bold transition-all opacity-60 hover:opacity-100";
             }
             triggerSearch();
         }
@@ -532,7 +647,7 @@
             }
 
             try {
-                statusEl.className = "text-xs font-bold text-[#c084fc]";
+                statusEl.className = "text-xs font-bold text-purple-400";
                 statusEl.innerText = "⏳ Menyimpan...";
                 await setDoc(doc(db, "pengaturan_margin", nama), { persen, tambahNominal, updated_at: new Date().toISOString() });
                 statusEl.className = "text-xs font-bold text-emerald-400";
@@ -573,7 +688,12 @@
             const resultContainer = document.getElementById('searchResult');
             
             if (rawKeyword.length < 2) {
-                resultContainer.innerHTML = `<div class="col-span-full py-20 text-center border-2 border-dashed border-gray-500/30 rounded-3xl opacity-60 text-xs sm:text-sm font-semibold">🔍 Hasil akan ditampilkan disini</div>`;
+                resultContainer.innerHTML = `<div class="col-span-full py-24 text-center border-2 border-dashed border-gray-500/20 rounded-3xl opacity-50 text-sm font-semibold">
+                    <svg class="w-12 h-12 mx-auto mb-4 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                    </svg>
+                    Hasil akan ditampilkan disini
+                </div>`;
                 return;
             }
 
@@ -592,41 +712,41 @@
                     return;
                 }
 
-                filteredJual.slice(0, 30).forEach(item => {
+                filteredJual.slice(0, 30).forEach((item, idx) => {
                     html += `
-                        <div class="relative rounded-2xl sm:rounded-3xl p-[2px] sm:p-[3px] bg-gradient-to-b from-[#c084fc] to-[#a855f7] shadow-xl transition-transform hover:-translate-y-1">
-                            <div class="card-inner h-full rounded-[14px] sm:rounded-[22px] p-5 sm:p-8 flex flex-col border border-gray-500/20 sub-box">
+                        <div class="price-card relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-b from-purple-500 via-indigo-500 to-blue-500 shadow-xl fade-in-up" style="animation-delay: ${idx * 0.05}s">
+                            <div class="card-inner h-full rounded-[14px] sm:rounded-[22px] p-5 sm:p-8 flex flex-col border border-gray-500/10 sub-box">
                                 <div class="mb-2 grid place-items-center">
-                                    <span class="px-3.5 py-1 bg-[#c084fc]/10 text-[#c084fc] border border-[#c084fc]/20 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest">${item.brand || 'PRICETAG'}</span>
+                                    <span class="badge-modern">${item.brand || 'PRICETAG'}</span>
                                 </div>
                                 <h3 class="text-center text-lg sm:text-2xl font-black tracking-tight break-words mb-4">${item.model}</h3>
 
                                 <ul class="space-y-2.5 sm:space-y-3.5 pt-2">
-                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/20 sub-box">
-                                        <span class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-emerald-500/10 ring-1 ring-emerald-500/30 text-emerald-400 text-[9px] sm:text-[10px] font-bold">A</span>
+                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/10 sub-box">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/10 ring-1 ring-emerald-500/30 text-emerald-400 text-[10px] font-bold">A</span>
                                         <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                            <span class="font-semibold">Grade A</span>
+                                            <span class="font-semibold opacity-70">Grade A</span>
                                             <span class="font-extrabold whitespace-nowrap">Rp ${Number(item.gradeA || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/20 sub-box">
-                                        <span class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-purple-500/10 ring-1 ring-purple-500/30 text-purple-400 text-[9px] sm:text-[10px] font-bold">B</span>
+                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/10 sub-box">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-purple-500/10 ring-1 ring-purple-500/30 text-purple-400 text-[10px] font-bold">B</span>
                                         <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                            <span class="font-semibold">Grade B</span>
+                                            <span class="font-semibold opacity-70">Grade B</span>
                                             <span class="font-extrabold whitespace-nowrap">Rp ${Number(item.gradeB || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/20 sub-box">
-                                        <span class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-indigo-500/10 ring-1 ring-indigo-500/30 text-indigo-400 text-[9px] sm:text-[10px]">🌐</span>
+                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/10 sub-box">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-500/10 ring-1 ring-indigo-500/30 text-indigo-400 text-[10px]">🌐</span>
                                         <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                            <span class="font-semibold">Online</span>
+                                            <span class="font-semibold opacity-70">Online</span>
                                             <span class="font-extrabold whitespace-nowrap">Rp ${Number(item.online || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
-                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/20 sub-box">
-                                        <span class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-500/30 text-sky-400 text-[9px] sm:text-[10px]">🏢</span>
+                                    <li class="flex items-center gap-2 sm:gap-3 p-3 rounded-xl border border-gray-500/10 sub-box">
+                                        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-sky-500/10 ring-1 ring-sky-500/30 text-sky-400 text-[10px]">🏢</span>
                                         <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                            <span class="font-semibold">Offline</span>
+                                            <span class="font-semibold opacity-70">Offline</span>
                                             <span class="font-extrabold whitespace-nowrap">Rp ${Number(item.offline || 0).toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
@@ -648,7 +768,7 @@
                     return;
                 }
 
-                filteredModal.slice(0, 30).forEach(item => {
+                filteredModal.slice(0, 30).forEach((item, idx) => {
                     const modal = sanitizeModal(item.modal);
                     const brandKey = (item.brand || "").toLowerCase().trim();
                     const aturanDefault = { multiplier: 1.10, tambahNominal: 0 };
@@ -664,33 +784,33 @@
                     const persentaseMargin = modal > 0 ? ((selisihMargin / modal) * 100).toFixed(1) : 0;
 
                     html += `
-                        <div class="relative rounded-2xl sm:rounded-3xl p-[2px] sm:p-[3px] bg-gradient-to-b from-emerald-400 to-emerald-600 shadow-xl transition-transform hover:-translate-y-1">
-                            <div class="card-inner h-full rounded-[14px] sm:rounded-[22px] p-5 sm:p-8 flex flex-col border border-gray-500/20 sub-box">
+                        <div class="price-card relative rounded-2xl sm:rounded-3xl p-[2px] bg-gradient-to-b from-emerald-400 via-teal-400 to-cyan-500 shadow-xl fade-in-up" style="animation-delay: ${idx * 0.05}s">
+                            <div class="card-inner h-full rounded-[14px] sm:rounded-[22px] p-5 sm:p-8 flex flex-col border border-gray-500/10 sub-box">
                                 <div class="mb-2 grid place-items-center">
                                     <span class="px-3.5 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-[9px] sm:text-[10px] font-extrabold uppercase tracking-widest">${item.brand}</span>
                                 </div>
                                 <h3 class="text-center text-lg sm:text-2xl font-black tracking-tight break-words">${item.tipe}</h3>
                                 
                                 <div class="mt-4 sm:mt-6 mb-6 sm:mb-8 text-center text-emerald-400">
-                                    <p class="text-[9px] sm:text-[10px] font-extrabold text-muted uppercase tracking-widest mb-1.5 sm:mb-2">Harga Jual</p>
+                                    <p class="text-[9px] sm:text-[10px] font-extrabold text-muted uppercase tracking-widest mb-1.5 sm:mb-2 opacity-60">Harga Jual</p>
                                     <div class="flex justify-center items-start">
-                                        <span class="text-sm sm:text-xl font-bold mt-0.5 sm:mt-1 mr-1 text-muted">Rp</span>
+                                        <span class="text-sm sm:text-xl font-bold mt-0.5 sm:mt-1 mr-1 opacity-60">Rp</span>
                                         <span class="text-2xl sm:text-5xl font-black leading-none tracking-tighter whitespace-nowrap">${jual.toLocaleString('id-ID')}</span>
                                     </div>
                                 </div>
 
-                                <ul class="mt-auto space-y-3.5 sm:space-y-4 border-t border-gray-500/20 pt-5 sm:pt-6">
+                                <ul class="mt-auto space-y-3.5 sm:space-y-4 border-t border-gray-500/10 pt-5 sm:pt-6">
                                     <li class="flex items-center gap-2.5 sm:gap-3 text-muted">
-                                        <span class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-gray-500/10 text-[10px] sm:text-xs">📦</span>
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-gray-500/10 text-xs">📦</span>
                                         <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                            <span class="font-semibold">Modal</span>
+                                            <span class="font-semibold opacity-70">Modal</span>
                                             <span class="font-black whitespace-nowrap">Rp ${modal.toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
                                     <li class="flex items-center gap-2.5 sm:gap-3 text-muted">
-                                        <span class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] sm:text-xs">📈</span>
+                                        <span class="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400 text-xs">📈</span>
                                         <div class="flex-1 flex justify-between items-center text-xs sm:text-sm">
-                                            <span class="font-semibold">Margin (${persentaseMargin}%)</span>
+                                            <span class="font-semibold opacity-70">Margin (${persentaseMargin}%)</span>
                                             <span class="font-black text-emerald-400 whitespace-nowrap">+Rp ${selisihMargin.toLocaleString('id-ID')}</span>
                                         </div>
                                     </li>
@@ -713,7 +833,7 @@
                 return;
             }
             const file = fileInput.files[0];
-            statusEl.className = "text-xs font-bold text-[#c084fc]";
+            statusEl.className = "text-xs font-bold text-purple-400";
             statusEl.innerText = "⏳ Memproses & Mengunggah...";
             const reader = new FileReader();
             reader.onload = async function(e) {
@@ -763,7 +883,7 @@
                 return;
             }
             const file = fileInput.files[0];
-            statusEl.className = "text-xs font-bold text-[#c084fc]";
+            statusEl.className = "text-xs font-bold text-purple-400";
             statusEl.innerText = "⏳ Memproses & Mengunggah...";
             const reader = new FileReader();
             reader.onload = async function(e) {
